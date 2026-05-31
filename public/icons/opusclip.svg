@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="32" viewBox="0 0 120 32" fill="none" role="img" aria-labelledby="title">
+  <title id="title">OpusClip</title>
+  <rect width="120" height="32" rx="8" fill="#1e293b"/>
+  <rect x="12" y="11" width="14" height="10" rx="2" stroke="#6366f1" stroke-width="2" fill="none"/>
+  <text x="34" y="21" fill="#f8fafc" font-family="system-ui,sans-serif" font-size="12" font-weight="700">OpusClip</text>
+</svg>

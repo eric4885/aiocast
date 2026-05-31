@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="32" viewBox="0 0 120 32" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Descript</title>
+  <rect width="120" height="32" rx="8" fill="#1e293b"/>
+  <path d="M14 22V10h6c3.3 0 5 1.8 5 4.2 0 2.6-2 4-5 4h-3v3.8H14zm5.5-8.4h-2.2v4.8h2.3c1.6 0 2.4-.7 2.4-2.4 0-1.7-.8-2.4-2.5-2.4z" fill="#6366f1"/>
+  <text x="38" y="21" fill="#f8fafc" font-family="system-ui,sans-serif" font-size="13" font-weight="700">Descript</text>
+</svg>

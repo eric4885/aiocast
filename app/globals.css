@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 5%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 16% 47%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 258 90% 66%;
+    --accent-foreground: 210 40% 98%;
+    --border: 215 25% 27%;
+    --success: 160 84% 39%;
+    --warning: 38 92% 50%;
+    --radius: 16px;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-grid-subtle {
+    background-image:
+      linear-gradient(
+        to right,
+        rgba(148, 163, 184, 0.06) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .shadow-card-hover {
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.35),
+      0 8px 10px -6px rgba(0, 0, 0, 0.25);
+  }
+}

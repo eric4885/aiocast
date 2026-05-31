@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="32" viewBox="0 0 140 32" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Riverside</title>
+  <rect width="140" height="32" rx="8" fill="#1e293b"/>
+  <circle cx="18" cy="16" r="6" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+  <circle cx="18" cy="16" r="2.5" fill="#8b5cf6"/>
+  <text x="34" y="21" fill="#f8fafc" font-family="system-ui,sans-serif" font-size="13" font-weight="700">Riverside</text>
+</svg>
