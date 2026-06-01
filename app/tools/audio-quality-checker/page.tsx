@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AudioQualityClient } from "./audio-quality-client";
 import { siteConfig } from "@/lib/data";
 
@@ -20,5 +21,9 @@ export default function AudioQualityCheckerPage({
   searchParams?: { from?: string };
 }) {
   const fromRemote = searchParams?.from === "remote";
-  return <AudioQualityClient fromRemoteSetup={fromRemote} />;
+  return (
+    <Suspense fallback={<div className="min-h-[40vh]" aria-hidden />}>
+      <AudioQualityClient fromRemoteSetup={fromRemote} />
+    </Suspense>
+  );
 }

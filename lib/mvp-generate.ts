@@ -124,6 +124,106 @@ ${transcript.slice(0, 8000)}
   return jsonFromModel(content);
 }
 
+function defaultFaq() {
+  return [
+    {
+      q: "How can podcasters rank on Google faster?",
+      a: "Publish intent-structured long-form articles from each episode, then support them with FAQ blocks and internal links.",
+    },
+    {
+      q: "What content should I post after publishing an episode?",
+      a: "Use a script matrix per channel: one X hook thread, one LinkedIn insight post, and one newsletter takeaway.",
+    },
+    {
+      q: "Do I need a team to run podcast SEO?",
+      a: "No. A repeatable weekly workflow plus templates can produce consistent growth assets solo.",
+    },
+  ];
+}
+
+function defaultSchedule() {
+  return [
+    "Mon 09:00 local: Publish long-form SEO article",
+    "Tue 11:00 local: Publish FAQ snippet post",
+    "Wed 13:00 local: Post X thread version",
+    "Thu 10:00 local: Publish LinkedIn deep post",
+    "Fri 15:00 local: Send Substack summary",
+    "Sat 12:00 local: Republish highlight quote card",
+    "Sun 20:00 local: Review performance and pick next topic",
+  ];
+}
+
+function defaultHighlights() {
+  return [
+    { title: "Growth Loop Framework", start: "00:02:10", end: "00:02:55", note: "Core insight clip." },
+    { title: "SEO Execution Tips", start: "00:14:20", end: "00:15:05", note: "Actionable checklist clip." },
+  ];
+}
+
+function defaultSeoReport() {
+  return {
+    targetKeyword: "podcast seo workflow",
+    altTitle: "Podcast SEO Workflow: From Audio to Search Traffic",
+    altDescription: "A step-by-step loop to convert podcast episodes into discoverable content assets.",
+    estimatedTrafficHint:
+      "Early stage topics in this cluster often reach 200-800 monthly impressions within 4-8 weeks.",
+  };
+}
+
+function normalizeFaq(raw: unknown) {
+  if (!Array.isArray(raw)) return defaultFaq();
+  const items = raw
+    .map((item, index) => {
+      if (!item || typeof item !== "object") return null;
+      const row = item as Record<string, unknown>;
+      const q = String(row.q ?? row.question ?? "").trim();
+      const a = String(row.a ?? row.answer ?? "").trim();
+      if (!q) return null;
+      return { q, a: a || `Answer ${index + 1}` };
+    })
+    .filter((item): item is { q: string; a: string } => item !== null);
+  return items.length > 0 ? items.slice(0, 3) : defaultFaq();
+}
+
+function normalizeSchedule(raw: unknown) {
+  if (!Array.isArray(raw)) return defaultSchedule();
+  const items = raw.map((line) => String(line).trim()).filter(Boolean);
+  return items.length > 0 ? items.slice(0, 7) : defaultSchedule();
+}
+
+function normalizeHighlights(raw: unknown) {
+  if (!Array.isArray(raw)) return defaultHighlights();
+  const items = raw
+    .map((item, index) => {
+      if (!item || typeof item !== "object") return null;
+      const row = item as Record<string, unknown>;
+      const title = String(row.title ?? "").trim();
+      if (!title) return null;
+      return {
+        title,
+        start: String(row.start ?? "00:00:00"),
+        end: String(row.end ?? "00:00:30"),
+        note: String(row.note ?? ""),
+      };
+    })
+    .filter(
+      (item): item is { title: string; start: string; end: string; note: string } => item !== null,
+    );
+  return items.length > 0 ? items.slice(0, 2) : defaultHighlights();
+}
+
+function normalizeSeoReport(raw: unknown) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return defaultSeoReport();
+  const row = raw as Record<string, unknown>;
+  const fallback = defaultSeoReport();
+  return {
+    targetKeyword: String(row.targetKeyword ?? fallback.targetKeyword),
+    altTitle: String(row.altTitle ?? fallback.altTitle),
+    altDescription: String(row.altDescription ?? fallback.altDescription),
+    estimatedTrafficHint: String(row.estimatedTrafficHint ?? fallback.estimatedTrafficHint),
+  };
+}
+
 export async function buildPack(input: Input): Promise<GeneratedPack> {
   const transcript = input.transcriptHint?.trim() || fallbackTranscript(input.sourceLabel);
   const ai = await generateWithOpenAI(transcript);
@@ -139,41 +239,11 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     ? ai.keywords.slice(0, 5)
     : ["podcast SEO", "audio to article", "FAQ snippets", "social scripts", "content repurposing"];
 
-  const faq = Array.isArray(ai?.faq)
-    ? ai.faq.slice(0, 3)
-    : [
-        {
-          q: "How can podcasters rank on Google faster?",
-          a: "Publish intent-structured long-form articles from each episode, then support them with FAQ blocks and internal links.",
-        },
-        {
-          q: "What content should I post after publishing an episode?",
-          a: "Use a script matrix per channel: one X hook thread, one LinkedIn insight post, and one newsletter takeaway.",
-        },
-        {
-          q: "Do I need a team to run podcast SEO?",
-          a: "No. A repeatable weekly workflow plus templates can produce consistent growth assets solo.",
-        },
-      ];
+  const faq = normalizeFaq(ai?.faq);
 
-  const schedule = Array.isArray(ai?.schedule)
-    ? ai.schedule.slice(0, 7)
-    : [
-        "Mon 09:00 local: Publish long-form SEO article",
-        "Tue 11:00 local: Publish FAQ snippet post",
-        "Wed 13:00 local: Post X thread version",
-        "Thu 10:00 local: Publish LinkedIn deep post",
-        "Fri 15:00 local: Send Substack summary",
-        "Sat 12:00 local: Republish highlight quote card",
-        "Sun 20:00 local: Review performance and pick next topic",
-      ];
+  const schedule = normalizeSchedule(ai?.schedule);
 
-  const highlights = Array.isArray(ai?.highlights)
-    ? ai.highlights.slice(0, 2)
-    : [
-        { title: "Growth Loop Framework", start: "00:02:10", end: "00:02:55", note: "Core insight clip." },
-        { title: "SEO Execution Tips", start: "00:14:20", end: "00:15:05", note: "Actionable checklist clip." },
-      ];
+  const highlights = normalizeHighlights(ai?.highlights);
 
   return {
     id: "",
@@ -204,12 +274,7 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     localSchedule: schedule,
     srt: srtFromTranscript(transcript),
     highlights,
-    seoReport: ai?.seoReport ?? {
-      targetKeyword: "podcast seo workflow",
-      altTitle: "Podcast SEO Workflow: From Audio to Search Traffic",
-      altDescription: "A step-by-step loop to convert podcast episodes into discoverable content assets.",
-      estimatedTrafficHint: "Early stage topics in this cluster often reach 200-800 monthly impressions within 4-8 weeks.",
-    },
+    seoReport: normalizeSeoReport(ai?.seoReport),
   };
 }
 

@@ -8,10 +8,18 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function ResultPage({ params }: { params: { id: string } }) {
+export default function ResultPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams?: { token?: string };
+}) {
+  const token = typeof searchParams?.token === "string" ? searchParams.token : null;
+
   return (
     <Suspense fallback={<div className="min-h-[40vh]" aria-hidden />}>
-      <ResultClient id={params.id} />
+      <ResultClient id={params.id} token={token} />
     </Suspense>
   );
 }

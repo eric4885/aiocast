@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { Copy, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,9 +26,80 @@ type JobPayload = {
   };
 };
 
-export function ResultClient({ id }: { id: string }) {
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+function asString(value: unknown, fallback = ""): string {
+  return typeof value === "string" ? value : fallback;
+}
+
+function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
+  if (!raw || typeof raw !== "object") return null;
+
+  const seoArticle = raw.seoArticle;
+  if (!seoArticle || typeof seoArticle !== "object") return null;
+
+  const socialPack = raw.socialPack;
+  const seoReport =
+    raw.seoReport && typeof raw.seoReport === "object" && !Array.isArray(raw.seoReport)
+      ? raw.seoReport
+      : {
+          targetKeyword: "podcast seo workflow",
+          altTitle: "",
+          altDescription: "",
+          estimatedTrafficHint: "",
+        };
+
+  return {
+    seoArticle: {
+      title: asString(seoArticle.title, "Your SEO article draft"),
+      metaDescription: asString(seoArticle.metaDescription),
+      keywords: Array.isArray(seoArticle.keywords)
+        ? seoArticle.keywords.map((k) => asString(k)).filter(Boolean)
+        : [],
+      body: asString(seoArticle.body),
+    },
+    faq: Array.isArray(raw.faq)
+      ? raw.faq
+          .map((item, index) => {
+            if (!item || typeof item !== "object") return null;
+            const row = item as Record<string, unknown>;
+            const q = asString(row.q ?? row.question, `Question ${index + 1}`);
+            const a = asString(row.a ?? row.answer);
+            return q ? { q, a } : null;
+          })
+          .filter((item): item is { q: string; a: string } => item !== null)
+      : [],
+    socialPack: {
+      x: asString(socialPack?.x, ""),
+      linkedIn: asString(socialPack?.linkedIn, ""),
+      substack: asString(socialPack?.substack, ""),
+    },
+    localSchedule: Array.isArray(raw.localSchedule)
+      ? raw.localSchedule.map((line) => asString(line)).filter(Boolean)
+      : [],
+    srt: asString(raw.srt),
+    highlights: Array.isArray(raw.highlights)
+      ? raw.highlights
+          .map((item, index) => {
+            if (!item || typeof item !== "object") return null;
+            const row = item as Record<string, unknown>;
+            return {
+              title: asString(row.title, `Highlight ${index + 1}`),
+              start: asString(row.start, "00:00:00"),
+              end: asString(row.end, "00:00:30"),
+              note: asString(row.note),
+            };
+          })
+          .filter((item): item is { title: string; start: string; end: string; note: string } => item !== null)
+      : [],
+    seoReport: {
+      targetKeyword: asString(seoReport.targetKeyword, "podcast seo workflow"),
+      altTitle: asString(seoReport.altTitle),
+      altDescription: asString(seoReport.altDescription),
+      estimatedTrafficHint: asString(seoReport.estimatedTrafficHint),
+    },
+  };
+}
+
+export function ResultClient({ id, token }: { id: string; token: string | null }) {
   const [job, setJob] = useState<JobPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -43,22 +113,28 @@ export function ResultClient({ id }: { id: string }) {
     let cancelled = false;
 
     const load = async () => {
-      const qs = new URLSearchParams({ id, token });
-      const res = await fetch(`/api/generate-pack?${qs.toString()}`);
-      if (cancelled) return;
-      if (!res.ok) {
-        setLoadError(
-          res.status === 401 || res.status === 404
-            ? "This link is invalid or has expired. Request a new pack from the tool page."
-            : "Could not load your pack. Try again from the email link.",
-        );
-        return;
-      }
-      const data = (await res.json()) as { job: JobPayload };
-      setJob(data.job);
-      setLoadError(null);
-      if (data.job.status === "processing") {
-        timer = window.setTimeout(load, 1500);
+      try {
+        const qs = new URLSearchParams({ id, token });
+        const res = await fetch(`/api/generate-pack?${qs.toString()}`);
+        if (cancelled) return;
+        if (!res.ok) {
+          setLoadError(
+            res.status === 401 || res.status === 404
+              ? "This link is invalid or has expired. Request a new pack from the tool page."
+              : "Could not load your pack. Try again from the email link.",
+          );
+          return;
+        }
+        const data = (await res.json()) as { job: JobPayload };
+        setJob(data.job);
+        setLoadError(null);
+        if (data.job.status === "processing") {
+          timer = window.setTimeout(load, 1500);
+        }
+      } catch {
+        if (!cancelled) {
+          setLoadError("Could not load your pack. Check your connection and try the email link again.");
+        }
       }
     };
 
@@ -69,17 +145,24 @@ export function ResultClient({ id }: { id: string }) {
     };
   }, [id, token]);
 
-  const srtHref = useMemo(() => {
-    if (!job?.pack?.srt) return "#";
-    return `data:text/plain;charset=utf-8,${encodeURIComponent(job.pack.srt)}`;
-  }, [job?.pack?.srt]);
-
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
     } catch {
       /* ignore */
     }
+  };
+
+  const downloadSrt = () => {
+    const srt = job?.pack?.srt;
+    if (!srt) return;
+    const blob = new Blob([srt], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `aiocast-${id}.srt`;
+    anchor.click();
+    URL.revokeObjectURL(url);
   };
 
   if (loadError) {
@@ -114,7 +197,7 @@ export function ResultClient({ id }: { id: string }) {
     );
   }
 
-  if (job.status === "failed" || !job.pack) {
+  if (job.status === "failed") {
     return (
       <div className="mx-auto max-w-5xl px-4 py-16">
         <Card>
@@ -127,7 +210,23 @@ export function ResultClient({ id }: { id: string }) {
     );
   }
 
-  const pack = job.pack;
+  const pack = normalizePack(job.pack);
+  if (!pack) {
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-16">
+        <Card>
+          <CardContent className="space-y-4 p-8 text-center">
+            <p className="font-semibold text-rose-300">Pack data looks incomplete</p>
+            <p className="text-sm text-muted-foreground">Generate a new pack and we will email you a fresh link.</p>
+            <Button asChild>
+              <Link href="/tools/audio-quality-checker">Generate a new pack</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-14">
       <p className="text-center text-xs text-muted-foreground">
@@ -145,17 +244,19 @@ export function ResultClient({ id }: { id: string }) {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardContent className="space-y-3 p-6">
-          <p className="font-semibold">FAQ blocks</p>
-          {pack.faq.map((f) => (
-            <div key={f.q} className="rounded-lg border border-border p-3">
-              <p className="text-sm font-medium">{f.q}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{f.a}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      {pack.faq.length > 0 && (
+        <Card>
+          <CardContent className="space-y-3 p-6">
+            <p className="font-semibold">FAQ blocks</p>
+            {pack.faq.map((f, index) => (
+              <div key={`${f.q}-${index}`} className="rounded-lg border border-border p-3">
+                <p className="text-sm font-medium">{f.q}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{f.a}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardContent className="space-y-3 p-6">
@@ -174,27 +275,29 @@ export function ResultClient({ id }: { id: string }) {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardContent className="space-y-3 p-6">
-          <p className="font-semibold">7-day publish schedule</p>
-          <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
-            {pack.localSchedule.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+      {pack.localSchedule.length > 0 && (
+        <Card>
+          <CardContent className="space-y-3 p-6">
+            <p className="font-semibold">7-day publish schedule</p>
+            <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
+              {pack.localSchedule.map((line, index) => (
+                <li key={`${line}-${index}`}>{line}</li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardContent className="space-y-3 p-6">
           <p className="font-semibold">SRT and highlights</p>
-          <a href={srtHref} download={`aiocast-${id}.srt`}>
-            <Button variant="secondary">
+          {pack.srt ? (
+            <Button variant="secondary" onClick={downloadSrt}>
               <Download className="mr-2 h-4 w-4" /> Download SRT
             </Button>
-          </a>
-          {pack.highlights.map((h) => (
-            <p key={h.title} className="text-sm text-muted-foreground">
+          ) : null}
+          {pack.highlights.map((h, index) => (
+            <p key={`${h.title}-${index}`} className="text-sm text-muted-foreground">
               {h.title}: {h.start}-{h.end} ({h.note})
             </p>
           ))}

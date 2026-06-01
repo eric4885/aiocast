@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Loader2, Link2, Mic2, Sparkles, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,10 +19,9 @@ export function AudioQualityClient({
 }: {
   fromRemoteSetup?: boolean;
 }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [phase, setPhase] = useState<Phase>("idle");
-  const [inputMode, setInputMode] = useState<InputMode>("audio");
+  const [inputMode, setInputMode] = useState<InputMode>("transcript");
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [openingChest, setOpeningChest] = useState(false);
@@ -93,14 +92,6 @@ export function AudioQualityClient({
       setError("Paste a transcript, show notes, or outline to generate your pack.");
       return;
     }
-    if (inputMode === "audio" && !file) {
-      setError("Upload an audio sample (validates length) or switch input tabs.");
-      return;
-    }
-    if (inputMode === "url" && !sourceUrl.trim()) {
-      setError("Paste an episode URL for reference or switch to transcript-only.");
-      return;
-    }
     setPhase("analyzing");
     setOpeningChest(true);
     setSubmitSuccess(false);
@@ -129,39 +120,31 @@ export function AudioQualityClient({
       setOpeningChest(false);
       setSubmitSuccess(true);
       window.setTimeout(() => {
-        router.push(payload.resultUrl!);
+        window.location.assign(payload.resultUrl!);
       }, 2600);
     } catch {
       setError("Generation failed - try again in a moment.");
       setOpeningChest(false);
       setPhase("idle");
     }
-  }, [file, transcript, sourceUrl, email, router, inputMode]);
+  }, [file, transcript, sourceUrl, email, inputMode]);
 
   const hasTranscript = transcript.trim().length > 0;
-  const hasInput =
-    (inputMode === "audio" && file !== null && hasTranscript) ||
-    (inputMode === "url" && sourceUrl.trim().length > 0 && hasTranscript) ||
-    (inputMode === "transcript" && hasTranscript);
-
-  const readyToSubmit = hasInput && email.trim().length > 0;
+  const readyToSubmit = hasTranscript && email.trim().length > 0;
   const busy = phase === "analyzing" || submitSuccess;
   const canClickSubmit = readyToSubmit && !busy;
 
   const disabledSubmitHint = (() => {
     if (busy) return undefined;
     if (!email.trim()) return "Please enter your email address";
-    if (!hasTranscript) return "Paste a transcript, show notes, or outline — required for all input types";
-    if (inputMode === "audio" && !file) return "Please upload an audio sample (validates length and format)";
-    if (inputMode === "url" && !sourceUrl.trim()) return "Please paste an episode or show URL for reference";
-    if (inputMode === "transcript" && !hasTranscript) return "Please paste your transcript";
+    if (!hasTranscript) return "Paste a transcript, show notes, or outline to generate your pack";
     return undefined;
   })();
 
   const modeTabs: { id: InputMode; label: string }[] = [
+    { id: "transcript", label: "Paste transcript" },
     { id: "audio", label: "Upload audio" },
     { id: "url", label: "Paste URL" },
-    { id: "transcript", label: "Paste transcript" },
   ];
 
   return (
@@ -183,8 +166,8 @@ export function AudioQualityClient({
         <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-muted-foreground">
           <p className="font-semibold text-primary">Free plan limits</p>
           <ul className="mt-2 space-y-1">
-            <li>Transcript (or show notes) required — we do not auto-transcribe uploads or fetch URLs yet</li>
-            <li>Audio: up to 5 minutes per file (validates your clip; generation uses the text you paste)</li>
+            <li>Transcript (or show notes) is the only required input — audio and URL are optional references</li>
+            <li>Audio: optional clip check up to 5 minutes (we do not auto-transcribe on the free tier)</li>
             <li>Per email: 3 free runs per month · Per IP: 3 per day</li>
             <li>Please wait 1 minute between submissions from the same IP</li>
           </ul>
@@ -197,8 +180,8 @@ export function AudioQualityClient({
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">Step 1</p>
                 <p className="mt-1 text-base font-semibold text-foreground">Choose one input method</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Paste transcript-style text for every path. Upload audio or a URL for reference and validation — we do
-                  not transcribe audio or crawl episode pages automatically on this tier.
+                  Paste transcript-style text to generate your pack. Upload audio or add a URL only if you want optional
+                  reference metadata — generation always uses the text field below.
                 </p>
                 <div
                   className="mt-4 flex flex-wrap gap-2 rounded-xl border border-border bg-background/50 p-1"
@@ -230,7 +213,7 @@ export function AudioQualityClient({
                       <UploadCloud className="mb-4 h-10 w-10 text-primary" />
                       <span className="text-sm font-semibold">Drag & drop or click to browse</span>
                       <span className="mt-2 text-xs text-muted-foreground">
-                        {file ? file.name : "MP3 recommended · max 10 MB · up to 5 min"}
+                        {file ? file.name : "Optional · MP3 recommended · max 10 MB · up to 5 min"}
                       </span>
                       {!file && (
                         <span className="mt-2 block text-[11px] leading-snug text-muted-foreground/90">
@@ -274,8 +257,8 @@ export function AudioQualityClient({
                         Episode transcript or show notes <span className="text-primary">(required)</span>
                       </label>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        This text drives your SEO article and scripts. Automatic transcription and URL fetching are not
-                        enabled on the free tier.
+                        This text drives your SEO article and scripts. Audio above is optional and is not transcribed
+                        automatically on the free tier.
                       </p>
                       <textarea
                         id="pack-transcript-aux"
@@ -355,7 +338,12 @@ export function AudioQualityClient({
                     ✓ Your pack is being generated — check your inbox in 2–5 minutes.
                   </p>
                 )}
-                <span className="mt-4 block" title={canClickSubmit ? undefined : disabledSubmitHint}>
+                {!canClickSubmit && disabledSubmitHint && (
+                  <p className="mt-3 text-sm text-muted-foreground" role="status">
+                    {disabledSubmitHint}
+                  </p>
+                )}
+                <span className="mt-4 block">
                   <Button
                     size="lg"
                     variant={readyToSubmit || busy ? "primary" : "secondary"}
