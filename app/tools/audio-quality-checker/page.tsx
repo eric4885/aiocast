@@ -4,13 +4,13 @@ import { AudioQualityClient } from "./audio-quality-client";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Audio quality + SEO prep checker",
+  title: "Generate your podcast SEO growth pack",
   description:
-    "Paste a transcript to generate an SEO article draft, FAQs, social scripts, and a 7-day schedule. Optional audio validates clip length on the free tier.",
+    "Paste show notes or upload audio for automatic transcription, then generate an SEO article, FAQs, social scripts, and a 7-day schedule.",
   openGraph: {
-    title: "Audio quality + SEO prep checker",
+    title: "Generate your podcast SEO growth pack",
     description:
-      "Benchmark input quality before generating SEO article and social script outputs.",
+      "Paste transcript or upload audio — get SEO article drafts, social scripts, and a publish plan.",
     url: `${siteConfig.url}/tools/audio-quality-checker`,
   },
 };

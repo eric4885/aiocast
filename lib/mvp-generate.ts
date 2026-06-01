@@ -194,7 +194,7 @@ function normalizeSchedule(raw: unknown) {
 function normalizeHighlights(raw: unknown) {
   if (!Array.isArray(raw)) return defaultHighlights();
   const items = raw
-    .map((item, index) => {
+    .map((item) => {
       if (!item || typeof item !== "object") return null;
       const row = item as Record<string, unknown>;
       const title = String(row.title ?? "").trim();

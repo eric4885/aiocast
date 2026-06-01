@@ -11,10 +11,12 @@ import {
   setJobDone,
   setJobFailed,
   type GeneratedPack,
+  type JobRecord,
 } from "@/lib/mvp-store";
 import { warnIfEphemeralProduction } from "@/lib/persistent-backend";
 import { assertProductionReady } from "@/lib/production";
 import { publicSiteUrl } from "@/lib/subscribe";
+import { transcribeAudioFile, transcribeEnabled } from "@/lib/transcribe-audio";
 
 function emailValid(value: unknown): value is string {
   return typeof value === "string" && value.includes("@") && value.length < 255;
@@ -39,6 +41,22 @@ async function sendResultEmail(email: string, pack: GeneratedPack, accessToken: 
   });
 }
 
+async function finishJob(
+  job: JobRecord,
+  email: string,
+  input: {
+    sourceType: "audio" | "transcript";
+    sourceLabel: string;
+    transcriptHint: string;
+  },
+) {
+  const pack = await buildPack(input);
+  pack.id = job.id;
+  await setJobDone(job.id, pack);
+  await sendResultEmail(email, pack, job.accessToken);
+  return resultPath(job.id, job.accessToken);
+}
+
 export async function POST(req: Request) {
   warnIfEphemeralProduction();
   assertProductionReady();
@@ -47,7 +65,6 @@ export async function POST(req: Request) {
   const form = await req.formData();
   const email = form.get("email");
   const transcriptRaw = form.get("transcript");
-  const sourceUrlRaw = form.get("sourceUrl");
   const file = form.get("file");
 
   if (!emailValid(email)) {
@@ -55,37 +72,27 @@ export async function POST(req: Request) {
   }
 
   const transcriptStr = typeof transcriptRaw === "string" ? transcriptRaw.trim() : "";
-  const sourceUrlStr = typeof sourceUrlRaw === "string" ? sourceUrlRaw.trim() : "";
   const hasFile = file instanceof File && file.size > 0;
-  const hasUrl = sourceUrlStr.length > 0;
+  const needsTranscribe = hasFile && !transcriptStr;
 
-  if (!transcriptStr) {
-    if (hasFile) {
-      return NextResponse.json(
-        {
-          error:
-            "Add your episode transcript or show notes. Automatic transcription from uploaded audio is not available yet.",
-          code: "TRANSCRIPT_REQUIRED",
-        },
-        { status: 400 },
-      );
-    }
-    if (hasUrl) {
-      return NextResponse.json(
-        {
-          error:
-            "Add your episode transcript or show notes. We do not fetch episode pages from URLs automatically yet.",
-          code: "TRANSCRIPT_REQUIRED",
-        },
-        { status: 400 },
-      );
-    }
+  if (!transcriptStr && !hasFile) {
     return NextResponse.json(
       {
-        error: "Paste a transcript, show notes, or episode outline to generate your pack.",
-        code: "TRANSCRIPT_REQUIRED",
+        error: "Paste a transcript or upload an audio file to generate your pack.",
+        code: "INPUT_REQUIRED",
       },
       { status: 400 },
+    );
+  }
+
+  if (needsTranscribe && !transcribeEnabled()) {
+    return NextResponse.json(
+      {
+        error:
+          "Audio transcription is not enabled yet. Paste show notes instead, or ask the site owner to configure OPENAI_API_KEY.",
+        code: "TRANSCRIBE_UNAVAILABLE",
+      },
+      { status: 503 },
     );
   }
 
@@ -120,36 +127,30 @@ export async function POST(req: Request) {
     );
   }
 
-  let sourceType: "audio" | "transcript" | "url";
-  let sourceLabel: string;
-  if (hasFile) {
-    sourceType = "audio";
-    sourceLabel = (file as File).name;
-  } else if (hasUrl) {
-    sourceType = "url";
-    sourceLabel = sourceUrlStr;
-  } else {
-    sourceType = "transcript";
-    sourceLabel = "pasted transcript";
-  }
-
   const job = await createJob(email);
   try {
-    const pack = await buildPack({ sourceType, sourceLabel, transcriptHint: transcriptStr });
-    pack.id = job.id;
-    await setJobDone(job.id, pack);
-    await sendResultEmail(email, pack, job.accessToken);
-    const resultUrl = resultPath(job.id, job.accessToken);
+    const transcript = needsTranscribe ? await transcribeAudioFile(file as File) : transcriptStr;
+    const sourceType = hasFile ? "audio" : "transcript";
+    const sourceLabel = hasFile ? (file as File).name : "pasted transcript";
+    const resultUrl = await finishJob(job, email, {
+      sourceType,
+      sourceLabel,
+      transcriptHint: transcript,
+    });
+
     return NextResponse.json({
       ok: true,
       id: job.id,
       status: "done",
       resultUrl,
       usage,
+      transcribed: needsTranscribe,
     });
   } catch (error) {
-    await setJobFailed(job.id, error instanceof Error ? error.message : "Generation failed");
-    return NextResponse.json({ error: "Generation failed." }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Generation failed";
+    await setJobFailed(job.id, message);
+    const status = needsTranscribe && message.toLowerCase().includes("transcri") ? 502 : 500;
+    return NextResponse.json({ error: message, code: needsTranscribe ? "TRANSCRIBE_FAILED" : "GENERATION_FAILED" }, { status });
   }
 }
 

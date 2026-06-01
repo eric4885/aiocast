@@ -19,7 +19,7 @@ export function HeroHome() {
       router.push("/tools/audio-quality-checker");
       return;
     }
-    router.push(`/tools/audio-quality-checker?sourceUrl=${encodeURIComponent(trimmed)}`);
+    router.push("/tools/audio-quality-checker?mode=audio");
   };
 
   return (

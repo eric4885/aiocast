@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Link2, Mic2, Sparkles, UploadCloud } from "lucide-react";
+import { Loader2, Mic2, Sparkles, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,7 @@ const MAX_BYTES = 10 * 1024 * 1024;
 const MAX_SECONDS = 300;
 
 type Phase = "idle" | "analyzing";
-type InputMode = "audio" | "url" | "transcript";
+type InputMode = "audio" | "transcript";
 
 export function AudioQualityClient({
   fromRemoteSetup = false,
@@ -27,7 +27,6 @@ export function AudioQualityClient({
   const [openingChest, setOpeningChest] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const [sourceUrl, setSourceUrl] = useState("");
   const [email, setEmail] = useState("");
 
   const objectUrl = useMemo(() => (file ? URL.createObjectURL(file) : null), [file]);
@@ -39,10 +38,8 @@ export function AudioQualityClient({
   }, [objectUrl]);
 
   useEffect(() => {
-    const url = searchParams.get("sourceUrl");
-    if (url) {
-      setSourceUrl(url);
-      setInputMode("url");
+    if (searchParams.get("mode") === "audio") {
+      setInputMode("audio");
     }
   }, [searchParams]);
 
@@ -80,16 +77,25 @@ export function AudioQualityClient({
     setInputMode(m);
     setError(null);
     if (m !== "audio") setFile(null);
-    if (m !== "url") setSourceUrl("");
   };
+
+  const hasTranscript = transcript.trim().length > 0;
+  const hasAudioInput = inputMode === "audio" && file !== null;
+  const hasTextInput = inputMode === "transcript" && hasTranscript;
+  const hasInput = hasTextInput || hasAudioInput || (inputMode === "audio" && hasTranscript);
+  const willTranscribe = inputMode === "audio" && file !== null && !hasTranscript;
 
   const runAnalysis = useCallback(async () => {
     if (!email.trim()) {
       setError("Email is required to deliver your result link.");
       return;
     }
-    if (!transcript.trim()) {
+    if (inputMode === "transcript" && !hasTranscript) {
       setError("Paste a transcript, show notes, or outline to generate your pack.");
+      return;
+    }
+    if (inputMode === "audio" && !file && !hasTranscript) {
+      setError("Upload an audio file or paste show notes to generate your pack.");
       return;
     }
     setPhase("analyzing");
@@ -100,7 +106,6 @@ export function AudioQualityClient({
       const formData = new FormData();
       formData.append("email", email.trim());
       if (transcript.trim()) formData.append("transcript", transcript.trim());
-      if (sourceUrl.trim()) formData.append("sourceUrl", sourceUrl.trim());
       if (file) formData.append("file", file);
       const res = await fetch("/api/generate-pack", {
         method: "POST",
@@ -121,31 +126,39 @@ export function AudioQualityClient({
       setSubmitSuccess(true);
       window.setTimeout(() => {
         window.location.assign(payload.resultUrl!);
-      }, 2600);
+      }, willTranscribe ? 1200 : 2600);
     } catch {
       setError("Generation failed - try again in a moment.");
       setOpeningChest(false);
       setPhase("idle");
     }
-  }, [file, transcript, sourceUrl, email, inputMode]);
+  }, [file, transcript, email, inputMode, hasTranscript, willTranscribe]);
 
-  const hasTranscript = transcript.trim().length > 0;
-  const readyToSubmit = hasTranscript && email.trim().length > 0;
+  const readyToSubmit = hasInput && email.trim().length > 0;
   const busy = phase === "analyzing" || submitSuccess;
   const canClickSubmit = readyToSubmit && !busy;
 
   const disabledSubmitHint = (() => {
     if (busy) return undefined;
     if (!email.trim()) return "Please enter your email address";
-    if (!hasTranscript) return "Paste a transcript, show notes, or outline to generate your pack";
+    if (inputMode === "transcript" && !hasTranscript) {
+      return "Paste a transcript, show notes, or outline to generate your pack";
+    }
+    if (inputMode === "audio" && !file && !hasTranscript) {
+      return "Upload an audio file (we transcribe it automatically) or paste show notes below";
+    }
     return undefined;
   })();
 
-  const modeTabs: { id: InputMode; label: string }[] = [
-    { id: "transcript", label: "Paste transcript" },
-    { id: "audio", label: "Upload audio" },
-    { id: "url", label: "Paste URL" },
+  const modeTabs: { id: InputMode; label: string; hint: string }[] = [
+    { id: "transcript", label: "Paste transcript", hint: "Fastest when you already have show notes" },
+    { id: "audio", label: "Upload audio", hint: "We transcribe your clip, then generate your pack" },
   ];
+
+  const progressLabel = willTranscribe ? "Transcribing audio and building your pack..." : "Generating your growth pack...";
+  const progressDetail = willTranscribe
+    ? "This usually takes 30–90 seconds for a 5-minute clip. Keep this tab open."
+    : "Packaging your assets now...";
 
   return (
     <div className="border-b border-border bg-gradient-hero bg-grid-subtle">
@@ -160,14 +173,14 @@ export function AudioQualityClient({
         <p className="text-sm font-semibold text-primary">Free tool</p>
         <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Generate my SEO growth pack</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Pick one input path below. You&apos;ll get three packaged assets: an SEO-style article draft, social scripts,
-          and a 7-day publish plan.
+          Paste show notes or upload audio — you&apos;ll get an SEO article draft, social scripts, and a 7-day publish
+          plan.
         </p>
         <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-muted-foreground">
           <p className="font-semibold text-primary">Free plan limits</p>
           <ul className="mt-2 space-y-1">
-            <li>Transcript (or show notes) is the only required input — audio and URL are optional references</li>
-            <li>Audio: optional clip check up to 5 minutes (we do not auto-transcribe on the free tier)</li>
+            <li>Paste transcript/show notes, or upload audio for automatic transcription</li>
+            <li>Audio: up to 5 minutes · 10 MB max · MP3 recommended</li>
             <li>Per email: 3 free runs per month · Per IP: 3 per day</li>
             <li>Please wait 1 minute between submissions from the same IP</li>
           </ul>
@@ -178,10 +191,9 @@ export function AudioQualityClient({
             <CardContent className="space-y-8 p-8">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">Step 1</p>
-                <p className="mt-1 text-base font-semibold text-foreground">Choose one input method</p>
+                <p className="mt-1 text-base font-semibold text-foreground">Choose your starting point</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Paste transcript-style text to generate your pack. Upload audio or add a URL only if you want optional
-                  reference metadata — generation always uses the text field below.
+                  Pick whichever matches what you have today — transcript paste or audio upload.
                 </p>
                 <div
                   className="mt-4 flex flex-wrap gap-2 rounded-xl border border-border bg-background/50 p-1"
@@ -206,79 +218,59 @@ export function AudioQualityClient({
                     </button>
                   ))}
                 </div>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {modeTabs.find((t) => t.id === inputMode)?.hint}
+                </p>
 
                 <div className="mt-4">
                   {inputMode === "audio" && (
-                    <label className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-background/40 px-6 py-12 text-center transition-colors hover:border-primary/50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background">
-                      <UploadCloud className="mb-4 h-10 w-10 text-primary" />
-                      <span className="text-sm font-semibold">Drag & drop or click to browse</span>
-                      <span className="mt-2 text-xs text-muted-foreground">
-                        {file ? file.name : "Optional · MP3 recommended · max 10 MB · up to 5 min"}
-                      </span>
-                      {!file && (
-                        <span className="mt-2 block text-[11px] leading-snug text-muted-foreground/90">
-                          Tip: Export as MP3 to stay under the limit.
+                    <>
+                      <label className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-background/40 px-6 py-12 text-center transition-colors hover:border-primary/50 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background">
+                        <UploadCloud className="mb-4 h-10 w-10 text-primary" />
+                        <span className="text-sm font-semibold">Drag & drop or click to browse</span>
+                        <span className="mt-2 text-xs text-muted-foreground">
+                          {file ? file.name : "MP3 recommended · max 10 MB · up to 5 min"}
                         </span>
-                      )}
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        className="sr-only"
-                        id="pack-audio-file"
-                        onChange={(e) => validateFile(e.target.files?.[0] ?? null)}
-                      />
-                    </label>
-                  )}
-                  {inputMode === "url" && (
-                    <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
-                      <p className="flex items-center gap-2 text-sm font-semibold">
-                        <Link2 className="h-4 w-4 text-primary" /> Episode or show URL
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Optional reference only — paste transcript below to generate your pack.
-                      </p>
-                      <Input
-                        id="pack-source-url"
-                        type="url"
-                        value={sourceUrl}
-                        onChange={(e) => setSourceUrl(e.target.value)}
-                        placeholder="https://yourpodcast.com/episodes/42-ai-tools"
-                        className="mt-2"
-                        aria-describedby="pack-url-hint"
-                      />
-                      <p id="pack-url-hint" className="sr-only">
-                        Episode link for your records; generation uses the transcript field.
-                      </p>
-                    </div>
-                  )}
-                  {(inputMode === "audio" || inputMode === "url") && (
-                    <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
-                      <label htmlFor="pack-transcript-aux" className="text-sm font-semibold text-foreground">
-                        Episode transcript or show notes <span className="text-primary">(required)</span>
+                        {!file && (
+                          <span className="mt-2 block text-[11px] leading-snug text-muted-foreground/90">
+                            We transcribe your audio automatically, then build your growth pack.
+                          </span>
+                        )}
+                        <input
+                          type="file"
+                          accept="audio/*"
+                          className="sr-only"
+                          id="pack-audio-file"
+                          onChange={(e) => validateFile(e.target.files?.[0] ?? null)}
+                        />
                       </label>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        This text drives your SEO article and scripts. Audio above is optional and is not transcribed
-                        automatically on the free tier.
-                      </p>
-                      <textarea
-                        id="pack-transcript-aux"
-                        value={transcript}
-                        onChange={(e) => setTranscript(e.target.value)}
-                        placeholder="Paste transcript, polished show notes, or a detailed outline…"
-                        className="mt-2 min-h-32 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/30"
-                      />
-                    </div>
+                      <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
+                        <label htmlFor="pack-transcript-optional" className="text-sm font-semibold text-foreground">
+                          Already have show notes? <span className="font-normal text-muted-foreground">(optional)</span>
+                        </label>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          Paste here to skip auto-transcription and generate directly from your text.
+                        </p>
+                        <textarea
+                          id="pack-transcript-optional"
+                          value={transcript}
+                          onChange={(e) => setTranscript(e.target.value)}
+                          placeholder="Optional — paste show notes or transcript to skip auto-transcription…"
+                          className="mt-2 min-h-28 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/30"
+                        />
+                      </div>
+                    </>
                   )}
                   {inputMode === "transcript" && (
                     <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
                       <label htmlFor="pack-transcript-only" className="text-sm font-semibold">
-                        Full or partial transcript
+                        Episode transcript or show notes
                       </label>
                       <textarea
                         id="pack-transcript-only"
                         value={transcript}
                         onChange={(e) => setTranscript(e.target.value)}
-                        placeholder="Paste your transcript text here…"
+                        placeholder="Paste your transcript, polished show notes, or a detailed outline…"
                         className="mt-2 min-h-36 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/30"
                       />
                     </div>
@@ -354,7 +346,7 @@ export function AudioQualityClient({
                     {phase === "analyzing" ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating your growth pack...
+                        {progressLabel}
                       </>
                     ) : (
                       <>
@@ -372,20 +364,18 @@ export function AudioQualityClient({
                     className="h-2 w-full animate-pulse rounded bg-gradient-to-r from-primary to-accent opacity-90"
                     aria-hidden
                   />
-                  <p className="px-4 py-3 text-xs text-muted-foreground">Packaging your assets now...</p>
+                  <p className="px-4 py-3 text-xs text-muted-foreground">{progressDetail}</p>
                 </div>
               )}
 
               {openingChest && (
                 <div className="rounded-2xl border border-primary/30 bg-background/60 p-4 text-center">
                   <div className="text-4xl">🎁</div>
-                  <p className="mt-2 text-sm font-semibold text-foreground">Preparing your growth pack...</p>
+                  <p className="mt-2 text-sm font-semibold text-foreground">
+                    {willTranscribe ? "Transcribing your episode..." : "Preparing your growth pack..."}
+                  </p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     Article draft, Q&amp;A blocks, social scripts, quote highlights, and a subtitle file for video reuse.
-                  </p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    When AI generation is enabled on the server, this usually takes about 15–90 seconds. Keep this tab
-                    open.
                   </p>
                 </div>
               )}
