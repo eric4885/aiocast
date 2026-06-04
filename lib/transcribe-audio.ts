@@ -1,8 +1,10 @@
+import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
+
 const MAX_BYTES = 10 * 1024 * 1024;
 
 export function transcribeEnabled() {
   if (process.env.TRANSCRIBE_ENABLED === "false") return false;
-  return Boolean(process.env.OPENAI_API_KEY?.trim());
+  return Boolean(openAiApiKey());
 }
 
 export function assertAudioUpload(file: File) {
@@ -21,7 +23,7 @@ export function assertAudioUpload(file: File) {
 export async function transcribeAudioFile(file: File): Promise<string> {
   assertAudioUpload(file);
 
-  const key = process.env.OPENAI_API_KEY?.trim();
+  const key = openAiApiKey();
   if (!key) {
     throw new Error("Audio transcription is not configured on the server.");
   }
@@ -32,7 +34,7 @@ export async function transcribeAudioFile(file: File): Promise<string> {
   form.append("model", model);
   form.append("response_format", "text");
 
-  const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+  const res = await fetch(openAiUrl("/audio/transcriptions"), {
     method: "POST",
     headers: {
       Authorization: `Bearer ${key}`,

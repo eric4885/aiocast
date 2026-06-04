@@ -1,4 +1,5 @@
 import { recordOpenAiUsage } from "@/lib/mvp-generate";
+import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
 import { injectTitleAuditIntoResult, type TitleAudit } from "@/lib/title-audit";
 import { extractTopicTokens, titleAnchoredToTopic } from "@/lib/topic-anchor";
 import { applyTitlePostProcessing, buildFallbackTitles } from "@/lib/title-output-filter";
@@ -511,7 +512,7 @@ export async function fetchTitleOptimization(topic: string, outputLanguage: Outp
   const fallback = (): TitleOptimizationResult => buildOfflineTitleResult(trimmed, outputLanguage);
 
   const enabled = process.env.OPENAI_ENABLED === "true";
-  const key = process.env.OPENAI_API_KEY;
+  const key = openAiApiKey();
   if (!enabled || !key) {
     return fallback();
   }
@@ -520,7 +521,7 @@ export async function fetchTitleOptimization(topic: string, outputLanguage: Outp
 
   let res: Response;
   try {
-    res = await fetch("https://api.openai.com/v1/chat/completions", {
+    res = await fetch(openAiUrl("/chat/completions"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

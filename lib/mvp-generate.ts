@@ -1,4 +1,5 @@
 import { dayKey, type GeneratedPack } from "@/lib/mvp-store";
+import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -62,7 +63,7 @@ function jsonFromModel(raw: string) {
 
 async function generateWithOpenAI(transcript: string) {
   const enabled = process.env.OPENAI_ENABLED === "true";
-  const key = process.env.OPENAI_API_KEY;
+  const key = openAiApiKey();
   if (!enabled || !key) return null;
 
   const prompt = `
@@ -75,7 +76,7 @@ ${transcript.slice(0, 8000)}
 
   const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+  const res = await fetch(openAiUrl("/chat/completions"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
