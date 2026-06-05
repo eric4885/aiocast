@@ -1,7 +1,13 @@
+import { pollApimartTask, extractTaskId } from "@/lib/apimart-task";
 import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
-import { chatCompletionContent, chatCompletionError, parseOpenAiJson, parseTranscriptionText, readResponseText } from "@/lib/openai-response";
+import { parseOpenAiJson, readResponseText } from "@/lib/openai-response";
 
 const MAX_BYTES = 10 * 1024 * 1024;
+
+type TranscriptionJson = {
+  text?: string;
+  error?: { message?: string };
+};
 
 export function transcribeEnabled() {
   if (process.env.TRANSCRIBE_ENABLED === "false") return false;
@@ -21,6 +27,25 @@ export function assertAudioUpload(file: File) {
   }
 }
 
+function textFromTranscriptionPayload(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+
+  if (!trimmed.startsWith("{") && !trimmed.includes("data:")) {
+    return trimmed;
+  }
+
+  const parsed = parseOpenAiJson<TranscriptionJson>(trimmed);
+  if (parsed.error?.message) {
+    throw new Error(parsed.error.message);
+  }
+  if (typeof parsed.text === "string" && parsed.text.trim()) {
+    return parsed.text.trim();
+  }
+
+  return "";
+}
+
 export async function transcribeAudioFile(file: File): Promise<string> {
   assertAudioUpload(file);
 
@@ -29,35 +54,41 @@ export async function transcribeAudioFile(file: File): Promise<string> {
     throw new Error("Audio transcription is not configured on the server.");
   }
 
-  const model = process.env.OPENAI_TRANSCRIBE_MODEL?.trim() || "gpt-4o-mini-transcribe";
+  const model = process.env.OPENAI_TRANSCRIBE_MODEL?.trim() || "whisper-1";
   const form = new FormData();
   form.append("file", file, file.name || "episode.mp3");
   form.append("model", model);
-  form.append("response_format", "text");
+  form.append("response_format", "json");
 
   const res = await fetch(openAiUrl("/audio/transcriptions"), {
     method: "POST",
     headers: {
       Authorization: `Bearer ${key}`,
+      Accept: "application/json",
     },
     body: form,
   });
 
+  const raw = await readResponseText(res);
+
   if (!res.ok) {
-    const raw = await readResponseText(res);
     let detail = raw;
     try {
       const json = parseOpenAiJson<{ error?: { message?: string } }>(raw);
       detail = json.error?.message ?? raw;
     } catch {
-      /* use raw text */
+      /* use raw */
     }
     throw new Error(detail || `Transcription failed (HTTP ${res.status}).`);
   }
 
-  const text = parseTranscriptionText(await readResponseText(res));
-  if (!text) {
-    throw new Error("Transcription returned empty text. Try a clearer clip or paste show notes.");
+  const directText = textFromTranscriptionPayload(raw);
+  if (directText) return directText;
+
+  const taskId = extractTaskId(raw);
+  if (taskId) {
+    return pollApimartTask(taskId);
   }
-  return text;
+
+  throw new Error("Transcription returned empty text. Try a clearer clip or paste show notes.");
 }
