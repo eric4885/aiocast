@@ -1,5 +1,6 @@
 import { recordOpenAiUsage } from "@/lib/mvp-generate";
 import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
+import { parseOpenAiResponse } from "@/lib/openai-response";
 import { injectTitleAuditIntoResult, type TitleAudit } from "@/lib/title-audit";
 import { extractTopicTokens, titleAnchoredToTopic } from "@/lib/topic-anchor";
 import { applyTitlePostProcessing, buildFallbackTitles } from "@/lib/title-output-filter";
@@ -529,6 +530,7 @@ export async function fetchTitleOptimization(topic: string, outputLanguage: Outp
       },
       body: JSON.stringify({
         model,
+        stream: false,
         temperature: 0.42,
         response_format: { type: "json_object" },
         messages: [
@@ -550,7 +552,7 @@ export async function fetchTitleOptimization(topic: string, outputLanguage: Outp
     error?: { message?: string };
   };
   try {
-    json = (await res.json()) as typeof json;
+    json = await parseOpenAiResponse<typeof json>(res);
   } catch {
     return fallback();
   }

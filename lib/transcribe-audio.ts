@@ -1,4 +1,5 @@
 import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
+import { chatCompletionContent, chatCompletionError, parseOpenAiJson, parseTranscriptionText, readResponseText } from "@/lib/openai-response";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 
@@ -43,17 +44,18 @@ export async function transcribeAudioFile(file: File): Promise<string> {
   });
 
   if (!res.ok) {
-    let detail = "";
+    const raw = await readResponseText(res);
+    let detail = raw;
     try {
-      const json = (await res.json()) as { error?: { message?: string } };
-      detail = json.error?.message ?? "";
+      const json = parseOpenAiJson<{ error?: { message?: string } }>(raw);
+      detail = json.error?.message ?? raw;
     } catch {
-      detail = await res.text().catch(() => "");
+      /* use raw text */
     }
     throw new Error(detail || `Transcription failed (HTTP ${res.status}).`);
   }
 
-  const text = (await res.text()).trim();
+  const text = parseTranscriptionText(await readResponseText(res));
   if (!text) {
     throw new Error("Transcription returned empty text. Try a clearer clip or paste show notes.");
   }

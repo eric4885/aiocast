@@ -1,5 +1,6 @@
 import { dayKey, type GeneratedPack } from "@/lib/mvp-store";
 import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
+import { chatCompletionContent, chatCompletionError, parseOpenAiResponse } from "@/lib/openai-response";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -84,6 +85,7 @@ ${transcript.slice(0, 8000)}
     },
     body: JSON.stringify({
       model,
+      stream: false,
       temperature: 0.4,
       messages: [
         {
@@ -96,16 +98,18 @@ ${transcript.slice(0, 8000)}
     }),
   });
 
-  const json = (await res.json()) as {
+  const json = await parseOpenAiResponse<{
     choices?: Array<{ message?: { content?: string } }>;
     usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
     error?: { message?: string };
-  };
+  }>(res);
 
   if (!res.ok) {
     if (process.env.OPENAI_LOG_USAGE === "true") {
       console.warn("[openai error]", res.status, JSON.stringify(json?.error ?? json));
     }
+    const message = chatCompletionError(json);
+    if (message) throw new Error(message);
     return null;
   }
 
@@ -121,7 +125,7 @@ ${transcript.slice(0, 8000)}
     recordOpenAiUsage(json.usage);
   }
 
-  const content = json.choices?.[0]?.message?.content ?? "";
+  const content = chatCompletionContent(json);
   return jsonFromModel(content);
 }
 
