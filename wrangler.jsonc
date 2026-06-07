@@ -7,6 +7,8 @@
     "nodejs_compat",
     "global_fetch_strictly_public"
   ],
+  // Plain-text runtime vars — uploaded on every Git deploy.
+  // Wrangler replaces dashboard plain-text vars not listed here; secrets stay in the dashboard.
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://aiocast.com",
     "OPENAI_BASE_URL": "https://api.apimart.ai/v1",
