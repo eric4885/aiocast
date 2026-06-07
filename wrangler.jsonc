@@ -4,7 +4,21 @@
   "name": "aiocast",
   "compatibility_date": "2026-05-31",
   "compatibility_flags": [
-    "nodejs_compat",
+     "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://aiocast.com",
+    "OPENAI_BASE_URL": "https://api.apimart.ai/v1",
+    "OPENAI_ENABLED": "true",
+    "OPENAI_MODEL": "gpt-4o-mini",
+    "OPENAI_TRANSCRIBE_MODEL": "whisper-1",
+    "TRANSCRIBE_ENABLED": "true",
+    "RESEND_FROM_EMAIL": "AioCast <hello@aiocast.com>",
+    "RATE_LIMIT_DISABLED": "true",
+    "TITLE_OUTPUT_LANGUAGE": "en",
+    "FREE_MONTHLY_LIMIT": "3",
+    "FREE_IP_DAILY_LIMIT": "3",
+    "FREE_IP_COOLDOWN_SEC": "60"
+  }, 
+"nodejs_compat",
     "global_fetch_strictly_public"
   ],
   "assets": {
