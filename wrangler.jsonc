@@ -4,7 +4,10 @@
   "name": "aiocast",
   "compatibility_date": "2026-05-31",
   "compatibility_flags": [
-     "vars": {
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://aiocast.com",
     "OPENAI_BASE_URL": "https://api.apimart.ai/v1",
     "OPENAI_ENABLED": "true",
@@ -17,10 +20,7 @@
     "FREE_MONTHLY_LIMIT": "3",
     "FREE_IP_DAILY_LIMIT": "3",
     "FREE_IP_COOLDOWN_SEC": "60"
-  }, 
-"nodejs_compat",
-    "global_fetch_strictly_public"
-  ],
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
