@@ -29,6 +29,7 @@ type JobPayload = {
     };
     generationSource?: "ai" | "template";
     aiFailureReason?: string;
+    transcript?: string;
   };
 };
 
@@ -107,6 +108,7 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
         ? raw.generationSource
         : undefined,
     aiFailureReason: asString(raw.aiFailureReason) || undefined,
+    transcript: asString(raw.transcript) || undefined,
   };
 }
 
@@ -140,6 +142,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
   const [loadError, setLoadError] = useState<string | null>(null);
   const [copyToast, setCopyToast] = useState<string | null>(null);
   const [articleExpanded, setArticleExpanded] = useState(false);
+  const [transcriptExpanded, setTranscriptExpanded] = useState(false);
   const [backupEmail, setBackupEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [emailSending, setEmailSending] = useState(false);
@@ -388,7 +391,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
             <div>
               <p className="font-semibold">SEO article draft</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                ~{wordCount.toLocaleString()} words · aim for 800–1,500 for a solid SEO post
+                Repurposed blog post from your transcript — not the raw show notes. ~{wordCount.toLocaleString()}{" "}
+                words · aim for 800–1,500 for a solid SEO post
               </p>
             </div>
             <Button size="sm" variant="secondary" onClick={() => void copy(pack.seoArticle.body, "Article")}>
@@ -419,6 +423,49 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
           )}
         </CardContent>
       </Card>
+
+      {pack.transcript && (
+        <Card>
+          <CardContent className="space-y-3 p-6">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="font-semibold">Your source transcript</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  The text you submitted — SRT and highlights are built from this.
+                </p>
+              </div>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => void copy(pack.transcript!, "Transcript")}
+              >
+                <Copy className="mr-2 h-4 w-4" /> Copy transcript
+              </Button>
+            </div>
+            <div
+              className={cn(
+                "rounded-lg border border-border bg-background/40 p-4 text-sm text-muted-foreground",
+                !transcriptExpanded && pack.transcript.length > 480 && "max-h-48 overflow-hidden",
+              )}
+            >
+              <p className="whitespace-pre-wrap">
+                {transcriptExpanded || pack.transcript.length <= 480
+                  ? pack.transcript
+                  : `${pack.transcript.slice(0, 480)}…`}
+              </p>
+            </div>
+            {pack.transcript.length > 480 && (
+              <button
+                type="button"
+                className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+                onClick={() => setTranscriptExpanded((v) => !v)}
+              >
+                {transcriptExpanded ? "Show less" : "Show full transcript"}
+              </button>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {pack.faq.length > 0 && (
         <Card>
@@ -477,7 +524,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         <CardContent className="space-y-3 p-6">
           <p className="font-semibold">SRT and highlights</p>
           <p className="text-xs text-muted-foreground">
-            SRT subtitles are built from your text with estimated timestamps. For time-accurate
+            Pulled directly from your submitted transcript with estimated timestamps. For time-accurate
             subtitles, upload audio instead of pasting notes.
           </p>
           {pack.srt ? (

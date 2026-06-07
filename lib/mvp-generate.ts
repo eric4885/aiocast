@@ -37,32 +37,110 @@ function fallbackTranscript(sourceLabel: string) {
   return `This episode discusses practical podcast growth strategy: turning one conversation into a search-ready article, FAQ blocks, and channel-native promotion scripts. Source: ${sourceLabel}.`;
 }
 
-function srtFromTranscript(transcript: string, sourceType: Input["sourceType"]) {
-  const sentences = transcript
+function splitTranscriptSegments(transcript: string): string[] {
+  const byLine = transcript
     .split(/\n+/)
-    .flatMap((block) => block.split(/(?<=[.!?。！？])\s+/))
     .map((s) => s.trim())
-    .filter((s) => s.length > 8)
-    .slice(0, 60);
+    .filter((s) => s.length >= 12);
 
+  if (byLine.length >= 2) return byLine;
+
+  const bySentence = transcript
+    .split(/(?<=[.!?。！？])\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length >= 12);
+
+  if (bySentence.length >= 1) return bySentence;
+
+  const flat = transcript.replace(/\s+/g, " ").trim();
+  if (!flat) return [];
+
+  const segments: string[] = [];
+  for (let i = 0; i < flat.length; i += 180) {
+    const chunk = flat.slice(i, i + 180).trim();
+    if (chunk.length >= 12) segments.push(chunk);
+  }
+  return segments.length > 0 ? segments : [flat];
+}
+
+function formatSrtTimestamp(totalSec: number) {
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const ms = "000";
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")},${ms}`;
+}
+
+function formatClockTimestamp(totalSec: number) {
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+function srtFromTranscript(transcript: string, sourceType: Input["sourceType"]) {
+  const sentences = splitTranscriptSegments(transcript).slice(0, 60);
   if (sentences.length === 0) return "";
 
   const secondsPerLine = sourceType === "audio" ? 5 : 4;
-  const formatTs = (totalSec: number) => {
-    const h = Math.floor(totalSec / 3600);
-    const m = Math.floor((totalSec % 3600) / 60);
-    const s = totalSec % 60;
-    const ms = "000";
-    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")},${ms}`;
-  };
 
   return sentences
     .map((text, i) => {
       const start = i * secondsPerLine;
       const end = start + secondsPerLine - 1;
-      return `${i + 1}\n${formatTs(start)} --> ${formatTs(end)}\n${text}\n`;
+      return `${i + 1}\n${formatSrtTimestamp(start)} --> ${formatSrtTimestamp(end)}\n${text}\n`;
     })
     .join("\n");
+}
+
+function highlightsFromTranscript(transcript: string, sourceType: Input["sourceType"]) {
+  const segments = splitTranscriptSegments(transcript);
+  if (segments.length === 0) return defaultHighlights();
+
+  const secondsPerSegment = sourceType === "audio" ? 45 : 30;
+  const pickIndices =
+    segments.length === 1 ? [0] : [0, Math.min(segments.length - 1, Math.floor(segments.length / 2))];
+
+  const uniqueIndices = Array.from(new Set(pickIndices)).slice(0, 2);
+  return uniqueIndices.map((idx) => {
+    const text = segments[idx];
+    const titleWords = text.split(/\s+/).slice(0, 6).join(" ");
+    const start = idx * secondsPerSegment;
+    const end = start + secondsPerSegment;
+    return {
+      title: titleWords.length > 48 ? `${titleWords.slice(0, 48)}…` : titleWords || "Highlight",
+      start: formatClockTimestamp(start),
+      end: formatClockTimestamp(end),
+      note: text.length > 160 ? `${text.slice(0, 160)}…` : text,
+    };
+  });
+}
+
+function isPlaceholderSocial(text: string): boolean {
+  const t = text.trim();
+  if (!t || t.length < 24) return true;
+  if (/^https?:\/\/\S+$/i.test(t)) return true;
+  if (/^(https?:\/\/\S+\s*){1,3}$/i.test(t)) return true;
+  if (/yourpodcast|example\.com|placeholder|yourhandle|yourchannel/i.test(t)) return true;
+  return false;
+}
+
+function socialFromTranscript(transcript: string) {
+  const flat = transcript.replace(/\s+/g, " ").trim();
+  const hook = flat.slice(0, 240).trim();
+  const detail = flat.slice(0, 900).trim();
+
+  return {
+    x:
+      (hook.length > 220 ? `${hook.slice(0, 217)}…` : hook) +
+      "\n\nWhat stood out to you in this episode?",
+    linkedIn:
+      `From our latest episode:\n\n${detail.length > 850 ? `${detail.slice(0, 847)}…` : detail}\n\n` +
+      "What's your take? Drop a comment below.",
+    substack:
+      `This week on the show:\n\n${detail.length > 700 ? `${detail.slice(0, 697)}…` : detail}\n\n` +
+      "Read the full SEO article draft in your growth pack.",
+  };
 }
 
 function jsonFromModel(raw: string) {
@@ -91,7 +169,15 @@ async function generateWithOpenAI(transcript: string): Promise<{
 
   const prompt = `
 Return strict JSON with keys:
-title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 objects {q,a}), socialX, socialLinkedIn, socialSubstack, schedule (array of 7 short lines), highlights (array of 2 objects {title,start,end,note}), seoReport ({targetKeyword,altTitle,altDescription,estimatedTrafficHint})
+title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 objects {q,a}), socialX, socialLinkedIn, socialSubstack, schedule (array of 7 short lines), seoReport ({targetKeyword,altTitle,altDescription,estimatedTrafficHint})
+
+Rules:
+- articleBody: a FULL publishable SEO blog post in Markdown (800–1200 words) with ## section headers. Expand ideas from the transcript into reader-friendly prose. Do NOT write a short recap or bullet summary — write a complete article with intro, 3–5 sections, and conclusion. Use specific details from the transcript.
+- socialX: ready-to-post tweet text (≤280 chars). Plain text only — NO profile URLs, NO "https://" links, NO placeholders like yourpodcast.
+- socialLinkedIn: ready-to-post LinkedIn post (2–4 short paragraphs). Plain text only — NO URLs unless quoting a specific fact from the episode.
+- socialSubstack: ready-to-post newsletter intro (150–400 words). Plain text only — NO placeholder links.
+- schedule: 7 lines tied to THIS episode's topics, not generic "publish episode" filler.
+- faq: 3 Q&A pairs grounded in the transcript.
 
 Context transcript:
 ${transcript.slice(0, 8000)}
@@ -272,27 +358,6 @@ function normalizeSchedule(raw: unknown) {
   return items.length > 0 ? items.slice(0, 7) : defaultSchedule();
 }
 
-function normalizeHighlights(raw: unknown) {
-  if (!Array.isArray(raw)) return defaultHighlights();
-  const items = raw
-    .map((item) => {
-      if (!item || typeof item !== "object") return null;
-      const row = item as Record<string, unknown>;
-      const title = String(row.title ?? "").trim();
-      if (!title) return null;
-      return {
-        title,
-        start: String(row.start ?? "00:00:00"),
-        end: String(row.end ?? "00:00:30"),
-        note: String(row.note ?? ""),
-      };
-    })
-    .filter(
-      (item): item is { title: string; start: string; end: string; note: string } => item !== null,
-    );
-  return items.length > 0 ? items.slice(0, 2) : defaultHighlights();
-}
-
 function normalizeSeoReport(raw: unknown) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return defaultSeoReport();
   const row = raw as Record<string, unknown>;
@@ -330,7 +395,13 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
 
   const schedule = normalizeSchedule(ai?.schedule);
 
-  const highlights = normalizeHighlights(ai?.highlights);
+  const socialFallback = socialFromTranscript(transcript);
+  const pickSocial = (key: string, fallback: string) => {
+    const raw = aiStr(key);
+    return raw && !isPlaceholderSocial(raw) ? raw : fallback;
+  };
+
+  const highlights = highlightsFromTranscript(transcript, input.sourceType);
 
   return {
     id: "",
@@ -348,15 +419,9 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     },
     faq,
     socialPack: {
-      x:
-        aiStr("socialX") ??
-        "Most podcast episodes disappear after day one. We built a system: one URL in, then SEO article + FAQ + distribution scripts out. That is compounding audience growth.",
-      linkedIn:
-        aiStr("socialLinkedIn") ??
-        "Podcasters do not need more tools. They need a repeatable publishing loop. We now convert each episode into a search-ready article and channel-native scripts in one pass.",
-      substack:
-        aiStr("socialSubstack") ??
-        "This week we tested an audio-to-SEO workflow: one episode became a full article, three FAQ snippets, and a seven-day distribution plan.",
+      x: pickSocial("socialX", socialFallback.x),
+      linkedIn: pickSocial("socialLinkedIn", socialFallback.linkedIn),
+      substack: pickSocial("socialSubstack", socialFallback.substack),
     },
     localSchedule: schedule,
     srt: srtFromTranscript(transcript, input.sourceType),
