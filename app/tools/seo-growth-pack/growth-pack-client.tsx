@@ -271,6 +271,9 @@ export function GrowthPackClient({
                       <label htmlFor="pack-transcript-only" className="text-sm font-semibold">
                         Episode transcript or show notes
                       </label>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        English works best. Non-English notes are auto-translated to English in your pack.
+                      </p>
                       <textarea
                         id="pack-transcript-only"
                         value={transcript}

@@ -1,3 +1,4 @@
+import { ensureEnglishTranscript } from "@/lib/ensure-english-transcript";
 import { extractTaskId, pollApimartTask } from "@/lib/apimart-task";
 import { dayKey, type GeneratedPack } from "@/lib/mvp-store";
 import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
@@ -100,7 +101,7 @@ title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 obje
 
 Rules:
 - ${outputLanguageRule()}
-- articleBody: a FULL publishable SEO blog post in Markdown (800–1200 words) with ## section headers. Expand and rewrite ideas from the transcript into fresh editorial prose for Google search. Do NOT paste or lightly paraphrase the transcript — every section must be newly written. Do NOT write a short recap or bullet summary.
+- articleBody: a FULL publishable SEO blog post in Markdown (800–1200 words) with ## section headers. Expand and rewrite ideas from the transcript into fresh editorial prose for Google search. Do NOT paste or lightly paraphrase the transcript — every section must be newly written. The opening paragraph must use completely different wording from the transcript's first two sentences. Do NOT write a short recap or bullet summary.
 - socialX: ready-to-post tweet text (≤280 chars). Plain text only — NO profile URLs, NO "https://" links, NO placeholders like yourpodcast.
 - socialLinkedIn: ready-to-post LinkedIn post (2–4 short paragraphs). Plain text only — NO URLs unless quoting a specific fact from the episode.
 - socialSubstack: ready-to-post newsletter intro (150–400 words). Plain text only — NO placeholder links.
@@ -293,7 +294,9 @@ function normalizeSeoReport(raw: unknown) {
 }
 
 export async function buildPack(input: Input): Promise<GeneratedPack> {
-  const transcript = input.transcriptHint?.trim() || fallbackTranscript(input.sourceLabel);
+  const rawTranscript = input.transcriptHint?.trim() || fallbackTranscript(input.sourceLabel);
+  const normalized = await ensureEnglishTranscript(rawTranscript);
+  const transcript = normalized.text;
   const aiResult = await generateWithOpenAI(transcript);
   const ai = aiResult.data;
   const usedAi = Boolean(ai && (ai.articleBody || ai.title));
@@ -356,6 +359,7 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     generationSource: usedAi ? "ai" : "template",
     aiFailureReason: usedAi ? undefined : aiResult.failureReason,
     articleEchoesSource: articleEchoesSource || undefined,
+    transcriptTranslated: normalized.wasTranslated || undefined,
   };
 }
 

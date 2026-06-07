@@ -14,7 +14,7 @@ export function splitTranscriptSegments(transcript: string): string[] {
   const block = byLine.length === 1 ? byLine[0] : trimmed;
 
   const bySentence = block
-    .split(/(?<=[.!?])\s+/)
+    .split(/(?<=[.!?。！？])\s*/)
     .map((s) => s.trim())
     .filter((s) => s.length >= 8);
 

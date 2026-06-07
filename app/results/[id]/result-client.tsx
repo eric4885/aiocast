@@ -38,6 +38,7 @@ type JobPayload = {
     transcript?: string;
     sourceType?: TranscriptSourceType;
     articleEchoesSource?: boolean;
+    transcriptTranslated?: boolean;
   };
 };
 
@@ -122,6 +123,7 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
         ? raw.sourceType
         : "transcript",
     articleEchoesSource: raw.articleEchoesSource === true ? true : undefined,
+    transcriptTranslated: raw.transcriptTranslated === true ? true : undefined,
   };
 }
 
@@ -236,17 +238,27 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     }
   };
 
-  const downloadSrt = (srt: string) => {
-    if (!srt) return;
-    const blob = new Blob([srt], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `aiocast-${id}.srt`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-    setCopyToast("SRT downloaded");
-    window.setTimeout(() => setCopyToast(null), 2000);
+  const downloadSrtFromServer = async () => {
+    if (!token) return;
+    try {
+      const qs = new URLSearchParams({ id, token });
+      const res = await fetch(`/api/pack-srt?${qs.toString()}`, { cache: "no-store" });
+      if (!res.ok) return;
+      const text = await res.text();
+      const blob = new Blob([`\uFEFF${text}`], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `aiocast-${id}-${Date.now()}.srt`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+      setCopyToast("SRT downloaded");
+      window.setTimeout(() => setCopyToast(null), 2000);
+    } catch {
+      /* ignore */
+    }
   };
 
   if (loadError) {
@@ -457,7 +469,9 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
               <div>
                 <p className="font-semibold">Your source transcript</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  The text you submitted — SRT and highlights are built from this.
+                  {pack.transcriptTranslated
+                    ? "Translated to English from your submission — SRT and highlights use this version."
+                    : "The text used for SRT and highlights (matches what you submitted)."}
                 </p>
               </div>
               <Button
@@ -555,9 +569,18 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
           </p>
           {liveSrt ? (
             <>
-              <Button variant="secondary" onClick={() => downloadSrt(liveSrt)}>
-                <Download className="mr-2 h-4 w-4" /> Download SRT
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="secondary" onClick={() => void downloadSrtFromServer()}>
+                  <Download className="mr-2 h-4 w-4" /> Download SRT
+                </Button>
+                <Button size="sm" variant="secondary" onClick={() => void copy(liveSrt, "SRT")}>
+                  <Copy className="mr-2 h-4 w-4" /> Copy SRT
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Download pulls a fresh file from the server — filename includes a timestamp so your OS does not
+                open an older .srt by mistake.
+              </p>
               <pre className="max-h-32 overflow-auto rounded-lg border border-border bg-background/40 p-3 text-xs text-muted-foreground whitespace-pre-wrap">
                 {srtPreview}
                 {liveSrt.length > srtPreview.length ? "\n…" : ""}

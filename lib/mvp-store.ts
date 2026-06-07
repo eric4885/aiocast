@@ -40,6 +40,8 @@ export type GeneratedPack = {
   aiFailureReason?: string;
   /** True when AI article mostly copies the submitted transcript. */
   articleEchoesSource?: boolean;
+  /** True when non-English input was translated to English before generation. */
+  transcriptTranslated?: boolean;
 };
 
 export type JobRecord = {
