@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GrowthPackClient } from "./growth-pack-client";
+import { rateLimitsDisabled } from "@/lib/rate-limit-config";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function SeoGrowthPackPage({
   const fromRemote = searchParams?.from === "remote";
   return (
     <Suspense fallback={<div className="min-h-[40vh]" aria-hidden />}>
-      <GrowthPackClient fromRemoteSetup={fromRemote} />
+      <GrowthPackClient fromRemoteSetup={fromRemote} rateLimitsDisabled={rateLimitsDisabled()} />
     </Suspense>
   );
 }

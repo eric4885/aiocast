@@ -1,6 +1,7 @@
 import { randomBytes, randomUUID } from "crypto";
 import { getJsonField, setJsonField, withSnapshot } from "@/lib/persistent-backend";
 import { checkIpRateLimit, type IpGuardResult } from "@/lib/rate-limit";
+import { ipCooldownMs, ipDailyLimit, rateLimitsDisabled } from "@/lib/rate-limit-config";
 
 export type { IpGuardResult };
 
@@ -74,9 +75,13 @@ export function toPublicJob(job: JobRecord): PublicJobRecord {
 }
 
 export async function checkAndConsumeUsage(email: string) {
+  const limit = freeLimit();
+  if (rateLimitsDisabled()) {
+    return { allowed: true, used: 0, limit };
+  }
+
   const key = email.trim().toLowerCase();
   const currentMonth = monthKey();
-  const limit = freeLimit();
 
   return withSnapshot((snapshot) => {
     const current = snapshot.usage[key];
@@ -94,10 +99,13 @@ export async function checkAndConsumeUsage(email: string) {
 }
 
 export async function checkIpGuards(ip: string): Promise<IpGuardResult> {
+  if (rateLimitsDisabled()) {
+    return { allowed: true, code: "OK", used: 0, dailyLimit: ipDailyLimit() };
+  }
   return checkIpRateLimit({
     ip,
-    cooldownMs: 60_000,
-    dailyLimit: 3,
+    cooldownMs: ipCooldownMs(),
+    dailyLimit: ipDailyLimit(),
     usageKey: "ipUsage",
     lastKey: "ipLastSubmit",
   });
