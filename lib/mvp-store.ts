@@ -33,6 +33,8 @@ export type GeneratedPack = {
     altDescription: string;
     estimatedTrafficHint: string;
   };
+  /** Whether content came from the AI model or the built-in template fallback. */
+  generationSource?: "ai" | "template";
 };
 
 export type JobRecord = {

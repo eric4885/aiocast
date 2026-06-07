@@ -37,19 +37,32 @@ function fallbackTranscript(sourceLabel: string) {
   return `This episode discusses practical podcast growth strategy: turning one conversation into a search-ready article, FAQ blocks, and channel-native promotion scripts. Source: ${sourceLabel}.`;
 }
 
-function srtFromTranscript(transcript: string) {
-  const segments = [
-    "In this episode, we break down the SEO content loop for podcasters.",
-    "You will learn how to convert one audio into an article and FAQ snippets.",
-    "Then we map social scripts for X, LinkedIn, and newsletter distribution.",
-    "Finally, we propose a seven-day localized publishing plan.",
-  ];
-  const lines = segments.map((text, i) => {
-    const start = `00:00:${String(i * 15).padStart(2, "0")},000`;
-    const end = `00:00:${String(i * 15 + 14).padStart(2, "0")},000`;
-    return `${i + 1}\n${start} --> ${end}\n${text}\n`;
-  });
-  return `${lines.join("\n")}\n${transcript.slice(0, 160)}`;
+function srtFromTranscript(transcript: string, sourceType: Input["sourceType"]) {
+  const sentences = transcript
+    .split(/\n+/)
+    .flatMap((block) => block.split(/(?<=[.!?。！？])\s+/))
+    .map((s) => s.trim())
+    .filter((s) => s.length > 8)
+    .slice(0, 60);
+
+  if (sentences.length === 0) return "";
+
+  const secondsPerLine = sourceType === "audio" ? 5 : 4;
+  const formatTs = (totalSec: number) => {
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    const ms = "000";
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")},${ms}`;
+  };
+
+  return sentences
+    .map((text, i) => {
+      const start = i * secondsPerLine;
+      const end = start + secondsPerLine - 1;
+      return `${i + 1}\n${formatTs(start)} --> ${formatTs(end)}\n${text}\n`;
+    })
+    .join("\n");
 }
 
 function jsonFromModel(raw: string) {
@@ -120,9 +133,7 @@ ${transcript.slice(0, 8000)}
     }
 
     if (!res.ok) {
-      if (process.env.OPENAI_LOG_USAGE === "true") {
-        console.warn("[openai error]", res.status, JSON.stringify(json?.error ?? json));
-      }
+      console.error("[openai generate] HTTP", res.status, raw.slice(0, 400));
       return null;
     }
 
@@ -149,9 +160,7 @@ ${transcript.slice(0, 8000)}
 
     return null;
   } catch (error) {
-    if (process.env.OPENAI_LOG_USAGE === "true") {
-      console.warn("[openai parse/generate error]", error instanceof Error ? error.message : error);
-    }
+    console.error("[openai generate error]", error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -259,6 +268,7 @@ function normalizeSeoReport(raw: unknown) {
 export async function buildPack(input: Input): Promise<GeneratedPack> {
   const transcript = input.transcriptHint?.trim() || fallbackTranscript(input.sourceLabel);
   const ai = await generateWithOpenAI(transcript);
+  const usedAi = Boolean(ai && (ai.articleBody || ai.title));
   const now = new Date().toISOString();
 
   const title =
@@ -304,9 +314,10 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
         "This week we tested an audio-to-SEO workflow: one episode became a full article, three FAQ snippets, and a seven-day distribution plan.",
     },
     localSchedule: schedule,
-    srt: srtFromTranscript(transcript),
+    srt: srtFromTranscript(transcript, input.sourceType),
     highlights,
     seoReport: normalizeSeoReport(ai?.seoReport),
+    generationSource: usedAi ? "ai" : "template",
   };
 }
 

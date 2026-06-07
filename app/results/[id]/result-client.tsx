@@ -27,6 +27,7 @@ type JobPayload = {
       altDescription: string;
       estimatedTrafficHint: string;
     };
+    generationSource?: "ai" | "template";
   };
 };
 
@@ -100,6 +101,10 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
       altDescription: asString(seoReport.altDescription),
       estimatedTrafficHint: asString(seoReport.estimatedTrafficHint),
     },
+    generationSource:
+      raw.generationSource === "ai" || raw.generationSource === "template"
+        ? raw.generationSource
+        : undefined,
   };
 }
 
@@ -294,6 +299,9 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
   const articlePreview = pack.seoArticle.body.slice(0, 480);
   const articleTruncated = pack.seoArticle.body.length > 480;
+  const wordCount = pack.seoArticle.body.trim().split(/\s+/).filter(Boolean).length;
+  const isTemplate = pack.generationSource === "template";
+  const isAi = pack.generationSource === "ai";
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-14">
@@ -309,6 +317,23 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       <p className="text-center text-xs text-muted-foreground">
         Private link — review and edit before publishing. Do not share this URL publicly.
       </p>
+
+      {isTemplate && (
+        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+          <p className="font-semibold">Template draft — AI did not run for this pack</p>
+          <p className="mt-1 text-amber-100/90">
+            Content below is a generic starter based on your input. Check Cloudflare{" "}
+            <code className="text-xs">OPENAI_ENABLED</code> and APImart balance, then generate again
+            for a custom AI draft.
+          </p>
+        </div>
+      )}
+
+      {isAi && (
+        <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
+          AI-generated draft — review facts and tone before publishing.
+        </div>
+      )}
 
       {!emailSent && token && (
         <Card className="border-primary/25 bg-primary/5">
@@ -352,7 +377,12 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       <Card>
         <CardContent className="space-y-4 p-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <p className="font-semibold">SEO article draft</p>
+            <div>
+              <p className="font-semibold">SEO article draft</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                ~{wordCount.toLocaleString()} words · aim for 800–1,500 for a solid SEO post
+              </p>
+            </div>
             <Button size="sm" variant="secondary" onClick={() => void copy(pack.seoArticle.body, "Article")}>
               <Copy className="mr-2 h-4 w-4" /> Copy full article
             </Button>
@@ -438,6 +468,10 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       <Card>
         <CardContent className="space-y-3 p-6">
           <p className="font-semibold">SRT and highlights</p>
+          <p className="text-xs text-muted-foreground">
+            SRT subtitles are built from your text with estimated timestamps. For time-accurate
+            subtitles, upload audio instead of pasting notes.
+          </p>
           {pack.srt ? (
             <Button variant="secondary" onClick={downloadSrt}>
               <Download className="mr-2 h-4 w-4" /> Download SRT
