@@ -23,7 +23,7 @@ export default function ResultError({
               Try again
             </Button>
             <Button variant="secondary" asChild>
-              <Link href="/tools/audio-quality-checker">Generate a new pack</Link>
+              <Link href="/tools/seo-growth-pack">Generate a new pack</Link>
             </Button>
           </div>
         </CardContent>

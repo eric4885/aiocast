@@ -1,11 +1,12 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Mic2, Sparkles, UploadCloud } from "lucide-react";
+import { ChevronDown, Loader2, Mic2, Sparkles, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { samplePack } from "@/lib/sample-pack";
 import { cn } from "@/lib/utils";
 
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -14,7 +15,7 @@ const MAX_SECONDS = 300;
 type Phase = "idle" | "analyzing";
 type InputMode = "audio" | "transcript";
 
-export function AudioQualityClient({
+export function GrowthPackClient({
   fromRemoteSetup = false,
 }: {
   fromRemoteSetup?: boolean;
@@ -28,6 +29,7 @@ export function AudioQualityClient({
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [email, setEmail] = useState("");
+  const [showSample, setShowSample] = useState(false);
 
   const objectUrl = useMemo(() => (file ? URL.createObjectURL(file) : null), [file]);
 
@@ -50,7 +52,7 @@ export function AudioQualityClient({
       return;
     }
     if (next.size > MAX_BYTES) {
-      setError("Please upload a sample under 10 MB.");
+      setError("Please upload a sample under 10 MB. Trim to the first 5 minutes if needed.");
       return;
     }
     const audio = document.createElement("audio");
@@ -61,13 +63,13 @@ export function AudioQualityClient({
       audio.onloadedmetadata = () => resolve();
       audio.onerror = () => reject(new Error("metadata"));
     }).catch(() => {
-      setError("Could not read audio metadata.");
+      setError("Could not read audio metadata. Try MP3, M4A, or WAV.");
       URL.revokeObjectURL(url);
       return;
     });
     URL.revokeObjectURL(url);
     if (audio.duration > MAX_SECONDS + 0.25) {
-      setError(`Keep samples under ${Math.floor(MAX_SECONDS / 60)} minutes for free plan.`);
+      setError(`Keep samples under ${Math.floor(MAX_SECONDS / 60)} minutes for free plan. Trim your clip and retry.`);
       return;
     }
     setFile(next);
@@ -86,10 +88,6 @@ export function AudioQualityClient({
   const willTranscribe = inputMode === "audio" && file !== null && !hasTranscript;
 
   const runAnalysis = useCallback(async () => {
-    if (!email.trim()) {
-      setError("Email is required to deliver your result link.");
-      return;
-    }
     if (inputMode === "transcript" && !hasTranscript) {
       setError("Paste a transcript, show notes, or outline to generate your pack.");
       return;
@@ -104,7 +102,7 @@ export function AudioQualityClient({
     setError(null);
     try {
       const formData = new FormData();
-      formData.append("email", email.trim());
+      if (email.trim()) formData.append("email", email.trim());
       if (transcript.trim()) formData.append("transcript", transcript.trim());
       if (file) formData.append("file", file);
       const res = await fetch("/api/generate-pack", {
@@ -126,7 +124,7 @@ export function AudioQualityClient({
       setSubmitSuccess(true);
       window.setTimeout(() => {
         window.location.assign(payload.resultUrl!);
-      }, willTranscribe ? 1200 : 2600);
+      }, willTranscribe ? 1200 : 1800);
     } catch {
       setError("Generation failed - try again in a moment.");
       setOpeningChest(false);
@@ -134,13 +132,12 @@ export function AudioQualityClient({
     }
   }, [file, transcript, email, inputMode, hasTranscript, willTranscribe]);
 
-  const readyToSubmit = hasInput && email.trim().length > 0;
+  const readyToSubmit = hasInput;
   const busy = phase === "analyzing" || submitSuccess;
   const canClickSubmit = readyToSubmit && !busy;
 
   const disabledSubmitHint = (() => {
     if (busy) return undefined;
-    if (!email.trim()) return "Please enter your email address";
     if (inputMode === "transcript" && !hasTranscript) {
       return "Paste a transcript, show notes, or outline to generate your pack";
     }
@@ -157,8 +154,8 @@ export function AudioQualityClient({
 
   const progressLabel = willTranscribe ? "Transcribing audio and building your pack..." : "Generating your growth pack...";
   const progressDetail = willTranscribe
-    ? "This usually takes 30–90 seconds for a 5-minute clip. Keep this tab open."
-    : "Packaging your assets now...";
+    ? "Usually 30–90 seconds for a 5-minute clip. Keep this tab open — you'll land on your result page automatically."
+    : "Packaging your assets now — you'll be redirected when ready.";
 
   return (
     <div className="border-b border-border bg-gradient-hero bg-grid-subtle">
@@ -180,7 +177,7 @@ export function AudioQualityClient({
           <p className="font-semibold text-primary">Free plan limits</p>
           <ul className="mt-2 space-y-1">
             <li>Paste transcript/show notes, or upload audio for automatic transcription</li>
-            <li>Audio: up to 5 minutes · 10 MB max · MP3 recommended</li>
+            <li>Audio: up to 5 minutes · 10 MB max · MP3, M4A, or WAV recommended</li>
             <li>Per email: 3 free runs per month · Per IP: 3 per day</li>
             <li>Please wait 1 minute between submissions from the same IP</li>
           </ul>
@@ -229,7 +226,7 @@ export function AudioQualityClient({
                         <UploadCloud className="mb-4 h-10 w-10 text-primary" />
                         <span className="text-sm font-semibold">Drag & drop or click to browse</span>
                         <span className="mt-2 text-xs text-muted-foreground">
-                          {file ? file.name : "MP3 recommended · max 10 MB · up to 5 min"}
+                          {file ? file.name : "MP3 / M4A / WAV · max 10 MB · up to 5 min"}
                         </span>
                         {!file && (
                           <span className="mt-2 block text-[11px] leading-snug text-muted-foreground/90">
@@ -291,26 +288,29 @@ export function AudioQualityClient({
 
               <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">Step 2</p>
-                <p className="mt-1 text-base font-semibold text-foreground">Email for delivery</p>
+                <p className="mt-1 text-base font-semibold text-foreground">
+                  Email for backup delivery{" "}
+                  <span className="text-sm font-normal text-muted-foreground">(optional)</span>
+                </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  We send a link to your personalized result page. See our{" "}
+                  Skip this to open results instantly. Add an email and we&apos;ll also send a private link you can
+                  revisit later. See our{" "}
                   <a href="/privacy" className="text-primary underline-offset-4 hover:underline">
                     Privacy Policy
-                  </a>{" "}
-                  for how we use your email and inputs.
+                  </a>
+                  .
                 </p>
                 <label htmlFor="pack-delivery-email" className="sr-only">
-                  Email for delivery
+                  Email for backup delivery (optional)
                 </label>
                 <Input
                   id="pack-delivery-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="you@example.com (optional)"
                   className="mt-3"
                   autoComplete="email"
-                  required
                 />
               </div>
 
@@ -327,7 +327,8 @@ export function AudioQualityClient({
                     className="mt-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-100"
                     role="status"
                   >
-                    ✓ Your pack is being generated — check your inbox in 2–5 minutes.
+                    ✓ Pack ready — opening your result page now
+                    {email.trim() ? ". We’ll also email a backup link shortly." : ". Bookmark the page or add your email there."}
                   </p>
                 )}
                 {!canClickSubmit && disabledSubmitHint && (
@@ -382,44 +383,84 @@ export function AudioQualityClient({
             </CardContent>
           </Card>
 
-          <Card className="relative overflow-hidden border-border/80 shadow-[0_0_0_1px_rgba(99,102,241,0.15)]">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-            <CardContent className="space-y-6 p-8">
-              <div className="space-y-3 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/10 to-accent/5 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-primary">Fixed 3-piece delivery</p>
-                <div className="rounded-lg border border-border bg-background/60 p-3">
-                  <p className="text-sm font-semibold text-foreground">
-                    <span aria-hidden>📄 </span>SEO Blog Post
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Title, meta description, H2 outline, and structured FAQ blocks for featured snippets.
+          <div className="space-y-6">
+            <Card className="relative overflow-hidden border-border/80 shadow-[0_0_0_1px_rgba(99,102,241,0.15)]">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+              <CardContent className="space-y-6 p-8">
+                <div className="space-y-3 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/10 to-accent/5 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-primary">Fixed 3-piece delivery</p>
+                  <div className="rounded-lg border border-border bg-background/60 p-3">
+                    <p className="text-sm font-semibold text-foreground">
+                      <span aria-hidden>📄 </span>SEO Blog Post
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Title, meta description, H2 outline, and structured FAQ blocks for featured snippets.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-border bg-background/60 p-3">
+                    <p className="text-sm font-semibold text-foreground">
+                      <span aria-hidden>📱 </span>Social Scripts
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Ready-to-post copy for X, LinkedIn, and Substack — edit lightly and publish.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-border bg-background/60 p-3">
+                    <p className="text-sm font-semibold text-foreground">
+                      <span aria-hidden>📅 </span>7-Day Publish Plan
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Week-long rollout suggestions with timing hints — pair with your analytics when you upgrade.
+                    </p>
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-secondary/40 p-4">
+                  <p className="font-semibold">Delivery</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Results open on this site as soon as generation finishes — usually under 90 seconds. Optional email
+                    sends a private backup link.
                   </p>
                 </div>
-                <div className="rounded-lg border border-border bg-background/60 p-3">
-                  <p className="text-sm font-semibold text-foreground">
-                    <span aria-hidden>📱 </span>Social Scripts
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Ready-to-post copy for X, LinkedIn, and Substack — edit lightly and publish.
-                  </p>
-                </div>
-                <div className="rounded-lg border border-border bg-background/60 p-3">
-                  <p className="text-sm font-semibold text-foreground">
-                    <span aria-hidden>📅 </span>7-Day Publish Plan
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Week-long rollout suggestions with timing hints — pair with your analytics when you upgrade.
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-secondary/40 p-4">
-                <p className="font-semibold">Delivery</p>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Results delivered to your inbox within 2–5 minutes.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/80">
+              <CardContent className="p-6">
+                <button
+                  type="button"
+                  onClick={() => setShowSample((v) => !v)}
+                  className="flex w-full items-center justify-between gap-2 text-left"
+                  aria-expanded={showSample}
+                >
+                  <span className="font-semibold">See example output</span>
+                  <ChevronDown
+                    className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform", showSample && "rotate-180")}
+                  />
+                </button>
+                {showSample && (
+                  <div className="mt-4 space-y-4 border-t border-border pt-4 text-sm">
+                    <div>
+                      <p className="font-semibold text-foreground">{samplePack.seoArticle.title}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{samplePack.seoArticle.metaDescription}</p>
+                      <p className="mt-2 line-clamp-4 text-xs text-muted-foreground">{samplePack.seoArticle.body}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">Social preview</p>
+                      <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">{samplePack.socialPack.x}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">7-day plan (excerpt)</p>
+                      <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-muted-foreground">
+                        {samplePack.localSchedule.slice(0, 3).map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

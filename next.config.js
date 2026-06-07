@@ -13,6 +13,15 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/tools/audio-quality-checker",
+        destination: "/tools/seo-growth-pack",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

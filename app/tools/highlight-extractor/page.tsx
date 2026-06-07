@@ -32,7 +32,7 @@ export default function HighlightExtractorPage() {
             <Link href="/podcast-to-short-video">Open workflow</Link>
           </Button>
           <Button size="lg" variant="secondary" asChild>
-            <Link href="/tools/audio-quality-checker">Benchmark audio first</Link>
+            <Link href="/tools/seo-growth-pack">Generate SEO pack first</Link>
           </Button>
         </div>
         <Card className="mt-12 border-dashed border-border text-left">

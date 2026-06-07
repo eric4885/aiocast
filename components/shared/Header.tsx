@@ -22,7 +22,7 @@ const nav = [
     badge: "Soon",
   },
   { href: "/remote-recording-setup", label: "Local schedule" },
-  { href: "/tools/audio-quality-checker", label: "Free tools" },
+  { href: "/tools/seo-growth-pack", label: "SEO growth pack" },
 ] as const;
 
 export function Header() {
@@ -67,7 +67,7 @@ export function Header() {
         <div className="hidden items-center gap-2 md:flex">
           {isHome ? (
             <Button size="sm" asChild>
-              <Link href="/tools/audio-quality-checker">Get Started</Link>
+              <Link href="/tools/seo-growth-pack">Get Started</Link>
             </Button>
           ) : (
             <>
@@ -75,7 +75,7 @@ export function Header() {
                 <Link href="/pro-toolkit">Pro toolkit</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/tools/audio-quality-checker">Generate pack</Link>
+                <Link href="/tools/seo-growth-pack">Generate pack</Link>
               </Button>
             </>
           )}
@@ -113,7 +113,7 @@ export function Header() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/tools/audio-quality-checker" onClick={() => setOpen(false)}>
+                <Link href="/tools/seo-growth-pack" onClick={() => setOpen(false)}>
                   Generate pack
                 </Link>
               </DropdownMenuItem>

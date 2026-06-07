@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/ai-podcast-editing-stack",
     "/podcast-to-short-video",
     "/remote-recording-setup",
-    "/tools/audio-quality-checker",
+    "/tools/seo-growth-pack",
     "/resources/pre-flight-checklist",
   ];
 

@@ -206,7 +206,7 @@ export function EditingStackView() {
 
           <div className="mt-10 flex flex-wrap gap-4">
             <Button size="lg" asChild>
-              <Link href="/tools/audio-quality-checker">
+              <Link href="/tools/seo-growth-pack">
                 Try free
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

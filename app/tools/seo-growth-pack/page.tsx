@@ -1,6 +1,6 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Suspense } from "react";
-import { AudioQualityClient } from "./audio-quality-client";
+import { GrowthPackClient } from "./growth-pack-client";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -11,11 +11,11 @@ export const metadata: Metadata = {
     title: "Generate your podcast SEO growth pack",
     description:
       "Paste transcript or upload audio — get SEO article drafts, social scripts, and a publish plan.",
-    url: `${siteConfig.url}/tools/audio-quality-checker`,
+    url: `${siteConfig.url}/tools/seo-growth-pack`,
   },
 };
 
-export default function AudioQualityCheckerPage({
+export default function SeoGrowthPackPage({
   searchParams,
 }: {
   searchParams?: { from?: string };
@@ -23,7 +23,7 @@ export default function AudioQualityCheckerPage({
   const fromRemote = searchParams?.from === "remote";
   return (
     <Suspense fallback={<div className="min-h-[40vh]" aria-hidden />}>
-      <AudioQualityClient fromRemoteSetup={fromRemote} />
+      <GrowthPackClient fromRemoteSetup={fromRemote} />
     </Suspense>
   );
 }

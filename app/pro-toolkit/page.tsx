@@ -64,7 +64,7 @@ export default function ProToolkitPage() {
               </ul>
               <div className="space-y-3">
                 <Button size="lg" className="w-full" asChild>
-                  <Link href="/tools/audio-quality-checker">
+                  <Link href="/tools/seo-growth-pack">
                     Start free — generate my pack
                   </Link>
                 </Button>

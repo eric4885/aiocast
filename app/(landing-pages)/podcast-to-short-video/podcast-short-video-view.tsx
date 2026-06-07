@@ -53,7 +53,7 @@ export function PodcastShortVideoView() {
               </Link>
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link href="/tools/audio-quality-checker">
+              <Link href="/tools/seo-growth-pack">
                 Generate full pack
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

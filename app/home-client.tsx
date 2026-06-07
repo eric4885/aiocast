@@ -969,7 +969,7 @@ export function HomePageClient() {
             </li>
           </ul>
           <Button size="lg" className="mx-auto mt-6 flex min-h-[52px] w-full max-w-md touch-manipulation px-8 text-base font-semibold sm:min-h-12 sm:px-10" asChild>
-            <Link href="/tools/audio-quality-checker">
+            <Link href="/tools/seo-growth-pack">
               <Rocket className="mr-2 h-4 w-4" />
               Try free growth pack
             </Link>
@@ -1013,7 +1013,7 @@ export function HomePageClient() {
               </p>
             </Link>
             <Link
-              href="/tools/audio-quality-checker"
+              href="/tools/seo-growth-pack"
               className="group block rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <p className="text-3xl" aria-hidden>

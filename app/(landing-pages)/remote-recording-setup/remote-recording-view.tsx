@@ -57,7 +57,7 @@ export function RemoteRecordingView() {
           </div>
           <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
             Need assets today? The free{" "}
-            <Link href="/tools/audio-quality-checker?from=remote" className="font-semibold text-primary underline-offset-4 hover:underline">
+            <Link href="/tools/seo-growth-pack?from=remote" className="font-semibold text-primary underline-offset-4 hover:underline">
               Generate pack
             </Link>{" "}
             flow includes a 7-day publish plan with timing hints you can adapt to your regions.

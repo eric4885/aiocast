@@ -16,10 +16,10 @@ export function HeroHome() {
     e.preventDefault();
     const trimmed = url.trim();
     if (!trimmed) {
-      router.push("/tools/audio-quality-checker");
+      router.push("/tools/seo-growth-pack");
       return;
     }
-    router.push("/tools/audio-quality-checker?mode=audio");
+    router.push("/tools/seo-growth-pack?mode=audio");
   };
 
   return (

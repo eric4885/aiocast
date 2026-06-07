@@ -106,7 +106,7 @@ export default function PreFlightChecklistPage() {
             See Pro toolkit
           </Link>
           {" · "}
-          <Link href="/tools/audio-quality-checker" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/tools/seo-growth-pack" className="text-primary underline-offset-4 hover:underline">
             Check your recording quality
           </Link>
           .

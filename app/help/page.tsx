@@ -43,20 +43,20 @@ export default function HelpPage() {
         <h2 className="text-base font-semibold text-foreground">Generate pack (free tool)</h2>
         <ul className="mt-3 list-inside list-disc space-y-2">
           <li>
-            <strong className="text-foreground">Transcript required:</strong> Paste a transcript, show notes, or a solid
-            outline. We do not auto-transcribe uploads or fetch episode pages from URLs on this tier.
+            <strong className="text-foreground">Input options:</strong> Paste a transcript or show notes, or upload up
+            to 5 minutes of audio (MP3, M4A, or WAV) for automatic transcription on the free tier.
           </li>
           <li>
-            <strong className="text-foreground">Limits:</strong> Three runs per email per calendar month, three per IP
-            per day, and about one minute between submissions from the same IP.
+            <strong className="text-foreground">Limits:</strong> Three runs per email per calendar month (when an email
+            is provided), three per IP per day, and about one minute between submissions from the same IP.
           </li>
           <li>
-            <strong className="text-foreground">Delivery:</strong> You get a link to a results page and a confirmation
-            email when outbound mail is configured.
+            <strong className="text-foreground">Delivery:</strong> Your pack opens on-site as soon as generation
+            finishes. Add an email for an optional backup link.
           </li>
         </ul>
         <p className="mt-4">
-          <Link href="/tools/audio-quality-checker" className="font-medium text-primary hover:underline">
+          <Link href="/tools/seo-growth-pack" className="font-medium text-primary hover:underline">
             Open Generate pack →
           </Link>
         </p>

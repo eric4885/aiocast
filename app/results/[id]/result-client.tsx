@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Copy, Download } from "lucide-react";
+import { Check, Copy, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+
+const TOOL_HREF = "/tools/seo-growth-pack";
 
 type JobPayload = {
   id: string;
@@ -99,9 +103,40 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
   };
 }
 
+function SocialBlock({
+  label,
+  text,
+  onCopy,
+  copied,
+}: {
+  label: string;
+  text: string;
+  onCopy: () => void;
+  copied: boolean;
+}) {
+  return (
+    <div className="rounded-lg border border-border bg-background/40 p-3">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold">{label}</p>
+        <Button size="sm" variant="secondary" onClick={onCopy}>
+          {copied ? <Check className="mr-1 h-3.5 w-3.5" /> : <Copy className="mr-1 h-3.5 w-3.5" />}
+          {copied ? "Copied" : "Copy"}
+        </Button>
+      </div>
+      <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">{text || "—"}</p>
+    </div>
+  );
+}
+
 export function ResultClient({ id, token }: { id: string; token: string | null }) {
   const [job, setJob] = useState<JobPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [copyToast, setCopyToast] = useState<string | null>(null);
+  const [articleExpanded, setArticleExpanded] = useState(false);
+  const [backupEmail, setBackupEmail] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailSending, setEmailSending] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!token) {
@@ -145,11 +180,36 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     };
   }, [id, token]);
 
-  const copy = async (text: string) => {
+  const copy = async (text: string, label: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      setCopyToast(label);
+      window.setTimeout(() => setCopyToast(null), 2000);
     } catch {
       /* ignore */
+    }
+  };
+
+  const sendBackupEmail = async () => {
+    if (!token || !backupEmail.trim()) return;
+    setEmailSending(true);
+    setEmailError(null);
+    try {
+      const res = await fetch("/api/send-pack-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, token, email: backupEmail.trim() }),
+      });
+      const payload = (await res.json()) as { ok?: boolean; error?: string };
+      if (!res.ok || !payload.ok) {
+        setEmailError(payload.error ?? "Could not send email.");
+        return;
+      }
+      setEmailSent(true);
+    } catch {
+      setEmailError("Could not send email. Try again.");
+    } finally {
+      setEmailSending(false);
     }
   };
 
@@ -163,6 +223,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     anchor.download = `aiocast-${id}.srt`;
     anchor.click();
     URL.revokeObjectURL(url);
+    setCopyToast("SRT downloaded");
+    window.setTimeout(() => setCopyToast(null), 2000);
   };
 
   if (loadError) {
@@ -173,7 +235,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
             <p className="font-semibold text-rose-300">Unable to open pack</p>
             <p className="text-sm text-muted-foreground">{loadError}</p>
             <Button asChild>
-              <Link href="/tools/audio-quality-checker">Generate a new pack</Link>
+              <Link href={TOOL_HREF}>Generate a new pack</Link>
             </Button>
           </CardContent>
         </Card>
@@ -201,9 +263,12 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     return (
       <div className="mx-auto max-w-5xl px-4 py-16">
         <Card>
-          <CardContent className="p-8">
+          <CardContent className="space-y-4 p-8">
             <p className="font-semibold text-rose-300">Generation failed.</p>
-            <p className="mt-2 text-sm text-muted-foreground">{job.error ?? "Unknown error"}</p>
+            <p className="text-sm text-muted-foreground">{job.error ?? "Unknown error"}</p>
+            <Button asChild>
+              <Link href={TOOL_HREF}>Try again</Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -217,9 +282,9 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         <Card>
           <CardContent className="space-y-4 p-8 text-center">
             <p className="font-semibold text-rose-300">Pack data looks incomplete</p>
-            <p className="text-sm text-muted-foreground">Generate a new pack and we will email you a fresh link.</p>
+            <p className="text-sm text-muted-foreground">Generate a new pack to get a fresh link.</p>
             <Button asChild>
-              <Link href="/tools/audio-quality-checker">Generate a new pack</Link>
+              <Link href={TOOL_HREF}>Generate a new pack</Link>
             </Button>
           </CardContent>
         </Card>
@@ -227,20 +292,93 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     );
   }
 
+  const articlePreview = pack.seoArticle.body.slice(0, 480);
+  const articleTruncated = pack.seoArticle.body.length > 480;
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-14">
+      {copyToast && (
+        <p
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-100 shadow-lg"
+          role="status"
+        >
+          {copyToast} copied
+        </p>
+      )}
+
       <p className="text-center text-xs text-muted-foreground">
         Private link — review and edit before publishing. Do not share this URL publicly.
       </p>
 
+      {!emailSent && token && (
+        <Card className="border-primary/25 bg-primary/5">
+          <CardContent className="space-y-3 p-6">
+            <p className="font-semibold">Email me this link</p>
+            <p className="text-sm text-muted-foreground">
+              Bookmark this page or send a backup link to your inbox.
+            </p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                type="email"
+                value={backupEmail}
+                onChange={(e) => setBackupEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoComplete="email"
+                className="flex-1"
+              />
+              <Button
+                variant="secondary"
+                disabled={!backupEmail.trim() || emailSending}
+                onClick={() => void sendBackupEmail()}
+              >
+                {emailSending ? "Sending…" : "Send link"}
+              </Button>
+            </div>
+            {emailError && (
+              <p className="text-sm text-rose-300" role="alert">
+                {emailError}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {emailSent && (
+        <p className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
+          Backup link sent — check your inbox.
+        </p>
+      )}
+
       <Card>
-        <CardContent className="space-y-3 p-6">
-          <p className="font-semibold">SEO article draft</p>
-          <p className="text-sm">{pack.seoArticle.title}</p>
+        <CardContent className="space-y-4 p-6">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <p className="font-semibold">SEO article draft</p>
+            <Button size="sm" variant="secondary" onClick={() => void copy(pack.seoArticle.body, "Article")}>
+              <Copy className="mr-2 h-4 w-4" /> Copy full article
+            </Button>
+          </div>
+          <p className="text-sm font-medium">{pack.seoArticle.title}</p>
           <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
-          <Button size="sm" variant="secondary" onClick={() => copy(pack.seoArticle.body)}>
-            <Copy className="mr-2 h-4 w-4" /> Copy article
-          </Button>
+          {pack.seoArticle.keywords.length > 0 && (
+            <p className="text-xs text-muted-foreground">Keywords: {pack.seoArticle.keywords.join(", ")}</p>
+          )}
+          <div
+            className={cn(
+              "rounded-lg border border-border bg-background/40 p-4 text-sm text-muted-foreground",
+              !articleExpanded && articleTruncated && "max-h-48 overflow-hidden",
+            )}
+          >
+            <p className="whitespace-pre-wrap">{articleExpanded ? pack.seoArticle.body : articlePreview}</p>
+          </div>
+          {articleTruncated && (
+            <button
+              type="button"
+              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+              onClick={() => setArticleExpanded((v) => !v)}
+            >
+              {articleExpanded ? "Show less" : "Show full article"}
+            </button>
+          )}
         </CardContent>
       </Card>
 
@@ -259,18 +397,27 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       )}
 
       <Card>
-        <CardContent className="space-y-3 p-6">
+        <CardContent className="space-y-4 p-6">
           <p className="font-semibold">Social script matrix</p>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <Button variant="secondary" onClick={() => copy(pack.socialPack.x)}>
-              <Copy className="mr-2 h-4 w-4" /> Copy X
-            </Button>
-            <Button variant="secondary" onClick={() => copy(pack.socialPack.linkedIn)}>
-              <Copy className="mr-2 h-4 w-4" /> Copy LinkedIn
-            </Button>
-            <Button variant="secondary" onClick={() => copy(pack.socialPack.substack)}>
-              <Copy className="mr-2 h-4 w-4" /> Copy Substack
-            </Button>
+          <div className="grid gap-3 lg:grid-cols-1">
+            <SocialBlock
+              label="X"
+              text={pack.socialPack.x}
+              copied={copyToast === "X"}
+              onCopy={() => void copy(pack.socialPack.x, "X")}
+            />
+            <SocialBlock
+              label="LinkedIn"
+              text={pack.socialPack.linkedIn}
+              copied={copyToast === "LinkedIn"}
+              onCopy={() => void copy(pack.socialPack.linkedIn, "LinkedIn")}
+            />
+            <SocialBlock
+              label="Substack"
+              text={pack.socialPack.substack}
+              copied={copyToast === "Substack"}
+              onCopy={() => void copy(pack.socialPack.substack, "Substack")}
+            />
           </div>
         </CardContent>
       </Card>
@@ -308,13 +455,19 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         <CardContent className="space-y-2 p-6">
           <p className="font-semibold">SEO report</p>
           <p className="text-sm text-muted-foreground">Target keyword: {pack.seoReport.targetKeyword}</p>
+          {pack.seoReport.altTitle && (
+            <p className="text-sm text-muted-foreground">Alt title: {pack.seoReport.altTitle}</p>
+          )}
           <p className="text-sm text-muted-foreground">{pack.seoReport.estimatedTrafficHint}</p>
         </CardContent>
       </Card>
 
-      <div className="pb-8 text-center">
+      <div className="flex flex-col items-center gap-3 pb-8 sm:flex-row sm:justify-center">
         <Button size="lg" asChild>
           <Link href="/pro-toolkit">Explore Pro toolkit</Link>
+        </Button>
+        <Button size="lg" variant="secondary" asChild>
+          <Link href={TOOL_HREF}>Generate another pack</Link>
         </Button>
       </div>
     </div>

@@ -94,7 +94,7 @@ export const testimonials = [
     avatar: "/images/avatar-2.svg",
     quote:
       "The social script bundle removed blank-page time. We now publish on three channels after every episode.",
-    metric: "+10x perceived audio quality",
+    metric: "3 channels per episode",
   },
   {
     name: "Alex Rivera",
@@ -136,39 +136,5 @@ export const comparisonRows = [
     pick: "Descript",
   },
 ];
-
-export type AudioAnalysisStatus = "good" | "warning" | "bad";
-
-export interface AudioAnalysisResult {
-  overallScore: number;
-  dimensions: {
-    noiseFloor: {
-      score: number;
-      value: string;
-      status: AudioAnalysisStatus;
-      suggestion: string;
-    };
-    volumeConsistency: {
-      score: number;
-      value: string;
-      status: AudioAnalysisStatus;
-      suggestion: string;
-    };
-    clarity: {
-      score: number;
-      value: string;
-      status: AudioAnalysisStatus;
-      suggestion: string;
-    };
-    plosives: {
-      score: number;
-      value: string;
-      status: AudioAnalysisStatus;
-      suggestion: string;
-    };
-  };
-  recommendedTools: string[];
-  emailCapture: boolean;
-}
 
 
