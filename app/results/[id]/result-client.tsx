@@ -7,6 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import {
+  articleEchoesTranscript,
+  highlightsFromTranscript,
+  srtFromTranscript,
+  type TranscriptSourceType,
+} from "@/lib/transcript-segments";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -30,6 +36,8 @@ type JobPayload = {
     generationSource?: "ai" | "template";
     aiFailureReason?: string;
     transcript?: string;
+    sourceType?: TranscriptSourceType;
+    articleEchoesSource?: boolean;
   };
 };
 
@@ -109,6 +117,11 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
         : undefined,
     aiFailureReason: asString(raw.aiFailureReason) || undefined,
     transcript: asString(raw.transcript) || undefined,
+    sourceType:
+      raw.sourceType === "audio" || raw.sourceType === "transcript" || raw.sourceType === "url"
+        ? raw.sourceType
+        : "transcript",
+    articleEchoesSource: raw.articleEchoesSource === true ? true : undefined,
   };
 }
 
@@ -223,8 +236,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     }
   };
 
-  const downloadSrt = () => {
-    const srt = job?.pack?.srt;
+  const downloadSrt = (srt: string) => {
     if (!srt) return;
     const blob = new Blob([srt], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -307,6 +319,15 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
   const wordCount = pack.seoArticle.body.trim().split(/\s+/).filter(Boolean).length;
   const isTemplate = pack.generationSource === "template";
   const isAi = pack.generationSource === "ai";
+  const sourceType = pack.sourceType ?? "transcript";
+  const liveSrt = pack.transcript ? srtFromTranscript(pack.transcript, sourceType) : pack.srt;
+  const liveHighlights = pack.transcript
+    ? highlightsFromTranscript(pack.transcript, sourceType)
+    : pack.highlights;
+  const echoesSource =
+    pack.articleEchoesSource ??
+    (pack.transcript ? articleEchoesTranscript(pack.seoArticle.body, pack.transcript) : false);
+  const srtPreview = liveSrt.split("\n").slice(0, 6).join("\n");
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-14">
@@ -391,7 +412,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
             <div>
               <p className="font-semibold">SEO article draft</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Repurposed blog post from your transcript — not the raw show notes. ~{wordCount.toLocaleString()}{" "}
+                AI-rewritten blog post for search — not your raw show notes. ~{wordCount.toLocaleString()}{" "}
                 words · aim for 800–1,500 for a solid SEO post
               </p>
             </div>
@@ -399,6 +420,11 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
               <Copy className="mr-2 h-4 w-4" /> Copy full article
             </Button>
           </div>
+          {echoesSource && (
+            <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+              This draft closely mirrors your transcript. Edit it into a distinct SEO article before publishing.
+            </p>
+          )}
           <p className="text-sm font-medium">{pack.seoArticle.title}</p>
           <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
           {pack.seoArticle.keywords.length > 0 && (
@@ -524,19 +550,31 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         <CardContent className="space-y-3 p-6">
           <p className="font-semibold">SRT and highlights</p>
           <p className="text-xs text-muted-foreground">
-            Pulled directly from your submitted transcript with estimated timestamps. For time-accurate
-            subtitles, upload audio instead of pasting notes.
+            Built live from your submitted transcript (English source text) with estimated timestamps. Upload audio
+            for time-accurate subtitles.
           </p>
-          {pack.srt ? (
-            <Button variant="secondary" onClick={downloadSrt}>
-              <Download className="mr-2 h-4 w-4" /> Download SRT
-            </Button>
-          ) : null}
-          {pack.highlights.map((h, index) => (
-            <p key={`${h.title}-${index}`} className="text-sm text-muted-foreground">
-              {h.title}: {h.start}-{h.end} ({h.note})
-            </p>
-          ))}
+          {liveSrt ? (
+            <>
+              <Button variant="secondary" onClick={() => downloadSrt(liveSrt)}>
+                <Download className="mr-2 h-4 w-4" /> Download SRT
+              </Button>
+              <pre className="max-h-32 overflow-auto rounded-lg border border-border bg-background/40 p-3 text-xs text-muted-foreground whitespace-pre-wrap">
+                {srtPreview}
+                {liveSrt.length > srtPreview.length ? "\n…" : ""}
+              </pre>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">No SRT — transcript too short to segment.</p>
+          )}
+          {liveHighlights.length > 0 ? (
+            liveHighlights.map((h, index) => (
+              <p key={`${h.title}-${index}`} className="text-sm text-muted-foreground">
+                {h.title}: {h.start}-{h.end} ({h.note})
+              </p>
+            ))
+          ) : (
+            <p className="text-sm text-muted-foreground">No highlights — add more transcript text to extract clips.</p>
+          )}
         </CardContent>
       </Card>
 

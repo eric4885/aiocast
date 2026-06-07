@@ -60,6 +60,7 @@ export async function transcribeAudioFile(file: File): Promise<string> {
   form.append("file", file, file.name || "episode.mp3");
   form.append("model", model);
   form.append("response_format", "json");
+  form.append("language", "en");
 
   const res = await fetch(openAiUrl("/audio/transcriptions"), {
     method: "POST",

@@ -1,7 +1,13 @@
 import { extractTaskId, pollApimartTask } from "@/lib/apimart-task";
 import { dayKey, type GeneratedPack } from "@/lib/mvp-store";
 import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
+import { outputLanguageRule } from "@/lib/output-language";
 import { chatCompletionContent, parseOpenAiJson, readResponseText } from "@/lib/openai-response";
+import {
+  articleEchoesTranscript,
+  highlightsFromTranscript,
+  srtFromTranscript,
+} from "@/lib/transcript-segments";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -35,85 +41,6 @@ type Input = {
 
 function fallbackTranscript(sourceLabel: string) {
   return `This episode discusses practical podcast growth strategy: turning one conversation into a search-ready article, FAQ blocks, and channel-native promotion scripts. Source: ${sourceLabel}.`;
-}
-
-function splitTranscriptSegments(transcript: string): string[] {
-  const byLine = transcript
-    .split(/\n+/)
-    .map((s) => s.trim())
-    .filter((s) => s.length >= 12);
-
-  if (byLine.length >= 2) return byLine;
-
-  const bySentence = transcript
-    .split(/(?<=[.!?。！？])\s+/)
-    .map((s) => s.trim())
-    .filter((s) => s.length >= 12);
-
-  if (bySentence.length >= 1) return bySentence;
-
-  const flat = transcript.replace(/\s+/g, " ").trim();
-  if (!flat) return [];
-
-  const segments: string[] = [];
-  for (let i = 0; i < flat.length; i += 180) {
-    const chunk = flat.slice(i, i + 180).trim();
-    if (chunk.length >= 12) segments.push(chunk);
-  }
-  return segments.length > 0 ? segments : [flat];
-}
-
-function formatSrtTimestamp(totalSec: number) {
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  const ms = "000";
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")},${ms}`;
-}
-
-function formatClockTimestamp(totalSec: number) {
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
-
-function srtFromTranscript(transcript: string, sourceType: Input["sourceType"]) {
-  const sentences = splitTranscriptSegments(transcript).slice(0, 60);
-  if (sentences.length === 0) return "";
-
-  const secondsPerLine = sourceType === "audio" ? 5 : 4;
-
-  return sentences
-    .map((text, i) => {
-      const start = i * secondsPerLine;
-      const end = start + secondsPerLine - 1;
-      return `${i + 1}\n${formatSrtTimestamp(start)} --> ${formatSrtTimestamp(end)}\n${text}\n`;
-    })
-    .join("\n");
-}
-
-function highlightsFromTranscript(transcript: string, sourceType: Input["sourceType"]) {
-  const segments = splitTranscriptSegments(transcript);
-  if (segments.length === 0) return defaultHighlights();
-
-  const secondsPerSegment = sourceType === "audio" ? 45 : 30;
-  const pickIndices =
-    segments.length === 1 ? [0] : [0, Math.min(segments.length - 1, Math.floor(segments.length / 2))];
-
-  const uniqueIndices = Array.from(new Set(pickIndices)).slice(0, 2);
-  return uniqueIndices.map((idx) => {
-    const text = segments[idx];
-    const titleWords = text.split(/\s+/).slice(0, 6).join(" ");
-    const start = idx * secondsPerSegment;
-    const end = start + secondsPerSegment;
-    return {
-      title: titleWords.length > 48 ? `${titleWords.slice(0, 48)}…` : titleWords || "Highlight",
-      start: formatClockTimestamp(start),
-      end: formatClockTimestamp(end),
-      note: text.length > 160 ? `${text.slice(0, 160)}…` : text,
-    };
-  });
 }
 
 function isPlaceholderSocial(text: string): boolean {
@@ -172,7 +99,8 @@ Return strict JSON with keys:
 title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 objects {q,a}), socialX, socialLinkedIn, socialSubstack, schedule (array of 7 short lines), seoReport ({targetKeyword,altTitle,altDescription,estimatedTrafficHint})
 
 Rules:
-- articleBody: a FULL publishable SEO blog post in Markdown (800–1200 words) with ## section headers. Expand ideas from the transcript into reader-friendly prose. Do NOT write a short recap or bullet summary — write a complete article with intro, 3–5 sections, and conclusion. Use specific details from the transcript.
+- ${outputLanguageRule()}
+- articleBody: a FULL publishable SEO blog post in Markdown (800–1200 words) with ## section headers. Expand and rewrite ideas from the transcript into fresh editorial prose for Google search. Do NOT paste or lightly paraphrase the transcript — every section must be newly written. Do NOT write a short recap or bullet summary.
 - socialX: ready-to-post tweet text (≤280 chars). Plain text only — NO profile URLs, NO "https://" links, NO placeholders like yourpodcast.
 - socialLinkedIn: ready-to-post LinkedIn post (2–4 short paragraphs). Plain text only — NO URLs unless quoting a specific fact from the episode.
 - socialSubstack: ready-to-post newsletter intro (150–400 words). Plain text only — NO placeholder links.
@@ -203,7 +131,7 @@ ${transcript.slice(0, 8000)}
             {
               role: "system",
               content:
-                "You are an SEO content operator for podcasters. Return valid JSON only. Produce professional marketing copy only: no harassment, hate, illegal instructions, or explicit sexual content.",
+                `You are an SEO content operator for podcasters. ${outputLanguageRule()} Return valid JSON only. Produce professional marketing copy only: no harassment, hate, illegal instructions, or explicit sexual content.`,
             },
             { role: "user", content: prompt },
           ],
@@ -320,12 +248,6 @@ function defaultSchedule() {
   ];
 }
 
-function defaultHighlights() {
-  return [
-    { title: "Growth Loop Framework", start: "00:02:10", end: "00:02:55", note: "Core insight clip." },
-    { title: "SEO Execution Tips", start: "00:14:20", end: "00:15:05", note: "Actionable checklist clip." },
-  ];
-}
 
 function defaultSeoReport() {
   return {
@@ -402,6 +324,10 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
   };
 
   const highlights = highlightsFromTranscript(transcript, input.sourceType);
+  const srt = srtFromTranscript(transcript, input.sourceType);
+  const articleBodyRaw = aiStr("articleBody");
+  const articleEchoesSource =
+    Boolean(articleBodyRaw) && articleEchoesTranscript(articleBodyRaw!, transcript);
 
   return {
     id: "",
@@ -414,7 +340,7 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
       metaDescription,
       keywords,
       body:
-        aiStr("articleBody") ??
+        articleBodyRaw ??
         `## Executive Summary\n${transcript}\n\n## Why Most Podcast Episodes Underperform\nMost episodes are published once and forgotten.\n\n## Build an AIO-Ready Content Loop\nTurn each episode into a long-form article, three FAQ answers, and a script matrix.\n\n## Execution Framework\nShip article first, then social distribution within 24 hours.\n`,
     },
     faq,
@@ -424,11 +350,12 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
       substack: pickSocial("socialSubstack", socialFallback.substack),
     },
     localSchedule: schedule,
-    srt: srtFromTranscript(transcript, input.sourceType),
+    srt,
     highlights,
     seoReport: normalizeSeoReport(ai?.seoReport),
     generationSource: usedAi ? "ai" : "template",
     aiFailureReason: usedAi ? undefined : aiResult.failureReason,
+    articleEchoesSource: articleEchoesSource || undefined,
   };
 }
 

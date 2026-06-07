@@ -38,6 +38,8 @@ export type GeneratedPack = {
   generationSource?: "ai" | "template";
   /** Set when generationSource is template — safe to show the user. */
   aiFailureReason?: string;
+  /** True when AI article mostly copies the submitted transcript. */
+  articleEchoesSource?: boolean;
 };
 
 export type JobRecord = {
