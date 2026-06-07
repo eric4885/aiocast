@@ -61,6 +61,7 @@ export function dayKey(now = new Date()) {
 }
 
 export function freeLimit() {
+  if (rateLimitsDisabled()) return 999_999;
   const raw = Number(process.env.FREE_MONTHLY_LIMIT ?? "3");
   if (!Number.isFinite(raw) || raw < 1) return 3;
   return Math.floor(raw);

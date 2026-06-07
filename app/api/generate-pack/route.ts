@@ -76,6 +76,11 @@ export async function POST(req: Request) {
     );
   }
 
+  const limitsOff = process.env.RATE_LIMIT_DISABLED?.trim().toLowerCase();
+  if (limitsOff === "true" || limitsOff === "1" || limitsOff === "yes") {
+    console.info("[generate-pack] rate limits disabled via RATE_LIMIT_DISABLED");
+  }
+
   const ipGuard = await checkIpGuards(ip);
   if (!ipGuard.allowed) {
     if (ipGuard.code === "IP_COOLDOWN") {
