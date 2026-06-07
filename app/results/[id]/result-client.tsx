@@ -28,6 +28,7 @@ type JobPayload = {
       estimatedTrafficHint: string;
     };
     generationSource?: "ai" | "template";
+    aiFailureReason?: string;
   };
 };
 
@@ -105,6 +106,7 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
       raw.generationSource === "ai" || raw.generationSource === "template"
         ? raw.generationSource
         : undefined,
+    aiFailureReason: asString(raw.aiFailureReason) || undefined,
   };
 }
 
@@ -322,9 +324,15 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
           <p className="font-semibold">Template draft — AI did not run for this pack</p>
           <p className="mt-1 text-amber-100/90">
-            Content below is a generic starter based on your input. Check Cloudflare{" "}
-            <code className="text-xs">OPENAI_ENABLED</code> and APImart balance, then generate again
-            for a custom AI draft.
+            Content below is a generic starter based on your input.
+            {pack.aiFailureReason ? (
+              <>
+                {" "}
+                <span className="font-medium">Reason:</span> {pack.aiFailureReason}
+              </>
+            ) : (
+              <> Check Cloudflare OPENAI_ENABLED, OPENAI_API_KEY, and APImart balance, then generate again.</>
+            )}
           </p>
         </div>
       )}

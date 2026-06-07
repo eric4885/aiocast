@@ -36,6 +36,8 @@ export type GeneratedPack = {
   };
   /** Whether content came from the AI model or the built-in template fallback. */
   generationSource?: "ai" | "template";
+  /** Set when generationSource is template — safe to show the user. */
+  aiFailureReason?: string;
 };
 
 export type JobRecord = {
