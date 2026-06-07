@@ -1,6 +1,7 @@
 import { pollApimartTask, extractTaskId } from "@/lib/apimart-task";
 import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
 import { parseOpenAiJson, readResponseText } from "@/lib/openai-response";
+import { sanitizePublicError } from "@/lib/public-error-message";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 
@@ -37,7 +38,7 @@ function textFromTranscriptionPayload(raw: string): string {
 
   const parsed = parseOpenAiJson<TranscriptionJson>(trimmed);
   if (parsed.error?.message) {
-    throw new Error(parsed.error.message);
+    throw new Error(sanitizePublicError(parsed.error.message));
   }
   if (typeof parsed.text === "string" && parsed.text.trim()) {
     return parsed.text.trim();
@@ -79,7 +80,9 @@ export async function transcribeAudioFile(file: File): Promise<string> {
     } catch {
       /* use raw */
     }
-    throw new Error(detail || `Transcription failed (HTTP ${res.status}).`);
+    throw new Error(
+      sanitizePublicError(detail || `Transcription failed (HTTP ${res.status}).`),
+    );
   }
 
   const directText = textFromTranscriptionPayload(raw);

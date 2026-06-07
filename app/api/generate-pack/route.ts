@@ -14,6 +14,7 @@ import {
 } from "@/lib/mvp-store";
 import { warnIfEphemeralProduction } from "@/lib/persistent-backend";
 import { assertProductionReady } from "@/lib/production";
+import { toPublicApiError } from "@/lib/public-error-message";
 import { transcribeAudioFile, transcribeEnabled } from "@/lib/transcribe-audio";
 
 function emailValid(value: unknown): value is string {
@@ -129,10 +130,16 @@ export async function POST(req: Request) {
       transcribed: needsTranscribe,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Generation failed";
+    const fallback = needsTranscribe
+      ? "Transcription failed. Try a shorter clip or paste show notes instead."
+      : "Generation failed. Try again in a moment.";
+    const message = toPublicApiError(error, fallback);
     await setJobFailed(job.id, message);
-    const status = needsTranscribe && message.toLowerCase().includes("transcri") ? 502 : 500;
-    return NextResponse.json({ error: message, code: needsTranscribe ? "TRANSCRIBE_FAILED" : "GENERATION_FAILED" }, { status });
+    const status = needsTranscribe && message.includes("Transcription") ? 502 : 500;
+    return NextResponse.json(
+      { error: message, code: needsTranscribe ? "TRANSCRIBE_FAILED" : "GENERATION_FAILED" },
+      { status },
+    );
   }
 }
 
