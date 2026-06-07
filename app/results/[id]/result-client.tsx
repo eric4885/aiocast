@@ -156,6 +156,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
   const [job, setJob] = useState<JobPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [copyToast, setCopyToast] = useState<string | null>(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
   const [articleExpanded, setArticleExpanded] = useState(false);
   const [transcriptExpanded, setTranscriptExpanded] = useState(false);
   const [backupEmail, setBackupEmail] = useState("");
@@ -238,18 +239,19 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     }
   };
 
-  const downloadSrtFromServer = async () => {
-    if (!token) return;
+  const downloadSrtFile = (srt: string) => {
+    if (!srt.trim()) {
+      setDownloadError("No SRT content to download.");
+      return;
+    }
+    setDownloadError(null);
     try {
-      const qs = new URLSearchParams({ id, token });
-      const res = await fetch(`/api/pack-srt?${qs.toString()}`, { cache: "no-store" });
-      if (!res.ok) return;
-      const text = await res.text();
-      const blob = new Blob([`\uFEFF${text}`], { type: "text/plain;charset=utf-8" });
+      const blob = new Blob([`\uFEFF${srt}`], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = `aiocast-${id}-${Date.now()}.srt`;
+      anchor.download = `aiocast-pack-${id.slice(0, 8)}-${Date.now()}.srt`;
+      anchor.rel = "noopener";
       document.body.appendChild(anchor);
       anchor.click();
       document.body.removeChild(anchor);
@@ -257,7 +259,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       setCopyToast("SRT downloaded");
       window.setTimeout(() => setCopyToast(null), 2000);
     } catch {
-      /* ignore */
+      setDownloadError("Download failed — use Copy SRT and save manually.");
     }
   };
 
@@ -570,7 +572,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
           {liveSrt ? (
             <>
               <div className="flex flex-wrap gap-2">
-                <Button variant="secondary" onClick={() => void downloadSrtFromServer()}>
+                <Button variant="secondary" onClick={() => downloadSrtFile(liveSrt)}>
                   <Download className="mr-2 h-4 w-4" /> Download SRT
                 </Button>
                 <Button size="sm" variant="secondary" onClick={() => void copy(liveSrt, "SRT")}>
@@ -578,9 +580,14 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Download pulls a fresh file from the server — filename includes a timestamp so your OS does not
-                open an older .srt by mistake.
+                Download uses the same content as Copy SRT (built from your transcript above). Each file has a unique
+                timestamp in its name — open the newest file in your Downloads folder.
               </p>
+              {downloadError && (
+                <p className="text-sm text-rose-300" role="alert">
+                  {downloadError}
+                </p>
+              )}
               <pre className="max-h-32 overflow-auto rounded-lg border border-border bg-background/40 p-3 text-xs text-muted-foreground whitespace-pre-wrap">
                 {srtPreview}
                 {liveSrt.length > srtPreview.length ? "\n…" : ""}

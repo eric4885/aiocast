@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getJobIfAuthorized } from "@/lib/mvp-store";
 import { srtFromTranscript } from "@/lib/transcript-segments";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");

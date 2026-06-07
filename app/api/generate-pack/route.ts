@@ -53,6 +53,7 @@ export async function POST(req: Request) {
 
   const transcriptStr = typeof transcriptRaw === "string" ? transcriptRaw.trim() : "";
   const hasFile = file instanceof File && file.size > 0;
+  // Pasted transcript always wins — never re-transcribe audio when text was provided.
   const needsTranscribe = hasFile && !transcriptStr;
 
   if (!transcriptStr && !hasFile) {

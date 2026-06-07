@@ -106,7 +106,8 @@ export function GrowthPackClient({
       const formData = new FormData();
       if (email.trim()) formData.append("email", email.trim());
       if (transcript.trim()) formData.append("transcript", transcript.trim());
-      if (file) formData.append("file", file);
+      // Only attach audio in audio mode — avoid sending a stale file from a prior session.
+      if (inputMode === "audio" && file) formData.append("file", file);
       const res = await fetch("/api/generate-pack", {
         method: "POST",
         body: formData,
