@@ -22,11 +22,11 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — Audio to SEO growth pack`,
+    default: `${siteConfig.name} — Paste show notes, get podcast SEO pack`,
     template: `%s · ${siteConfig.name}`,
   },
   description:
-    "Convert one podcast audio into a complete SEO growth pack: blog article, social scripts, summaries, and localized publishing schedule.",
+    "Paste podcast show notes or upload audio — get an SEO blog draft, FAQ blocks, social scripts, and a 7-day publish schedule. Free podcast-to-blog repurposing for indie hosts.",
   keywords: [
     "podcast content repurposing",
     "podcast SEO article generator",
@@ -50,9 +50,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — Audio to SEO growth pack`,
+    title: `${siteConfig.name} — Paste show notes, get podcast SEO pack`,
     description:
-      "One audio in, full content growth pack out for search, social, and regional scheduling.",
+      "Paste show notes or upload audio — SEO article draft, social scripts, and publish schedule from one podcast episode.",
     images: [
       {
         url: "/opengraph-image",
@@ -64,9 +64,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — Audio to SEO growth pack`,
+    title: `${siteConfig.name} — Paste show notes, get podcast SEO pack`,
     description:
-      "Generate SEO-ready articles, social scripts, and publish plans from podcast audio.",
+      "Generate SEO-ready articles, social scripts, and publish plans from podcast show notes or audio.",
     images: ["/opengraph-image"],
   },
 };

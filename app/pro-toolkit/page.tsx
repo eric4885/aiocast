@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Pro toolkit — Audio to SEO growth assets",
   description:
     "Convert one episode into AIO long-form content, FAQ search blocks, social script matrix, and highlight assets.",
+  alternates: { canonical: `${siteConfig.url}/pro-toolkit` },
   openGraph: {
     title: "AioCast.com growth asset toolkit",
     description:

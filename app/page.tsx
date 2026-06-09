@@ -8,8 +8,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
+  title: "Paste show notes → podcast SEO article & social scripts",
+  description:
+    "Free podcast repurposing tool: paste transcript or show notes, get an SEO blog draft, FAQ blocks, social scripts, and a 7-day schedule.",
   openGraph: {
     url: siteConfig.url,
+    title: "Paste show notes → podcast SEO growth pack",
+    description:
+      "Turn one podcast episode into search-ready content — blog draft, social scripts, and publish plan.",
   },
 };
 

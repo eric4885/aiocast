@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Podcast to social scripts — growth copy from one episode",
   description:
     "Generate multi-platform social scripts from podcast audio: X thread, LinkedIn draft, newsletter lead, and CTA variants.",
+  alternates: { canonical: `${siteConfig.url}/podcast-to-short-video` },
   openGraph: {
     title: "Podcast audio -> social script workflow",
     description:

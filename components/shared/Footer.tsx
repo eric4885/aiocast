@@ -110,9 +110,19 @@ export function Footer() {
 
             <li>
 
+              <Link className="hover:text-foreground" href="/tools/seo-growth-pack">
+
+                Podcast SEO growth pack generator
+
+              </Link>
+
+            </li>
+
+            <li>
+
               <Link className="hover:text-foreground" href="/ai-podcast-editing-stack">
 
-                Content OS <span className="text-primary">→</span> <span className="text-xs text-foreground/80">tool</span>
+                Podcast to SEO article workflow
 
               </Link>
 
@@ -122,7 +132,7 @@ export function Footer() {
 
               <Link className="hover:text-foreground" href="/podcast-to-short-video">
 
-                Social scripts <span className="text-primary">→</span>{" "}
+                Podcast social script templates{" "}
 
                 <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-amber-200">
 
@@ -138,7 +148,7 @@ export function Footer() {
 
               <Link className="hover:text-foreground" href="/remote-recording-setup">
 
-                Local publishing guide <span className="text-xs text-muted-foreground">· Blog</span>
+                Localized podcast publishing schedule
 
               </Link>
 
@@ -148,7 +158,7 @@ export function Footer() {
 
               <Link className="hover:text-foreground" href="/pro-toolkit">
 
-                Pro toolkit <span className="text-primary">→</span>
+                Podcast SEO pro toolkit
 
               </Link>
 

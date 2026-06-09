@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Transcript too short for SRT" }, { status: 422 });
   }
 
-  const filename = `aiocast-${id}.srt`;
+  const filename = `aiocast-pack-${id.slice(0, 8)}-${Date.now()}.srt`;
   return new Response(`\uFEFF${srt}`, {
     status: 200,
     headers: {

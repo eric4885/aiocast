@@ -15,14 +15,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const nav = [
-  { href: "/ai-podcast-editing-stack", label: "Content OS" },
+  { href: "/tools/seo-growth-pack", label: "SEO growth pack" },
+  { href: "/ai-podcast-editing-stack", label: "Podcast to blog" },
   {
     href: "/podcast-to-short-video",
     label: "Social scripts",
     badge: "Soon",
   },
-  { href: "/remote-recording-setup", label: "Local schedule" },
-  { href: "/tools/seo-growth-pack", label: "SEO growth pack" },
+  { href: "/remote-recording-setup", label: "Publish schedule" },
 ] as const;
 
 export function Header() {
@@ -67,7 +67,7 @@ export function Header() {
         <div className="hidden items-center gap-2 md:flex">
           {isHome ? (
             <Button size="sm" asChild>
-              <Link href="/tools/seo-growth-pack">Get Started</Link>
+              <Link href="/tools/seo-growth-pack">Generate SEO pack</Link>
             </Button>
           ) : (
             <>
@@ -75,7 +75,7 @@ export function Header() {
                 <Link href="/pro-toolkit">Pro toolkit</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/tools/seo-growth-pack">Generate pack</Link>
+                <Link href="/tools/seo-growth-pack">Generate SEO pack</Link>
               </Button>
             </>
           )}

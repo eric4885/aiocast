@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, Copy, Download } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import {
   srtFromTranscript,
   type TranscriptSourceType,
 } from "@/lib/transcript-segments";
+import { SrtDownloadSection } from "@/components/results/SrtDownloadSection";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -156,7 +157,6 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
   const [job, setJob] = useState<JobPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [copyToast, setCopyToast] = useState<string | null>(null);
-  const [downloadError, setDownloadError] = useState<string | null>(null);
   const [articleExpanded, setArticleExpanded] = useState(false);
   const [transcriptExpanded, setTranscriptExpanded] = useState(false);
   const [backupEmail, setBackupEmail] = useState("");
@@ -239,30 +239,6 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     }
   };
 
-  const downloadSrtFile = (srt: string) => {
-    if (!srt.trim()) {
-      setDownloadError("No SRT content to download.");
-      return;
-    }
-    setDownloadError(null);
-    try {
-      const blob = new Blob([`\uFEFF${srt}`], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = `aiocast-pack-${id.slice(0, 8)}-${Date.now()}.srt`;
-      anchor.rel = "noopener";
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-      URL.revokeObjectURL(url);
-      setCopyToast("SRT downloaded");
-      window.setTimeout(() => setCopyToast(null), 2000);
-    } catch {
-      setDownloadError("Download failed — use Copy SRT and save manually.");
-    }
-  };
-
   if (loadError) {
     return (
       <div className="mx-auto max-w-5xl px-4 py-16">
@@ -341,7 +317,6 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
   const echoesSource =
     pack.articleEchoesSource ??
     (pack.transcript ? articleEchoesTranscript(pack.seoArticle.body, pack.transcript) : false);
-  const srtPreview = liveSrt.split("\n").slice(0, 6).join("\n");
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-14">
@@ -564,47 +539,14 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       <Card>
         <CardContent className="space-y-3 p-6">
-          <p className="font-semibold">SRT and highlights</p>
-          <p className="text-xs text-muted-foreground">
-            Built live from your submitted transcript (English source text) with estimated timestamps. Upload audio
-            for time-accurate subtitles.
-          </p>
-          {liveSrt ? (
-            <>
-              <div className="flex flex-wrap gap-2">
-                <Button variant="secondary" onClick={() => downloadSrtFile(liveSrt)}>
-                  <Download className="mr-2 h-4 w-4" /> Download SRT
-                </Button>
-                <Button size="sm" variant="secondary" onClick={() => void copy(liveSrt, "SRT")}>
-                  <Copy className="mr-2 h-4 w-4" /> Copy SRT
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Download uses the same content as Copy SRT (built from your transcript above). Each file has a unique
-                timestamp in its name — open the newest file in your Downloads folder.
-              </p>
-              {downloadError && (
-                <p className="text-sm text-rose-300" role="alert">
-                  {downloadError}
-                </p>
-              )}
-              <pre className="max-h-32 overflow-auto rounded-lg border border-border bg-background/40 p-3 text-xs text-muted-foreground whitespace-pre-wrap">
-                {srtPreview}
-                {liveSrt.length > srtPreview.length ? "\n…" : ""}
-              </pre>
-            </>
-          ) : (
-            <p className="text-sm text-muted-foreground">No SRT — transcript too short to segment.</p>
-          )}
-          {liveHighlights.length > 0 ? (
-            liveHighlights.map((h, index) => (
-              <p key={`${h.title}-${index}`} className="text-sm text-muted-foreground">
-                {h.title}: {h.start}-{h.end} ({h.note})
-              </p>
-            ))
-          ) : (
-            <p className="text-sm text-muted-foreground">No highlights — add more transcript text to extract clips.</p>
-          )}
+          <SrtDownloadSection
+            liveSrt={liveSrt}
+            packId={id}
+            token={token}
+            liveHighlights={liveHighlights}
+            onCopy={(text, label) => void copy(text, label)}
+            copyToast={copyToast}
+          />
         </CardContent>
       </Card>
 
