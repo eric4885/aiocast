@@ -102,7 +102,7 @@ title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 obje
 Rules:
 - ${outputLanguageRule()}
 - articleBody: a FULL publishable SEO blog post in Markdown (900–1300 words) written for Google search — NOT a podcast script cleanup.
-  * Cover EVERY major theme/chapter from the transcript (including ethics, conclusion, and closing topics). Do not omit any main section.
+  * Cover EVERY major theme/chapter from the transcript. If the source discusses ethics, AI policy, privacy, or labor impacts, include a dedicated ## section for that topic (do not fold into one sentence elsewhere). Do not omit any main section.
   * Do NOT mirror the transcript outline: section titles must be NEW (no reuse of "Introduction", "Chapter 1", or transcript headings).
   * Do NOT walk through the transcript in the same order paragraph-by-paragraph or section-by-section. Reorganize for search intent.
   * Required sections: ## Who this is for, ## Key takeaways (bullet list), plus 4–6 topic sections with fresh titles, then ## Conclusion.
@@ -257,7 +257,7 @@ async function rewriteDistinctArticle(
             content: `Rewrite this draft into a distinct SEO blog post (900–1300 words).
 
 Hard rules:
-- Cover ALL major themes from the source transcript, including ethics and conclusion topics — do not drop chapters.
+- Cover ALL major themes from the source transcript. If ethics, privacy, or labor are discussed, add a dedicated ## section — do not omit chapters.
 - Use NEW section titles (must not match transcript headings like "Chapter 1" or "Introduction: The Pace of Change").
 - Do NOT follow the transcript section order. Reorganize for a reader searching on Google.
 - Include ## Who this is for, ## Key takeaways (bullets), 4–6 fresh topic sections, ## Conclusion.

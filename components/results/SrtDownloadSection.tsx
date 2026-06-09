@@ -13,8 +13,8 @@ type SavePickerWindow = Window &
     }) => Promise<{ createWritable: () => Promise<{ write: (data: string) => Promise<void>; close: () => Promise<void> }> }>;
   };
 
-function timestampedName(packId: string): string {
-  return `aiocast-pack-${packId.slice(0, 8)}-${Date.now()}.srt`;
+function timestampedName(packId: string, ext: "srt" | "txt") {
+  return `aiocast-pack-${packId.slice(0, 8)}-${Date.now()}.${ext}`;
 }
 
 async function saveSrtWithPicker(srt: string, suggestedName: string): Promise<boolean> {
@@ -65,21 +65,23 @@ export function SrtDownloadSection({
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [showFullSrt, setShowFullSrt] = useState(false);
 
-  const runDownload = async () => {
+  const runDownload = async (ext: "srt" | "txt") => {
     setDownloadError(null);
     if (!liveSrt.trim()) {
       setDownloadError("No SRT content to download.");
       return;
     }
 
-    const filename = timestampedName(packId);
-    const saved = await saveSrtWithPicker(liveSrt, filename);
-    if (saved) return;
+    const filename = timestampedName(packId, ext);
+    if (ext === "srt") {
+      const saved = await saveSrtWithPicker(liveSrt, filename);
+      if (saved) return;
+    }
 
     try {
       downloadSrtBlob(liveSrt, filename);
     } catch {
-      setDownloadError("Download failed — expand full SRT below, copy, and save as .srt in Notepad.");
+      setDownloadError("Download failed — expand full SRT below, copy, and save in Notepad.");
     }
   };
 
@@ -93,9 +95,21 @@ export function SrtDownloadSection({
       </p>
       {liveSrt ? (
         <>
+          <div className="rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-2 text-xs text-sky-100">
+            <p className="font-medium">How to verify your subtitle file on Windows</p>
+            <p className="mt-1 text-sky-100/90">
+              An .srt file is plain text. If Windows opens it with a media player (VLC, etc.), the player may show
+              subtitles from a <strong>previously opened video or audio</strong> — that is not your download being
+              wrong. To check content: right-click the file → <strong>Open with → Notepad</strong>, or use{" "}
+              <strong>Save as .txt</strong> below.
+            </p>
+          </div>
           <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" onClick={() => void runDownload()}>
+            <Button variant="secondary" onClick={() => void runDownload("srt")}>
               <Download className="mr-2 h-4 w-4" /> Save SRT file
+            </Button>
+            <Button size="sm" variant="secondary" onClick={() => void runDownload("txt")}>
+              <Download className="mr-2 h-4 w-4" /> Save as .txt
             </Button>
             <Button size="sm" variant="secondary" onClick={() => onCopy(liveSrt, "SRT")}>
               <Copy className="mr-2 h-4 w-4" />
@@ -103,8 +117,7 @@ export function SrtDownloadSection({
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Both buttons use the preview text below. Open the newest timestamped file in Downloads — not an older
-            .srt from a previous audio test.
+            SRT and .txt contain the same text (see preview). Use .txt when you want Notepad to open by default.
           </p>
           {downloadError && (
             <p className="text-sm text-rose-300" role="alert">
