@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  articleEchoesTranscript,
+  articleNeedsDistinctRewrite,
   highlightsFromTranscript,
   srtFromTranscript,
   type TranscriptSourceType,
@@ -316,7 +316,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     : pack.highlights;
   const echoesSource =
     pack.articleEchoesSource ??
-    (pack.transcript ? articleEchoesTranscript(pack.seoArticle.body, pack.transcript) : false);
+    (pack.transcript ? articleNeedsDistinctRewrite(pack.seoArticle.body, pack.transcript) : false);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-14">
@@ -411,7 +411,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
           </div>
           {echoesSource && (
             <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
-              This draft closely mirrors your transcript. Edit it into a distinct SEO article before publishing.
+              This draft still looks close to your transcript outline. We tried an automatic rewrite — please edit
+              section titles and add search-specific detail before publishing.
             </p>
           )}
           <p className="text-sm font-medium">{pack.seoArticle.title}</p>
@@ -542,7 +543,6 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
           <SrtDownloadSection
             liveSrt={liveSrt}
             packId={id}
-            token={token}
             liveHighlights={liveHighlights}
             onCopy={(text, label) => void copy(text, label)}
             copyToast={copyToast}

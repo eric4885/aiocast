@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { Copy, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { TranscriptHighlight } from "@/lib/transcript-segments";
@@ -12,6 +12,10 @@ type SavePickerWindow = Window &
       types?: Array<{ description?: string; accept: Record<string, string[]> }>;
     }) => Promise<{ createWritable: () => Promise<{ write: (data: string) => Promise<void>; close: () => Promise<void> }> }>;
   };
+
+function timestampedName(packId: string): string {
+  return `aiocast-pack-${packId.slice(0, 8)}-${Date.now()}.srt`;
+}
 
 async function saveSrtWithPicker(srt: string, suggestedName: string): Promise<boolean> {
   const win = window as SavePickerWindow;
@@ -31,41 +35,35 @@ async function saveSrtWithPicker(srt: string, suggestedName: string): Promise<bo
   }
 }
 
+function downloadSrtBlob(srt: string, filename: string) {
+  const blob = new Blob([`\uFEFF${srt}`], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.rel = "noopener";
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}
+
 export function SrtDownloadSection({
   liveSrt,
   packId,
-  token,
   liveHighlights,
   onCopy,
   copyToast,
 }: {
   liveSrt: string;
   packId: string;
-  token: string | null;
   liveHighlights: TranscriptHighlight[];
   onCopy: (text: string, label: string) => void;
   copyToast: string | null;
 }) {
   const textareaId = useId();
-  const [srtBlobUrl, setSrtBlobUrl] = useState<string | null>(null);
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [showFullSrt, setShowFullSrt] = useState(false);
-  const filename = `aiocast-pack-${packId.slice(0, 8)}.srt`;
-  const serverHref =
-    token != null
-      ? `/api/pack-srt?id=${encodeURIComponent(packId)}&token=${encodeURIComponent(token)}&t=${Date.now()}`
-      : null;
-
-  useEffect(() => {
-    if (!liveSrt.trim()) {
-      setSrtBlobUrl(null);
-      return;
-    }
-    const blob = new Blob([`\uFEFF${liveSrt}`], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    setSrtBlobUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [liveSrt]);
 
   const runDownload = async () => {
     setDownloadError(null);
@@ -74,21 +72,15 @@ export function SrtDownloadSection({
       return;
     }
 
+    const filename = timestampedName(packId);
     const saved = await saveSrtWithPicker(liveSrt, filename);
     if (saved) return;
 
-    if (srtBlobUrl) {
-      const anchor = document.createElement("a");
-      anchor.href = srtBlobUrl;
-      anchor.download = filename;
-      anchor.rel = "noopener";
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-      return;
+    try {
+      downloadSrtBlob(liveSrt, filename);
+    } catch {
+      setDownloadError("Download failed — expand full SRT below, copy, and save as .srt in Notepad.");
     }
-
-    setDownloadError("Download failed — expand full SRT below, copy, and save as .srt in Notepad.");
   };
 
   const srtPreview = liveSrt.split("\n").slice(0, 9).join("\n");
@@ -97,7 +89,7 @@ export function SrtDownloadSection({
     <>
       <p className="font-semibold">SRT and highlights</p>
       <p className="text-xs text-muted-foreground">
-        Built from your transcript with estimated timestamps. Use Save / Download below — the file matches Copy SRT.
+        Built from your transcript with estimated timestamps. Save and Copy use the same content.
       </p>
       {liveSrt ? (
         <>
@@ -105,28 +97,14 @@ export function SrtDownloadSection({
             <Button variant="secondary" onClick={() => void runDownload()}>
               <Download className="mr-2 h-4 w-4" /> Save SRT file
             </Button>
-            {srtBlobUrl ? (
-              <Button variant="secondary" asChild>
-                <a href={srtBlobUrl} download={filename} rel="noopener">
-                  <Download className="mr-2 h-4 w-4" /> Direct download link
-                </a>
-              </Button>
-            ) : null}
-            {serverHref ? (
-              <Button size="sm" variant="secondary" asChild>
-                <a href={serverHref} download={filename} rel="noopener noreferrer">
-                  Server file
-                </a>
-              </Button>
-            ) : null}
             <Button size="sm" variant="secondary" onClick={() => onCopy(liveSrt, "SRT")}>
               <Copy className="mr-2 h-4 w-4" />
               {copyToast === "SRT" ? "Copied" : "Copy SRT"}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Tip: On Chrome/Edge, &quot;Save SRT file&quot; opens a Save dialog so you pick the folder. If Windows keeps
-            opening an old subtitle, save with a new name or use the full SRT box below.
+            Both buttons use the preview text below. Open the newest timestamped file in Downloads — not an older
+            .srt from a previous audio test.
           </p>
           {downloadError && (
             <p className="text-sm text-rose-300" role="alert">
@@ -147,7 +125,7 @@ export function SrtDownloadSection({
           {showFullSrt && (
             <div className="space-y-2">
               <label htmlFor={textareaId} className="text-xs text-muted-foreground">
-                Select all → copy → paste into Notepad → Save as <strong>{filename}</strong>
+                Select all → copy → paste into Notepad → Save as .srt
               </label>
               <textarea
                 id={textareaId}

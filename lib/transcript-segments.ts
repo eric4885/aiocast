@@ -112,5 +112,61 @@ export function articleEchoesTranscript(articleBody: string, transcript: string)
   for (const w of sourceWords) {
     if (articleWords.has(w)) overlap += 1;
   }
-  return overlap / sourceWords.length > 0.72;
+  return overlap / sourceWords.length > 0.58;
+}
+
+function normalizeHeading(text: string): string {
+  return text
+    .replace(/^#+\s*/, "")
+    .replace(/^chapter\s+\d+:\s*/i, "")
+    .trim()
+    .toLowerCase();
+}
+
+function transcriptSectionTitles(transcript: string): string[] {
+  const titles: string[] = [];
+  for (const line of transcript.split(/\n+/)) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (/^#{1,3}\s/.test(trimmed)) {
+      titles.push(normalizeHeading(trimmed));
+      continue;
+    }
+    if (/^(introduction|conclusion|chapter\s+\d+)/i.test(trimmed) && trimmed.length < 120) {
+      titles.push(normalizeHeading(trimmed));
+    }
+  }
+  return titles;
+}
+
+function articleSectionTitles(articleBody: string): string[] {
+  return Array.from(articleBody.matchAll(/^#{1,3}\s+(.+)$/gm)).map((m) => normalizeHeading(m[1]));
+}
+
+/** True when the article reuses the transcript's section outline (abbreviated recap). */
+export function articleMirrorsTranscriptStructure(articleBody: string, transcript: string): boolean {
+  const sourceTitles = transcriptSectionTitles(transcript);
+  const articleTitles = articleSectionTitles(articleBody);
+  if (sourceTitles.length < 2 || articleTitles.length < 2) return false;
+
+  let matched = 0;
+  for (const source of sourceTitles) {
+    const probe = source.slice(0, 24);
+    if (
+      articleTitles.some(
+        (title) =>
+          title.includes(probe) ||
+          source.includes(title.slice(0, 24)) ||
+          title.split(/\s+/).slice(0, 4).join(" ") === source.split(/\s+/).slice(0, 4).join(" "),
+      )
+    ) {
+      matched += 1;
+    }
+  }
+
+  return matched / sourceTitles.length >= 0.45;
+}
+
+export function articleNeedsDistinctRewrite(articleBody: string, transcript: string): boolean {
+  return articleEchoesTranscript(articleBody, transcript) || articleMirrorsTranscriptStructure(articleBody, transcript);
 }

@@ -5,7 +5,7 @@ import { openAiApiKey, openAiUrl } from "@/lib/openai-config";
 import { outputLanguageRule } from "@/lib/output-language";
 import { chatCompletionContent, parseOpenAiJson, readResponseText } from "@/lib/openai-response";
 import {
-  articleEchoesTranscript,
+  articleNeedsDistinctRewrite,
   highlightsFromTranscript,
   srtFromTranscript,
 } from "@/lib/transcript-segments";
@@ -101,7 +101,13 @@ title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 obje
 
 Rules:
 - ${outputLanguageRule()}
-- articleBody: a FULL publishable SEO blog post in Markdown (800–1200 words) with ## section headers. Expand and rewrite ideas from the transcript into fresh editorial prose for Google search. Do NOT paste or lightly paraphrase the transcript — every section must be newly written. The opening paragraph must use completely different wording from the transcript's first two sentences. Do NOT write a short recap or bullet summary.
+- articleBody: a FULL publishable SEO blog post in Markdown (900–1300 words) written for Google search — NOT a podcast script cleanup.
+  * Cover EVERY major theme/chapter from the transcript (including ethics, conclusion, and closing topics). Do not omit any main section.
+  * Do NOT mirror the transcript outline: section titles must be NEW (no reuse of "Introduction", "Chapter 1", or transcript headings).
+  * Do NOT walk through the transcript in the same order paragraph-by-paragraph or section-by-section. Reorganize for search intent.
+  * Required sections: ## Who this is for, ## Key takeaways (bullet list), plus 4–6 topic sections with fresh titles, then ## Conclusion.
+  * Write fresh editorial prose — no copy-paste, no light paraphrase, no spoken-word filler ("Good morning", "Thank you for listening").
+  * Opening paragraph must not reuse any sentence from the transcript's first 150 words.
 - socialX: ready-to-post tweet text (≤280 chars). Plain text only — NO profile URLs, NO "https://" links, NO placeholders like yourpodcast.
 - socialLinkedIn: ready-to-post LinkedIn post (2–4 short paragraphs). Plain text only — NO URLs unless quoting a specific fact from the episode.
 - socialSubstack: ready-to-post newsletter intro (150–400 words). Plain text only — NO placeholder links.
@@ -220,6 +226,66 @@ ${transcript.slice(0, 8000)}
   return { data: null, failureReason: "All configured models failed." };
 }
 
+async function rewriteDistinctArticle(
+  transcript: string,
+  draft: string,
+  title: string,
+): Promise<string | null> {
+  const key = openAiApiKey();
+  if (!key || process.env.OPENAI_ENABLED?.trim().toLowerCase() !== "true") return null;
+
+  const model = process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
+
+  try {
+    const res = await fetch(openAiUrl("/chat/completions"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${key}`,
+      },
+      body: JSON.stringify({
+        model,
+        stream: false,
+        temperature: 0.5,
+        messages: [
+          {
+            role: "system",
+            content: `You are an SEO editor. ${outputLanguageRule()} Return ONLY Markdown for the article body — no JSON, no commentary.`,
+          },
+          {
+            role: "user",
+            content: `Rewrite this draft into a distinct SEO blog post (900–1300 words).
+
+Hard rules:
+- Cover ALL major themes from the source transcript, including ethics and conclusion topics — do not drop chapters.
+- Use NEW section titles (must not match transcript headings like "Chapter 1" or "Introduction: The Pace of Change").
+- Do NOT follow the transcript section order. Reorganize for a reader searching on Google.
+- Include ## Who this is for, ## Key takeaways (bullets), 4–6 fresh topic sections, ## Conclusion.
+- No podcast script tone. No recap-by-abbreviation.
+
+Article title: ${title}
+
+Source transcript (themes to cover):
+${transcript.slice(0, 10000)}
+
+Draft to replace (too similar to transcript):
+${draft.slice(0, 6000)}`,
+          },
+        ],
+      }),
+    });
+
+    const raw = await readResponseText(res);
+    if (!res.ok) return null;
+
+    const json = parseOpenAiJson<{ choices?: Array<{ message?: { content?: string } }> }>(raw);
+    const body = chatCompletionContent(json)?.trim();
+    return body && body.length > 400 ? body : null;
+  } catch {
+    return null;
+  }
+}
+
 function defaultFaq() {
   return [
     {
@@ -328,9 +394,17 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
 
   const highlights = highlightsFromTranscript(transcript, input.sourceType);
   const srt = srtFromTranscript(transcript, input.sourceType);
-  const articleBodyRaw = aiStr("articleBody");
-  const articleEchoesSource =
-    Boolean(articleBodyRaw) && articleEchoesTranscript(articleBodyRaw!, transcript);
+
+  let articleBody =
+    aiStr("articleBody") ??
+    `## Executive Summary\n${transcript}\n\n## Why Most Podcast Episodes Underperform\nMost episodes are published once and forgotten.\n\n## Build an AIO-Ready Content Loop\nTurn each episode into a long-form article, three FAQ answers, and a script matrix.\n\n## Execution Framework\nShip article first, then social distribution within 24 hours.\n`;
+
+  if (aiStr("articleBody") && articleNeedsDistinctRewrite(articleBody, transcript)) {
+    const rewritten = await rewriteDistinctArticle(transcript, articleBody, title);
+    if (rewritten) articleBody = rewritten;
+  }
+
+  const articleEchoesSource = Boolean(aiStr("articleBody")) && articleNeedsDistinctRewrite(articleBody, transcript);
 
   return {
     id: "",
@@ -342,9 +416,7 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
       title,
       metaDescription,
       keywords,
-      body:
-        articleBodyRaw ??
-        `## Executive Summary\n${transcript}\n\n## Why Most Podcast Episodes Underperform\nMost episodes are published once and forgotten.\n\n## Build an AIO-Ready Content Loop\nTurn each episode into a long-form article, three FAQ answers, and a script matrix.\n\n## Execution Framework\nShip article first, then social distribution within 24 hours.\n`,
+      body: articleBody,
     },
     faq,
     socialPack: {
