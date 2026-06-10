@@ -16,6 +16,7 @@ import {
 import { SrtDownloadSection } from "@/components/results/SrtDownloadSection";
 import {
   articleExportFilename,
+  articleForClipboard,
   articleToHtml,
   articleToMarkdown,
 } from "@/lib/article-export";
@@ -468,11 +469,16 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
               <p className="font-semibold">SEO article draft</p>
               <p className="mt-1 text-xs text-muted-foreground">
                 AI-rewritten blog post for search — not your raw show notes. ~{wordCount.toLocaleString()}{" "}
-                words · aim for 800–1,500 for a solid SEO post
+                words · aim for 800–1,500 for a solid SEO post. Copy/Download use Markdown or HTML; paste into your CMS
+                and adjust headings if needed.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" variant="secondary" onClick={() => void copy(pack.seoArticle.body, "Article")}>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => void copy(articleForClipboard(pack.seoArticle), "Article")}
+              >
                 <Copy className="mr-2 h-4 w-4" /> Copy full article
               </Button>
               <Button
