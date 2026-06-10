@@ -5,6 +5,18 @@ import path from "path";
 export type UsageBucket = { month: string; used: number };
 export type DailyIpUsage = { day: string; used: number };
 
+export type EmailPackEntry = {
+  id: string;
+  accessToken: string;
+  title: string;
+  createdAt: number;
+};
+
+export type MyPacksToken = {
+  email: string;
+  expiresAt: number;
+};
+
 export type PersistedSnapshot = {
   jobs: Record<string, string>;
   usage: Record<string, UsageBucket>;
@@ -12,6 +24,10 @@ export type PersistedSnapshot = {
   ipLastSubmit: Record<string, number>;
   subscribeIpUsage: Record<string, DailyIpUsage>;
   subscribeIpLast: Record<string, number>;
+  emailPackIndex: Record<string, EmailPackEntry[]>;
+  myPacksTokens: Record<string, MyPacksToken>;
+  /** Emails that opted out of non-transactional mail (unix ms). */
+  unsubscribed: Record<string, number>;
 };
 
 const REDIS_KEY = "aiocast:v1:snapshot";
@@ -29,6 +45,9 @@ function emptySnapshot(): PersistedSnapshot {
     ipLastSubmit: {},
     subscribeIpUsage: {},
     subscribeIpLast: {},
+    emailPackIndex: {},
+    myPacksTokens: {},
+    unsubscribed: {},
   };
 }
 

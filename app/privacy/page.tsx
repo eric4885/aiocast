@@ -24,21 +24,31 @@ export default function PrivacyPage() {
       <p className="mt-2 text-sm text-muted-foreground">Last updated: {siteConfig.legalLastUpdated}</p>
       <div className="mt-8 space-y-5 text-sm leading-relaxed text-muted-foreground">
         <p>
-          This policy describes how <strong className="text-foreground">{siteConfig.name}</strong> (“we”, “us”) handles
-          information when you use our website and tools. The site is operated in English for creators worldwide. If you
-          use the service, you agree to this policy.
+          This policy describes how <strong className="text-foreground">{siteConfig.legalEntity}</strong> (“we”, “us”)
+          operates <strong className="text-foreground">{siteConfig.name}</strong> and handles information when you use our
+          website and tools. The site is operated in English for creators worldwide. If you use the service, you agree to
+          this policy.
         </p>
 
         <h2 className="text-lg font-semibold text-foreground">1. What we collect</h2>
         <ul className="list-inside list-disc space-y-2">
           <li>
             <strong className="text-foreground">Account and contact data:</strong> email address when you subscribe to
-            updates, join a waitlist, or request delivery of generated outputs.
+            updates, join a waitlist, request delivery of generated outputs, or use &quot;Find my packs&quot; recovery.
           </li>
           <li>
             <strong className="text-foreground">Content you submit:</strong> episode topics, RSS feed URLs, pasted
-            transcripts or show notes, optional episode URLs, and audio files you upload for validation or future
-            processing features.
+            transcripts or show notes, optional episode URLs, and audio files you upload for automatic transcription when
+            you do not paste text.
+          </li>
+          <li>
+            <strong className="text-foreground">Pack recovery index:</strong> when you provide an email at generation or
+            on a result page, we associate that address with pack identifiers and titles (up to 20 recent packs per email)
+            so you can request a private recovery link.
+          </li>
+          <li>
+            <strong className="text-foreground">Private result links:</strong> generated pack URLs include an access token.
+            Anyone with the full link can view that pack — treat links like passwords and do not share them publicly.
           </li>
           <li>
             <strong className="text-foreground">Technical data:</strong> standard server logs (for example IP address,
@@ -48,17 +58,22 @@ export default function PrivacyPage() {
 
         <h2 className="text-lg font-semibold text-foreground">2. Audio and transcript processing</h2>
         <p>
-          On the current free tier, <strong className="text-foreground">generation is driven by text you paste</strong>{" "}
-          (transcript, show notes, or outline). Uploaded audio may be used to validate format and duration in the
-          browser and on the server;{" "}
-          <strong className="text-foreground">we do not automatically transcribe uploaded audio</strong> unless we
-          ship and announce a separate transcription feature. Episode URLs you provide are treated as reference metadata;
-          we do not automatically crawl arbitrary URLs for content unless we document that capability.
+          The SEO growth pack tool accepts <strong className="text-foreground">pasted transcripts or show notes</strong>{" "}
+          and, on the free tier, <strong className="text-foreground">uploaded audio clips</strong> (currently up to 5
+          minutes and 10 MB). When you upload audio without pasting text, we send that file to our configured speech-to-text
+          provider (OpenAI Whisper or an equivalent model via our API gateway) to produce a transcript, then use that text
+          to generate your pack. We do not retain uploaded audio files after transcription completes — only the resulting
+          text and generated outputs are stored for delivery.
         </p>
         <p>
-          When server-side AI is enabled, text you submit may be sent to our configured model provider to produce drafts
-          (for example article structure, FAQs, social copy). Do not submit highly sensitive personal data or content you
-          are not allowed to share.
+          Non-English pasted notes may be translated to English before generation when the site is configured for English
+          output. Episode URLs you provide are treated as reference metadata; we do not automatically crawl arbitrary URLs
+          for content unless we document that capability separately.
+        </p>
+        <p>
+          When server-side AI is enabled, text you submit (including transcripts produced from audio) may be sent to our
+          configured model provider to produce drafts (for example article structure, FAQs, and social copy). Do not submit
+          highly sensitive personal data or content you are not allowed to share.
         </p>
 
         <h2 className="text-lg font-semibold text-foreground">3. Why we use data (purposes)</h2>
@@ -82,8 +97,32 @@ export default function PrivacyPage() {
 
         <h2 className="text-lg font-semibold text-foreground">5. Sharing and subprocessors</h2>
         <p>
-          We use infrastructure and service providers (for example hosting, email delivery, and optional AI inference).
-          Those vendors process data under their terms as processors where applicable.{" "}
+          We use infrastructure and service providers to run the Service. Those vendors process data under their terms as
+          processors where applicable. Typical categories include:
+        </p>
+        <ul className="list-inside list-disc space-y-2">
+          <li>
+            <strong className="text-foreground">Hosting:</strong> Cloudflare (Workers, CDN, and related edge services).
+          </li>
+          <li>
+            <strong className="text-foreground">Persistence:</strong> Upstash Redis (when configured) for job metadata and
+            usage counters; otherwise ephemeral or file-based storage in development.
+          </li>
+          <li>
+            <strong className="text-foreground">Email:</strong> Resend for transactional messages (pack links, pack
+            recovery, checklist delivery) and briefing/waitlist messages when you subscribe. Subscriber addresses are
+            processed to send what you requested; you can opt out of non-transactional mail via{" "}
+            <Link href="/unsubscribe" className="text-primary hover:underline">
+              Unsubscribe
+            </Link>
+            .
+          </li>
+          <li>
+            <strong className="text-foreground">AI inference:</strong> APImart and/or OpenAI-compatible endpoints for text
+            generation and Whisper-style audio transcription when enabled.
+          </li>
+        </ul>
+        <p>
           <strong className="text-foreground">We do not sell your personal information.</strong>
         </p>
 
@@ -96,10 +135,31 @@ export default function PrivacyPage() {
 
         <h2 className="text-lg font-semibold text-foreground">7. Retention</h2>
         <p>
-          We keep information only as long as needed for the purposes above — for example while processing your request,
-          maintaining usage limits, meeting legal obligations, or resolving disputes. Ephemeral or demo storage may be
-          cleared on deploy; production retention limits will be documented as the product matures.
+          We keep information only as long as needed for the purposes above. In general:
         </p>
+        <ul className="list-inside list-disc space-y-2">
+          <li>
+            <strong className="text-foreground">Uploaded audio:</strong> processed in memory for transcription and not kept
+            as a separate file after the request completes.
+          </li>
+          <li>
+            <strong className="text-foreground">Generated packs:</strong> stored so you can reopen your private result link
+            for at least 90 days under normal operation; email-indexed packs (last 20 per address) support recovery.
+            Storage may be cleared earlier on deploy or routine maintenance — use email backup or export downloads for
+            long-term copies.
+          </li>
+          <li>
+            <strong className="text-foreground">Unsubscribe flags:</strong> retained while you remain opted out of
+            non-transactional email.
+          </li>
+          <li>
+            <strong className="text-foreground">Usage limits:</strong> monthly email counters and daily IP counters rotate
+            with the calendar; magic-link tokens for pack recovery expire after 24 hours.
+          </li>
+          <li>
+            <strong className="text-foreground">Newsletter:</strong> until you unsubscribe or we delete the list entry.
+          </li>
+        </ul>
 
         <h2 className="text-lg font-semibold text-foreground">8. Your rights</h2>
         <p>
@@ -118,9 +178,12 @@ export default function PrivacyPage() {
 
         <h2 className="text-lg font-semibold text-foreground">10. Cookies and similar technologies</h2>
         <p>
-          We use strictly necessary cookies and local storage where needed for the site to function (for example remembering
-          that you acknowledged our cookie notice). If we add analytics or marketing cookies later, we will update this
-          policy and provide an appropriate consent mechanism where required by law.
+          We use <strong className="text-foreground">essential storage</strong> (cookies and local storage) so the site
+          works — for example remembering your cookie choice. If you choose &quot;Accept analytics&quot; in our banner and
+          we have configured a measurement ID, we may load <strong className="text-foreground">Google Analytics 4</strong>{" "}
+          to understand aggregate usage. Analytics does not run until you opt in via that banner. You can change your
+          choice by clearing site data for {siteConfig.name} in your browser. See Google&apos;s privacy documentation for
+          how GA processes data.
         </p>
 
         <h2 className="text-lg font-semibold text-foreground">11. Changes</h2>
@@ -131,7 +194,7 @@ export default function PrivacyPage() {
 
         <h2 className="text-lg font-semibold text-foreground">12. Contact</h2>
         <p>
-          Questions:{" "}
+          Data controller: {siteConfig.legalEntity}. Questions or privacy requests:{" "}
           <a href={`mailto:${siteConfig.contactEmail}`} className="text-primary hover:underline">
             {siteConfig.contactEmail}
           </a>{" "}
@@ -139,8 +202,13 @@ export default function PrivacyPage() {
           <Link href="/contact" className="text-primary hover:underline">
             Contact page
           </Link>
-          .
+          . We aim to respond to verifiable requests within 30 days where applicable law requires.
         </p>
+        {siteConfig.mailingAddress ? (
+          <p className="text-sm">
+            Postal correspondence: {siteConfig.mailingAddress.split("\n").join(", ")}
+          </p>
+        ) : null}
 
       </div>
     </div>

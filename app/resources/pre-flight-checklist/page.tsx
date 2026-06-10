@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SubscribeForm } from "@/components/shared/SubscribeForm";
 import { SavePdfButton } from "./print-button";
+import { CHECKLIST_MD_PATH } from "@/lib/checklist-markdown";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -21,9 +22,9 @@ const sections = [
   {
     title: "Before you hit record",
     items: [
-      "Room noise under control — quiet space; mitigate HVAC/fans near the mic.",
-      "One mic per voice — independent tracks for remote guests when possible.",
-      "Gain staging — speech peaks roughly −12 to −6 dBFS with headroom.",
+      "Room noise under control - quiet space; mitigate HVAC/fans near the mic.",
+      "One mic per voice - independent tracks for remote guests when possible.",
+      "Gain staging - speech peaks roughly -12 to -6 dBFS with headroom.",
       "Closed-back headphones for guests to reduce bleed.",
     ],
   },
@@ -31,7 +32,7 @@ const sections = [
     title: "During the session",
     items: [
       "Clap or slate at the top if merging separate recordings.",
-      "Watch meters — fix clipping and ultra-low levels before you wrap.",
+      "Watch meters - fix clipping and ultra-low levels before you wrap.",
     ],
   },
   {
@@ -46,8 +47,8 @@ const sections = [
 
 export default function PreFlightChecklistPage() {
   return (
-    <div className="border-b border-border bg-background">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:py-24">
+    <div className="border-b border-border bg-background print:border-0">
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:py-24 print:max-w-none print:py-8">
         <p className="text-sm font-semibold text-primary">Free resource</p>
         <h1 className="mt-3 text-4xl font-bold tracking-tight">
           Podcast pre-flight checklist
@@ -56,10 +57,10 @@ export default function PreFlightChecklistPage() {
           Same checklist included in our weekly AI tools briefing — bookmark this page or save a copy for offline use.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-wrap gap-3 print-hide">
           <SavePdfButton />
           <Button variant="secondary" asChild>
-            <a href="/downloads/pre-flight-checklist.md" download>
+            <a href={CHECKLIST_MD_PATH} download="pre-flight-checklist.md">
               <ArrowDownToLine className="mr-2 h-4 w-4" />
               Download .md
             </a>
@@ -86,7 +87,7 @@ export default function PreFlightChecklistPage() {
           </CardContent>
         </Card>
 
-        <Card className="mt-12 border-primary/25 bg-secondary/40">
+        <Card className="mt-12 border-primary/25 bg-secondary/40 print-hide">
           <CardContent className="space-y-4 p-8">
             <p className="text-lg font-semibold text-foreground">
               Get more resources like this — one email per week →
@@ -100,7 +101,7 @@ export default function PreFlightChecklistPage() {
           </CardContent>
         </Card>
 
-        <p className="mt-10 text-center text-sm text-muted-foreground">
+        <p className="mt-10 text-center text-sm text-muted-foreground print-hide">
           Want the full editing OS?{" "}
           <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
             See Pro toolkit

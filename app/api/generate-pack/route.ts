@@ -7,6 +7,7 @@ import {
   checkIpGuards,
   createJob,
   getJobIfAuthorized,
+  indexPackForEmail,
   resultPath,
   setJobDone,
   setJobFailed,
@@ -35,6 +36,12 @@ async function finishJob(
   await setJobDone(job.id, pack);
   if (email.trim()) {
     await sendPackResultEmail(email, pack, job.accessToken);
+    await indexPackForEmail(email, {
+      id: job.id,
+      accessToken: job.accessToken,
+      title: pack.seoArticle.title,
+      createdAt: job.createdAt,
+    });
   }
   return resultPath(job.id, job.accessToken);
 }

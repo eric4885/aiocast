@@ -3,8 +3,15 @@
   tagline: "Turn podcast audio into SEO growth assets.",
   url: "https://aiocast.com",
   contactEmail: "hello@aiocast.com",
+  /** Legal name shown in Privacy, Terms, and email footers (CAN-SPAM). */
+  legalEntity: "AioCast",
+  /**
+   * Physical mailing address for commercial email footers (CAN-SPAM).
+   * Set LEGAL_MAILING_ADDRESS in Cloudflare / .env.local (multiline OK with \\n).
+   */
+  mailingAddress: process.env.LEGAL_MAILING_ADDRESS?.trim().replace(/\\n/g, "\n") ?? "",
   /** Bump when Privacy or Terms materially change (shown on those pages). */
-  legalLastUpdated: "May 2026",
+  legalLastUpdated: "June 2026",
   /** Full profile URLs — optional env overrides. Empty = footer hides icons (no generic platform home links). */
   social: {
     x: process.env.NEXT_PUBLIC_SOCIAL_X?.trim() ?? "",

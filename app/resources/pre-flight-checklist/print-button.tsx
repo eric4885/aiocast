@@ -9,10 +9,10 @@ export function SavePdfButton() {
       variant="primary"
       type="button"
       onClick={() => window.print()}
-      title="Opens the print dialog — choose Save as PDF"
+      title="Opens your browser print dialog — choose Save as PDF or a printer"
     >
       <FileDown className="mr-2 h-4 w-4" />
-      Download PDF
+      Print / Save as PDF
     </Button>
   );
 }

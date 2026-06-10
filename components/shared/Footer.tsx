@@ -156,6 +156,16 @@ export function Footer() {
 
             <li>
 
+              <Link className="hover:text-foreground" href="/my-packs">
+
+                Find my SEO growth packs
+
+              </Link>
+
+            </li>
+
+            <li>
+
               <Link className="hover:text-foreground" href="/pro-toolkit">
 
                 Podcast SEO pro toolkit
@@ -229,6 +239,18 @@ export function Footer() {
           <Link href="/help" className="inline-flex min-h-[44px] items-center px-2 hover:text-foreground hover:underline">
 
             Help
+
+          </Link>
+
+          <span aria-hidden className="hidden text-border sm:inline">
+
+            ·
+
+          </span>
+
+          <Link href="/unsubscribe" className="inline-flex min-h-[44px] items-center px-2 hover:text-foreground hover:underline">
+
+            Unsubscribe
 
           </Link>
 

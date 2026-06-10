@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { getClientIp } from "@/lib/client-ip";
-import { checkSubscribeIpGuards } from "@/lib/mvp-store";
+import { CHECKLIST_MD_PATH } from "@/lib/checklist-markdown";
+import { emailFooterHtml, listUnsubscribeHeaders } from "@/lib/email-footer";
+import { clearUnsubscribed, checkSubscribeIpGuards } from "@/lib/mvp-store";
 import { assertProductionReady } from "@/lib/production";
 import {
   isSubscribeSource,
@@ -73,7 +75,10 @@ export async function POST(req: Request) {
 
   const baseUrl = publicSiteUrl();
   const checklistUrl = `${baseUrl}/resources/pre-flight-checklist`;
-  const mdUrl = `${baseUrl}/downloads/pre-flight-checklist.md`;
+  const mdUrl = `${baseUrl}${CHECKLIST_MD_PATH}`;
+
+  const normalizedEmail = String(email).trim().toLowerCase();
+  await clearUnsubscribed(normalizedEmail);
 
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL || "AioCast <onboarding@resend.dev>";
@@ -86,27 +91,24 @@ export async function POST(req: Request) {
       <p>You're on the <strong>RSS SEO audit</strong> early-access list.</p>
       <p>Source: <strong>${sourceLabel(source)}</strong>.</p>
       <p>We'll email you when full feed-level scoring and competitor gap reports roll out.</p>
-      <p style="color:#64748b;font-size:12px;margin-top:24px;">
-        AioCast · Reply to this email if something looks wrong.
-      </p>
+      ${emailFooterHtml({ marketing: true, email: normalizedEmail })}
     `
       : `
       <p>Thanks — here's your pre-flight checklist for cleaner recordings.</p>
       <p>You signed up from: <strong>${sourceLabel(source)}</strong>.</p>
       <p><a href="${checklistUrl}"><strong>Open the checklist (web)</strong></a></p>
       <p><a href="${mdUrl}">Download plain Markdown (.md)</a></p>
-      <p style="color:#64748b;font-size:12px;margin-top:24px;">
-        AioCast · You can reply to this email if something looks wrong.
-      </p>
+      ${emailFooterHtml({ marketing: true, email: normalizedEmail })}
     `;
 
     const { error } = await resend.emails.send({
       from,
-      to: email,
+      to: normalizedEmail,
       subject: isRssWaitlist
         ? "You're on the RSS audit waitlist — AioCast"
         : "Your podcast pre-flight checklist — AioCast",
       html,
+      headers: listUnsubscribeHeaders(normalizedEmail),
     });
 
     if (error) {

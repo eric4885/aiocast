@@ -1,5 +1,10 @@
 import { randomBytes, randomUUID } from "crypto";
-import { getJsonField, setJsonField, withSnapshot } from "@/lib/persistent-backend";
+import {
+  getJsonField,
+  setJsonField,
+  withSnapshot,
+  type EmailPackEntry,
+} from "@/lib/persistent-backend";
 import { checkIpRateLimit, type IpGuardResult } from "@/lib/rate-limit";
 import { ipCooldownMs, ipDailyLimit, rateLimitsDisabled } from "@/lib/rate-limit-config";
 
@@ -168,4 +173,80 @@ export async function getJobIfAuthorized(
 
 export function resultPath(id: string, accessToken: string) {
   return `/results/${id}?token=${encodeURIComponent(accessToken)}`;
+}
+
+const MAX_PACKS_PER_EMAIL = 20;
+const MY_PACKS_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+
+export type { EmailPackEntry };
+
+export async function indexPackForEmail(
+  email: string,
+  entry: { id: string; accessToken: string; title?: string; createdAt?: number },
+) {
+  const key = email.trim().toLowerCase();
+  if (!key.includes("@")) return;
+
+  await withSnapshot((snapshot) => {
+    const list = snapshot.emailPackIndex[key] ?? [];
+    const next = list.filter((pack) => pack.id !== entry.id);
+    next.unshift({
+      id: entry.id,
+      accessToken: entry.accessToken,
+      title: entry.title?.trim() || "SEO growth pack",
+      createdAt: entry.createdAt ?? Date.now(),
+    });
+    snapshot.emailPackIndex[key] = next.slice(0, MAX_PACKS_PER_EMAIL);
+  });
+}
+
+export async function createMyPacksAccessToken(email: string): Promise<string> {
+  const token = randomBytes(24).toString("hex");
+  const key = email.trim().toLowerCase();
+
+  await withSnapshot((snapshot) => {
+    snapshot.myPacksTokens[token] = {
+      email: key,
+      expiresAt: Date.now() + MY_PACKS_TOKEN_TTL_MS,
+    };
+  });
+
+  return token;
+}
+
+export async function getPacksForMyPacksToken(
+  token: string,
+): Promise<{ email: string; packs: EmailPackEntry[] } | null> {
+  return withSnapshot((snapshot) => {
+    const record = snapshot.myPacksTokens[token];
+    if (!record || record.expiresAt < Date.now()) {
+      if (record) delete snapshot.myPacksTokens[token];
+      return null;
+    }
+    return {
+      email: record.email,
+      packs: snapshot.emailPackIndex[record.email] ?? [],
+    };
+  });
+}
+
+export async function markUnsubscribed(email: string) {
+  const key = email.trim().toLowerCase();
+  if (!key.includes("@")) return;
+  await withSnapshot((snapshot) => {
+    snapshot.unsubscribed[key] = Date.now();
+  });
+}
+
+export async function clearUnsubscribed(email: string) {
+  const key = email.trim().toLowerCase();
+  if (!key.includes("@")) return;
+  await withSnapshot((snapshot) => {
+    delete snapshot.unsubscribed[key];
+  });
+}
+
+export async function isUnsubscribed(email: string): Promise<boolean> {
+  const key = email.trim().toLowerCase();
+  return withSnapshot((snapshot) => Boolean(snapshot.unsubscribed[key]));
 }

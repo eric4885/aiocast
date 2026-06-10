@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendPackResultEmail } from "@/lib/pack-email";
-import { getJob } from "@/lib/mvp-store";
+import { getJob, indexPackForEmail } from "@/lib/mvp-store";
 
 function emailValid(value: unknown): value is string {
   return typeof value === "string" && value.includes("@") && value.length < 255;
@@ -27,6 +27,12 @@ export async function POST(req: Request) {
 
   try {
     await sendPackResultEmail(email.trim(), job.pack, job.accessToken);
+    await indexPackForEmail(email.trim(), {
+      id: job.id,
+      accessToken: job.accessToken,
+      title: job.pack.seoArticle.title,
+      createdAt: job.createdAt,
+    });
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Could not send email. Try again shortly." }, { status: 500 });

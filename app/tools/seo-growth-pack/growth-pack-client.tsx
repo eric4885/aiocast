@@ -302,11 +302,15 @@ export function GrowthPackClient({
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">Step 2</p>
                 <p className="mt-1 text-base font-semibold text-foreground">
                   Email for backup delivery{" "}
-                  <span className="text-sm font-normal text-muted-foreground">(optional)</span>
+                  <span className="text-sm font-normal text-muted-foreground">(strongly recommended)</span>
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Skip this to open results instantly. Add an email and we&apos;ll also send a private link you can
-                  revisit later. See our{" "}
+                  Without an email you still get instant results, but the private link is easy to lose. Add your address
+                  and we&apos;ll send a backup plus index it for{" "}
+                  <a href="/my-packs" className="text-primary underline-offset-4 hover:underline">
+                    Find my packs
+                  </a>
+                  . See our{" "}
                   <a href="/privacy" className="text-primary underline-offset-4 hover:underline">
                     Privacy Policy
                   </a>
@@ -320,7 +324,7 @@ export function GrowthPackClient({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com (optional)"
+                  placeholder="you@example.com — backup link + pack recovery"
                   className="mt-3"
                   autoComplete="email"
                 />
@@ -340,7 +344,9 @@ export function GrowthPackClient({
                     role="status"
                   >
                     ✓ Pack ready — opening your result page now
-                    {email.trim() ? ". We’ll also email a backup link shortly." : ". Bookmark the page or add your email there."}
+                    {email.trim()
+                      ? ". Backup link incoming — same email works on Find my packs."
+                      : ". Bookmark the page or add your email there for recovery."}
                   </p>
                 )}
                 {!canClickSubmit && disabledSubmitHint && (
@@ -429,8 +435,12 @@ export function GrowthPackClient({
                 <div className="rounded-2xl border border-border/70 bg-secondary/40 p-4">
                   <p className="font-semibold">Delivery</p>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Results open on this site as soon as generation finishes — usually under 90 seconds. Optional email
-                    sends a private backup link.
+                    Results open on this site as soon as generation finishes — usually under 90 seconds. Add an email for
+                    a backup link and pack recovery via{" "}
+                    <a href="/my-packs" className="text-primary underline-offset-4 hover:underline">
+                      Find my packs
+                    </a>
+                    .
                   </p>
                 </div>
               </CardContent>

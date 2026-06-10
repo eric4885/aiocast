@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,11 @@ import {
   type TranscriptSourceType,
 } from "@/lib/transcript-segments";
 import { SrtDownloadSection } from "@/components/results/SrtDownloadSection";
+import {
+  articleExportFilename,
+  articleToHtml,
+  articleToMarkdown,
+} from "@/lib/article-export";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -126,6 +131,59 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
     articleEchoesSource: raw.articleEchoesSource === true ? true : undefined,
     transcriptTranslated: raw.transcriptTranslated === true ? true : undefined,
   };
+}
+
+function downloadTextFile(content: string, filename: string, mime = "text/plain;charset=utf-8") {
+  const blob = new Blob([`\uFEFF${content}`], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.rel = "noopener";
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}
+
+function PublishChecklist() {
+  return (
+    <Card>
+      <CardContent className="space-y-4 p-6">
+        <p className="font-semibold">Publish checklist</p>
+        <p className="text-sm text-muted-foreground">
+          Review and edit every draft before going live. Use the copy and download buttons above for each asset.
+        </p>
+        <div className="space-y-4 text-sm">
+          <div className="rounded-lg border border-border p-4">
+            <p className="font-semibold">WordPress / blog CMS</p>
+            <ol className="mt-2 list-inside list-decimal space-y-1 text-muted-foreground">
+              <li>Download Markdown or copy the full article into your block editor.</li>
+              <li>Paste the meta description into Yoast, Rank Math, or your SEO plugin.</li>
+              <li>Add FAQ blocks as an accordion section or a dedicated FAQ page.</li>
+              <li>Set a featured image and internal links before publishing.</li>
+            </ol>
+          </div>
+          <div className="rounded-lg border border-border p-4">
+            <p className="font-semibold">Substack</p>
+            <ol className="mt-2 list-inside list-decimal space-y-1 text-muted-foreground">
+              <li>Paste the article as a newsletter post; trim headings if it feels long for email.</li>
+              <li>Use the Substack script for Notes or a short teaser above the fold.</li>
+              <li>Schedule using the 7-day plan as a rough guide, not autopilot.</li>
+            </ol>
+          </div>
+          <div className="rounded-lg border border-border p-4">
+            <p className="font-semibold">LinkedIn &amp; X</p>
+            <ol className="mt-2 list-inside list-decimal space-y-1 text-muted-foreground">
+              <li>Copy the LinkedIn script first — it is written for a professional tone.</li>
+              <li>Post the X thread or single post when your blog URL is live.</li>
+              <li>Pair clips with the SRT file in your editor (VLC or Descript) for captioned video.</li>
+            </ol>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 function SocialBlock({
@@ -359,9 +417,13 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       {!emailSent && token && (
         <Card className="border-primary/25 bg-primary/5">
           <CardContent className="space-y-3 p-6">
-            <p className="font-semibold">Email me this link</p>
+            <p className="font-semibold">Save this pack — email backup recommended</p>
             <p className="text-sm text-muted-foreground">
-              Bookmark this page or send a backup link to your inbox.
+              Your browser may lose this private URL. Send a backup to your inbox and use{" "}
+              <Link href="/my-packs" className="text-primary underline-offset-4 hover:underline">
+                Find my packs
+              </Link>{" "}
+              later with the same email.
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Input
@@ -377,7 +439,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
                 disabled={!backupEmail.trim() || emailSending}
                 onClick={() => void sendBackupEmail()}
               >
-                {emailSending ? "Sending…" : "Send link"}
+                {emailSending ? "Sending…" : "Email backup link"}
               </Button>
             </div>
             {emailError && (
@@ -391,7 +453,11 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       {emailSent && (
         <p className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
-          Backup link sent — check your inbox.
+          Backup link sent — check your inbox. You can also recover packs anytime at{" "}
+          <Link href="/my-packs" className="font-medium underline underline-offset-2">
+            Find my packs
+          </Link>
+          .
         </p>
       )}
 
@@ -405,9 +471,36 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
                 words · aim for 800–1,500 for a solid SEO post
               </p>
             </div>
-            <Button size="sm" variant="secondary" onClick={() => void copy(pack.seoArticle.body, "Article")}>
-              <Copy className="mr-2 h-4 w-4" /> Copy full article
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" variant="secondary" onClick={() => void copy(pack.seoArticle.body, "Article")}>
+                <Copy className="mr-2 h-4 w-4" /> Copy full article
+              </Button>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() =>
+                  downloadTextFile(
+                    articleToMarkdown(pack.seoArticle, pack.faq),
+                    articleExportFilename(id, "md"),
+                  )
+                }
+              >
+                <Download className="mr-2 h-4 w-4" /> Download Markdown
+              </Button>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() =>
+                  downloadTextFile(
+                    articleToHtml(pack.seoArticle, pack.faq),
+                    articleExportFilename(id, "html"),
+                    "text/html;charset=utf-8",
+                  )
+                }
+              >
+                <Download className="mr-2 h-4 w-4" /> Download HTML
+              </Button>
+            </div>
           </div>
           {echoesSource && (
             <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
@@ -560,6 +653,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
           <p className="text-sm text-muted-foreground">{pack.seoReport.estimatedTrafficHint}</p>
         </CardContent>
       </Card>
+
+      <PublishChecklist />
 
       <div className="flex flex-col items-center gap-3 pb-8 sm:flex-row sm:justify-center">
         <Button size="lg" asChild>

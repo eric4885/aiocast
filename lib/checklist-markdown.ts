@@ -1,4 +1,4 @@
-# Podcast pre-flight checklist (AioCast.com)
+export const CHECKLIST_MARKDOWN = `# Podcast pre-flight checklist (AioCast.com)
 
 Use this before every recording session - solo or remote.
 
@@ -23,3 +23,6 @@ Use this before every recording session - solo or remote.
 ---
 
 Downloaded from **AioCast.com** - swap tips as your kit and room evolve.
+`;
+
+export const CHECKLIST_MD_PATH = "/api/downloads/pre-flight-checklist";

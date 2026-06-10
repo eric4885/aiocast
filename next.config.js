@@ -20,6 +20,11 @@ const nextConfig = {
         destination: "/tools/seo-growth-pack",
         permanent: true,
       },
+      {
+        source: "/downloads/pre-flight-checklist.md",
+        destination: "/api/downloads/pre-flight-checklist",
+        permanent: true,
+      },
     ];
   },
   async headers() {

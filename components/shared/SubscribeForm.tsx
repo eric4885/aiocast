@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { SubscribeSource } from "@/lib/subscribe";
+import { CHECKLIST_MD_PATH } from "@/lib/checklist-markdown";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -101,7 +102,7 @@ export function SubscribeForm({
           </Link>
           {" · "}
           <Link
-            href="/downloads/pre-flight-checklist.md"
+            href={CHECKLIST_MD_PATH}
             className="font-medium underline underline-offset-4"
           >
             Markdown download
@@ -176,7 +177,11 @@ export function SubscribeForm({
       <Link href="/privacy" className="text-primary underline-offset-4 hover:underline">
         Privacy Policy
       </Link>
-      . You can unsubscribe from non-transactional emails using the link in any message.
+      . Unsubscribe anytime via{" "}
+      <Link href="/unsubscribe" className="text-primary underline-offset-4 hover:underline">
+        Unsubscribe
+      </Link>{" "}
+      or the link in any message.
     </p>
   ) : null;
 
