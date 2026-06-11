@@ -167,7 +167,6 @@ export function HomePageClient() {
       setTitleResult(payload.data);
       setResultMeta(payload.meta ?? null);
       setSubmittedTopic(payload.meta?.normalizedTopic ?? trimmed);
-      setSavedAck(false);
       setCopied(false);
       setCopyToast(null);
     } catch {
