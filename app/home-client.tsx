@@ -30,6 +30,9 @@ import {
 } from "@/lib/title-heuristics";
 import { cn } from "@/lib/utils";
 
+/** RSS diagnosis hidden until audit is data-backed; /api/rss-preview kept for later. */
+const HOME_RSS_UI_ENABLED = false;
+
 const SAVED_TITLES_KEY = "aiocast_saved_titles_v1";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -100,7 +103,18 @@ export function HomePageClient() {
 
   useEffect(() => {
     const tab = searchParams.get("tab");
-    if (tab === "rss") {
+    if (tab === "rss" && !HOME_RSS_UI_ENABLED) {
+      setAnalysisMode("keyword");
+      setOptimizeError(null);
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("tab");
+        if (!url.hash) url.hash = "analyze-tool";
+        window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+      }
+      return;
+    }
+    if (tab === "rss" && HOME_RSS_UI_ENABLED) {
       setAnalysisMode("rss");
       setOptimizeError(null);
     } else if (tab === "keyword") {
@@ -164,7 +178,7 @@ export function HomePageClient() {
     const trimmed = topic.trim();
     if (!trimmed) return;
 
-    if (analysisMode === "rss") {
+    if (analysisMode === "rss" && HOME_RSS_UI_ENABLED) {
       setRssFetchError(null);
       setRssLivePreview(null);
       setRssLoading(true);
@@ -226,11 +240,12 @@ export function HomePageClient() {
   };
 
   const submitAnalyzeDisabled =
-    analysisMode === "keyword"
+    !HOME_RSS_UI_ENABLED || analysisMode === "keyword"
       ? optimizeLoading || isKeywordAnalyzeDisabled(topic)
       : rssLoading || !topic.trim();
 
   const handleModeTabKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (!HOME_RSS_UI_ENABLED) return;
     if (e.key === "ArrowRight" || e.key === "ArrowDown") {
       e.preventDefault();
       setAnalysisMode("rss");
@@ -326,6 +341,7 @@ export function HomePageClient() {
 
           <form id="analyze-tool" onSubmit={handleAnalyze} className="relative z-10 mx-auto mt-3 max-w-2xl sm:mt-6">
             <div className="rounded-2xl border border-border bg-card/90 p-3 shadow-lg shadow-black/20 ring-1 ring-border/80 sm:p-5">
+              {HOME_RSS_UI_ENABLED && (
               <div
                 className="mb-4 flex rounded-xl border border-border bg-secondary/80 p-1 shadow-inner"
                 role="tablist"
@@ -367,7 +383,8 @@ export function HomePageClient() {
                   RSS diagnosis
                 </button>
               </div>
-              {analysisMode === "keyword" && showEnglishTopicHint(topic) && (
+              )}
+              {(!HOME_RSS_UI_ENABLED || analysisMode === "keyword") && showEnglishTopicHint(topic) && (
                 <p className="mb-3 text-center text-sm font-medium text-violet-300">
                   Please provide an English topic to start.
                 </p>
@@ -377,12 +394,12 @@ export function HomePageClient() {
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   placeholder={
-                    analysisMode === "keyword"
-                      ? "e.g. How to grow a podcast without social media"
-                      : "Your RSS URL"
+                    HOME_RSS_UI_ENABLED && analysisMode === "rss"
+                      ? "Your RSS URL"
+                      : "e.g. How to grow a podcast without social media"
                   }
                   className="min-h-[48px] border-border bg-background px-3 text-base text-foreground placeholder:text-muted-foreground sm:px-4 md:text-sm"
-                  autoComplete={analysisMode === "rss" ? "url" : "on"}
+                  autoComplete={HOME_RSS_UI_ENABLED && analysisMode === "rss" ? "url" : "on"}
                   enterKeyHint="search"
                 />
                 <Button
@@ -390,20 +407,20 @@ export function HomePageClient() {
                   className="h-12 min-h-[48px] w-full shrink-0 touch-manipulation px-7 shadow-md sm:h-11 sm:min-h-[44px] sm:w-auto sm:min-w-[148px]"
                   disabled={submitAnalyzeDisabled}
                 >
-                  {analysisMode === "keyword" && optimizeLoading ? (
+                  {(!HOME_RSS_UI_ENABLED || analysisMode === "keyword") && optimizeLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Working…
                     </>
-                  ) : analysisMode === "rss" && rssLoading ? (
+                  ) : HOME_RSS_UI_ENABLED && analysisMode === "rss" && rssLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Fetching feed…
                     </>
-                  ) : analysisMode === "keyword" ? (
-                    "Analyze keyword"
-                  ) : (
+                  ) : HOME_RSS_UI_ENABLED && analysisMode === "rss" ? (
                     "Analyze RSS"
+                  ) : (
+                    "Analyze keyword"
                   )}
                 </Button>
               </div>
@@ -677,7 +694,7 @@ export function HomePageClient() {
           </div>
         )}
 
-        {analysisMode === "rss" && (
+        {HOME_RSS_UI_ENABLED && analysisMode === "rss" && (
           <div className="mx-auto mt-8 max-w-2xl sm:mt-10">
             <p className="text-center text-xl font-bold leading-tight text-balance sm:text-3xl">
               Your Podcast Health Diagnosis
@@ -977,7 +994,7 @@ export function HomePageClient() {
           <p className="mx-auto mt-3 max-w-md text-center text-xs text-muted-foreground">
             No credit card required. Paste a transcript on the free tool to generate your pack.
           </p>
-          <div className="mt-10 grid gap-4 text-left sm:grid-cols-3">
+          <div className={cn("mt-10 grid gap-4 text-left", HOME_RSS_UI_ENABLED ? "sm:grid-cols-3" : "sm:grid-cols-2")}>
             <Link
               href="/?tab=keyword#analyze-tool"
               className="group block rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -995,6 +1012,7 @@ export function HomePageClient() {
                 Explore demand signals from public podcast catalogs (estimated).
               </p>
             </Link>
+            {HOME_RSS_UI_ENABLED && (
             <Link
               href="/?tab=rss#analyze-tool"
               className="group block rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -1012,6 +1030,7 @@ export function HomePageClient() {
                 See your score &amp; fixes.
               </p>
             </Link>
+            )}
             <Link
               href="/tools/seo-growth-pack"
               className="group block rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
