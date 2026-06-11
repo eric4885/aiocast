@@ -632,7 +632,7 @@ export function HomePageClient() {
                     </ul>
                   )}
                   <p className="pt-2 text-xs text-muted-foreground">
-                    Signals from public trends and podcast metadata (estimate).
+                    Model-based signals from your topic phrasing (estimate).
                   </p>
                 </CardContent>
               </Card>
@@ -939,11 +939,15 @@ export function HomePageClient() {
               <p className="mt-3 text-center text-xs text-emerald-300">Paste it where your audience will see it.</p>
             )}
             <p className="mt-5 text-center text-sm text-muted-foreground">
-              Want the full report saved to your account?{" "}
-              <Link href="/contact" className="font-semibold text-primary underline-offset-4 hover:underline">
-                Register free &amp; save report
-              </Link>{" "}
-              below.
+              Titles save in this browser only. For pack recovery across devices, add your email when you{" "}
+              <Link href="/tools/seo-growth-pack" className="font-semibold text-primary underline-offset-4 hover:underline">
+                generate a growth pack
+              </Link>
+              , then use{" "}
+              <Link href="/my-packs" className="font-semibold text-primary underline-offset-4 hover:underline">
+                Find my packs
+              </Link>
+              .
             </p>
           </div>
         )}

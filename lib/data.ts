@@ -82,7 +82,7 @@ export const faqItems = [
   },
   {
     q: "How is this different from recording/hosting/video tools?",
-    a: "You get one coherent operating system: templates, parameters, SOPs, and troubleshooting tied to real publishing constraints - not isolated tips.",
+    a: "AioCast focuses on post-production growth: one episode becomes an SEO draft, FAQ blocks, social scripts, and a publish schedule — not recording or hosting.",
   },
 ];
 

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 const perks = [
-  "1 long-form blog post (2,000+ words) + 3 Q&A blocks to capture Google featured snippets",
+  "1 long-form blog post (about 900–1,300 words) + 3 Q&A blocks structured for search",
   "Ready-to-post scripts for X, LinkedIn & Substack — just copy and publish",
   "Best quote highlights from your episode + subtitle file for YouTube/video reuse",
   "Localized publishing strategy by region and timezone",

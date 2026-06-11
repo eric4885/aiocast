@@ -412,7 +412,7 @@ export function GrowthPackClient({
                       <span aria-hidden>📄 </span>SEO Blog Post
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      Title, meta description, H2 outline, and structured FAQ blocks for featured snippets.
+                      Title, meta description, H2 outline, and FAQ blocks you can paste into your site.
                     </p>
                   </div>
                   <div className="rounded-lg border border-border bg-background/60 p-3">
