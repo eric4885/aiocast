@@ -266,16 +266,21 @@ export function EditingStackView() {
       <section id="lead-checklist" className="scroll-mt-24 border-b border-border py-20">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-2 sm:px-6">
           <div>
-            <h2 className="text-3xl font-bold">Start with the pre-flight + output checklist</h2>
+            <h2 className="text-3xl font-bold">Get the free recording checklist</h2>
             <p className="mt-3 text-muted-foreground">
-              We&apos;ll send the checklist and sample output structure so you can evaluate the workflow before buying anything.
+              We&apos;ll email the pre-flight checklist (noise, gain, backups). Sample SEO output — article, FAQ,
+              social scripts — lives on the{" "}
+              <Link href="/tools/seo-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
+                free growth pack
+              </Link>{" "}
+              page; expand &quot;See example output&quot; there anytime.
             </p>
             <ul className="mt-8 space-y-3 text-sm text-muted-foreground">
               {[
-                "Episode-to-article structure with keyword intent",
-                "Social scripts by platform (your own channels)",
-                "3 summary lengths for reuse and snippets",
-                "Localized weekly schedule for consistent publishing",
+                "Pre-flight guardrails before every recording session",
+                "Gain staging, headphone bleed, and two-location backup steps",
+                "Welcome email with web + Markdown download links",
+                "Optional weekly briefing on audio-to-SEO workflows",
               ].map((line) => (
                 <li key={line} className="flex gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
@@ -287,7 +292,7 @@ export function EditingStackView() {
           <Card className="border-border/80">
             <CardContent className="space-y-4 p-8">
               <div className="flex items-center gap-2 text-sm font-semibold text-primary">
-                <FileText className="h-4 w-4" /> Email me the checklist + sample pack
+                <FileText className="h-4 w-4" /> Email me the recording checklist
               </div>
               <SubscribeForm
                 source="editing_stack"

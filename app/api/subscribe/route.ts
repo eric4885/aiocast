@@ -86,6 +86,11 @@ export async function POST(req: Request) {
   if (apiKey) {
     const resend = new Resend(apiKey);
     const isRssWaitlist = source === "rss_early_access";
+    const growthPackUrl = `${baseUrl}/tools/seo-growth-pack`;
+    const sampleOutputNote =
+      source === "editing_stack"
+        ? `<p>Preview example SEO output (article, FAQ, social scripts): <a href="${growthPackUrl}"><strong>Open the free growth pack</strong></a> and expand &quot;See example output&quot;.</p>`
+        : "";
     const html = isRssWaitlist
       ? `
       <p>You're on the <strong>RSS SEO audit</strong> early-access list.</p>
@@ -98,6 +103,7 @@ export async function POST(req: Request) {
       <p>You signed up from: <strong>${sourceLabel(source)}</strong>.</p>
       <p><a href="${checklistUrl}"><strong>Open the checklist (web)</strong></a></p>
       <p><a href="${mdUrl}">Download plain Markdown (.md)</a></p>
+      ${sampleOutputNote}
       ${emailFooterHtml({ marketing: true, email: normalizedEmail })}
     `;
 
