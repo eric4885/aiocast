@@ -314,28 +314,30 @@ export function HomePageClient() {
       <div className="mx-auto max-w-4xl px-4 pb-16 pt-4 sm:px-6 sm:pb-20 sm:pt-7 lg:pb-24">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:tracking-[0.2em]">
-            The First SEO Tool Built For Podcasters
+            Free podcast SEO tool
           </p>
           <div className="sm:hidden">
             <h1 className="mt-2 text-balance text-[1.55rem] font-bold leading-[1.18] tracking-tight text-foreground max-[380px]:text-[1.35rem]">
-              Thousands Search Your <span className="text-primary">Topic</span>.
+              Turn show notes into a <span className="text-primary">SEO growth pack</span>
             </h1>
             <p className="mt-2 text-sm font-medium leading-snug text-muted-foreground">
-              They find someone else — not you.
+              Article draft, FAQ, social scripts, SRT — from one episode.
             </p>
             <p className="mx-auto mt-2 max-w-2xl text-xs leading-snug text-muted-foreground/90">
-              Apple Podcasts & Spotify title insights — analyze in seconds.
+              Paste a transcript or try an episode title below — both free, no signup.
             </p>
           </div>
           <div className="hidden sm:block">
             <h1 className="mt-3 text-balance break-words text-[clamp(1.45rem,4vw+0.55rem,3.35rem)] font-bold leading-[1.08] tracking-tight text-foreground md:text-[clamp(1.625rem,5vw+0.35rem,3.5rem)]">
               <span className="block">
-                Your Podcast Title Is Being Searched by <span className="text-primary">Thousands of Listeners</span>
+                Turn show notes into a <span className="text-primary">search-ready growth pack</span>
               </span>
-              <span className="block text-foreground/95">— But They Find Someone Else</span>
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-              Apple Podcasts & Spotify title insights — analyze in seconds.
+              Paste transcript or upload audio — get an SEO article, FAQ blocks, social scripts, and SRT in one run.
+            </p>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground/90">
+              Optional: test an episode title or topic phrase in the box below.
             </p>
           </div>
 
@@ -396,7 +398,7 @@ export function HomePageClient() {
                   placeholder={
                     HOME_RSS_UI_ENABLED && analysisMode === "rss"
                       ? "Your RSS URL"
-                      : "e.g. How to grow a podcast without social media"
+                      : "e.g. Try an episode title or topic (optional)"
                   }
                   className="min-h-[48px] border-border bg-background px-3 text-base text-foreground placeholder:text-muted-foreground sm:px-4 md:text-sm"
                   autoComplete={HOME_RSS_UI_ENABLED && analysisMode === "rss" ? "url" : "on"}
@@ -948,43 +950,67 @@ export function HomePageClient() {
 
         <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
           <p className="text-balance text-2xl font-bold leading-tight tracking-tight sm:text-[2rem] sm:leading-snug md:text-4xl">
-            How AioCast scores your titles
+            What you get today
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-            A transparent, repeatable pipeline — built around listener search behavior and publishable headline craft,
-            not vague “growth hacks.”
+            The main product is the <strong className="text-foreground">SEO growth pack</strong> — everything below the
+            button. The title box above is a free bonus to sharpen episode headlines.
           </p>
-          <ol className="mx-auto mt-6 max-w-xl space-y-3 text-left text-[15px] leading-relaxed text-muted-foreground">
+          <div className="mx-auto mt-8 max-w-xl space-y-6 text-left text-[15px] leading-relaxed text-muted-foreground">
+            <div>
+              <p className="text-base font-semibold text-foreground">SEO growth pack</p>
+              <ul className="mt-3 space-y-2">
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+                  <span>SEO article draft with meta description &amp; keywords</span>
+                </li>
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+                  <span>FAQ blocks, social scripts (X, LinkedIn, Substack)</span>
+                </li>
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+                  <span>SRT &amp; highlights from your transcript</span>
+                </li>
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+                  <span>7-day publish plan</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-base font-semibold text-foreground">Title tryout (this page)</p>
+              <ul className="mt-3 space-y-2">
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+                  <span>1 recommended title plus up to 3 alternate angles per run</span>
+                </li>
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+                  <span>Heuristic title score (hook, length, specificity — not store rankings)</span>
+                </li>
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+                  <span>Suggested topic keywords (directional; not live search volume or competitor scans)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p className="mx-auto mt-8 max-w-xl text-left text-sm font-semibold text-foreground">How the title tryout works</p>
+          <ol className="mx-auto mt-3 max-w-xl space-y-3 text-left text-[15px] leading-relaxed text-muted-foreground">
             <li>
               <strong className="text-foreground">1. Topic anchor — </strong>
-              Your phrase is tokenized and locked into every variant so titles cannot drift into unrelated themes.
+              Your phrase is locked into every variant so titles stay on your episode theme.
             </li>
             <li>
-              <strong className="text-foreground">2. Demand signal — </strong>
-              Public podcast catalog signals inform whether intent looks crowded or rising before we shape angles.
+              <strong className="text-foreground">2. Demand estimate — </strong>
+              The model labels intent as high/medium/low — a directional hint, not catalog-wide data.
             </li>
             <li>
               <strong className="text-foreground">3. Variant scoring — </strong>
-              Each line is checked for hook patterns (proof, tension, specificity), then uplift is capped to stay in a
-              credible band for display.
+              Each line is checked for hook patterns (proof, tension, specificity); uplift stays in a credible band.
             </li>
           </ol>
-          <ul className="mx-auto mt-8 max-w-lg space-y-2 text-left text-[15px] leading-relaxed text-muted-foreground">
-            <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-              <span>
-                <strong className="text-foreground">Full report includes:</strong> 10 title variants
-              </span>
-            </li>
-            <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-              <span>Keyword density score</span>
-            </li>
-            <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-              <span>Competitor gap analysis</span>
-            </li>
-          </ul>
           <Button size="lg" className="mx-auto mt-6 flex min-h-[52px] w-full max-w-md touch-manipulation px-8 text-base font-semibold sm:min-h-12 sm:px-10" asChild>
             <Link href="/tools/seo-growth-pack">
               <Rocket className="mr-2 h-4 w-4" />
