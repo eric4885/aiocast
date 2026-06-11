@@ -23,25 +23,12 @@ import {
   styleLaneLabel,
 } from "@/lib/title-heuristics";
 import { cn } from "@/lib/utils";
-
-/** RSS diagnosis hidden until audit is data-backed; /api/rss-preview kept for later. */
-const HOME_RSS_UI_ENABLED = false;
-
-const SAVED_TITLES_KEY = "aiocast_saved_titles_v1";
-
-type SavedTitleEntry = { topic: string; title: string; savedAt: number };
-
-function readSavedTitles(): SavedTitleEntry[] {
-  try {
-    const raw = JSON.parse(localStorage.getItem(SAVED_TITLES_KEY) || "[]") as unknown;
-    return Array.isArray(raw) ? (raw as SavedTitleEntry[]) : [];
-  } catch {
-    return [];
-  }
-}
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+
+/** RSS diagnosis hidden until audit is data-backed; /api/rss-preview kept for later. */
+const HOME_RSS_UI_ENABLED = false;
 
 function topicBreadthLabel(level: SearchDemandLevel): "Broad" | "Moderate" | "Narrow" {
   if (level === "High") return "Broad";
@@ -81,8 +68,6 @@ export function HomePageClient() {
   const [optimizeError, setOptimizeError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [copyToast, setCopyToast] = useState<string | null>(null);
-  const [savedAck, setSavedAck] = useState(false);
-  const [savedTitles, setSavedTitles] = useState<SavedTitleEntry[]>([]);
   const [regenLoading, setRegenLoading] = useState(false);
   const [rssLoading, setRssLoading] = useState(false);
   const [rssLivePreview, setRssLivePreview] = useState<(RssPreviewOk & { feedUrl?: string }) | null>(null);
@@ -116,10 +101,6 @@ export function HomePageClient() {
     });
     return best;
   }, [pickVariants, submittedTopic]);
-
-  useEffect(() => {
-    setSavedTitles(readSavedTitles());
-  }, []);
 
   useEffect(() => {
     if (!titleResult) return;
@@ -298,26 +279,6 @@ export function HomePageClient() {
       window.setTimeout(() => setCopyToast(null), 4500);
     } catch {
       setOptimizeError("Copy failed. Please copy manually.");
-    }
-  };
-
-  const handleSaveTitle = () => {
-    const title = pickVariants[selectedTitle]?.title ?? titleResult?.optimalTitle ?? "";
-    const t = title.trim();
-    if (!t || !submittedTopic.trim()) return;
-    try {
-      const prev = JSON.parse(localStorage.getItem(SAVED_TITLES_KEY) || "[]") as Array<{
-        topic: string;
-        title: string;
-        savedAt: number;
-      }>;
-      prev.unshift({ topic: submittedTopic.trim(), title: t, savedAt: Date.now() });
-      localStorage.setItem(SAVED_TITLES_KEY, JSON.stringify(prev.slice(0, 40)));
-      setSavedTitles(readSavedTitles());
-      setSavedAck(true);
-      window.setTimeout(() => setSavedAck(false), 3500);
-    } catch {
-      setOptimizeError("Could not save to this browser.");
     }
   };
 
@@ -824,14 +785,6 @@ export function HomePageClient() {
               <Button
                 variant="secondary"
                 className="min-h-12 w-full touch-manipulation px-5 sm:min-h-11 sm:w-auto"
-                onClick={handleSaveTitle}
-                title="Save to this browser only — appears in the list below."
-              >
-                {savedAck ? <>✓ Saved</> : "Save in this browser"}
-              </Button>
-              <Button
-                variant="secondary"
-                className="min-h-12 w-full touch-manipulation px-5 sm:min-h-11 sm:w-auto"
                 onClick={handleGenerateMore}
                 disabled={regenLoading || optimizeLoading}
                 title="Run another model pass for up to five fresh alternate titles on the same topic."
@@ -846,41 +799,6 @@ export function HomePageClient() {
             )}
             {copied && !copyToast && (
               <p className="mt-3 text-center text-xs text-emerald-300">Paste it into your episode title field.</p>
-            )}
-            {savedTitles.length > 0 && (
-              <div className="mt-6 rounded-xl border border-border bg-secondary/30 p-4 text-left">
-                <p className="text-sm font-semibold text-foreground">Saved in this browser</p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Stored on this device only — clearing site data removes them.
-                </p>
-                <ul className="mt-3 space-y-2">
-                  {savedTitles.slice(0, 8).map((entry) => (
-                    <li
-                      key={`${entry.savedAt}-${entry.title.slice(0, 24)}`}
-                      className="flex flex-col gap-2 rounded-lg border border-border/80 bg-background/60 p-3 sm:flex-row sm:items-center sm:justify-between"
-                    >
-                      <div className="min-w-0">
-                        <p className="break-words text-sm font-medium text-foreground">{entry.title}</p>
-                        <p className="mt-0.5 truncate text-xs text-muted-foreground">Topic: {entry.topic}</p>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        className="shrink-0"
-                        onClick={() => {
-                          void navigator.clipboard.writeText(entry.title).then(() => {
-                            setCopyToast(`Copied saved title (${entry.title.length} chars)`);
-                            window.setTimeout(() => setCopyToast(null), 3500);
-                          });
-                        }}
-                      >
-                        Copy
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             )}
             <p className="mt-5 text-center text-sm text-muted-foreground">
               Cross-device pack backup: add your email when you{" "}
