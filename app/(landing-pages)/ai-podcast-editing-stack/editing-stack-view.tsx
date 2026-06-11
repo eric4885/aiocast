@@ -20,12 +20,11 @@ function AssetBundleArticle() {
           <div className="space-y-4 p-6">
             <h3 className="text-xl font-semibold">AI-optimized deep long-form article</h3>
             <p className="text-muted-foreground">
-              A ~2,500-word draft structured for search intent, topical depth, and snippet-friendly headings — first pass
+              A ~900–1,300 word draft structured for search intent, topical depth, and clear H2 headings — first pass
               from your episode, not generic fluff.
             </p>
             <div className="rounded-xl border border-border/60 bg-background/60 p-4 text-sm text-primary">
-              <Clock className="mb-2 inline h-4 w-4" /> Written so Google can quote sections and listeners can skim H2s
-              fast.
+              <Clock className="mb-2 inline h-4 w-4" /> Written for readers and search — review facts before you publish.
             </div>
           </div>
           <div className="border-t border-border/60 bg-secondary/40 p-6 md:border-l md:border-t-0">
@@ -36,10 +35,10 @@ function AssetBundleArticle() {
               get stuck — so both humans and search engines see a reason to cite you…
             </p>
             <Link
-              href="/resources/pre-flight-checklist"
+              href="/tools/seo-growth-pack"
               className="mt-4 inline-flex text-sm font-semibold text-primary hover:underline"
             >
-              View sample →
+              See example output →
             </Link>
           </div>
         </div>
@@ -57,10 +56,9 @@ function AssetBundleFaq() {
       <Card className="overflow-hidden border-border/80">
         <div className="grid gap-0 md:grid-cols-2">
           <div className="space-y-4 p-6">
-            <h3 className="text-xl font-semibold">FAQ blocks for featured snippets</h3>
+            <h3 className="text-xl font-semibold">FAQ blocks for your site</h3>
             <p className="text-muted-foreground">
-              Three tight Q&amp;A pairs extracted from your episode — formatted so they can compete for Google featured
-              snippets.
+              Three Q&amp;A pairs from your episode — formatted to paste into blog posts or landing pages.
             </p>
             <div className="rounded-xl border border-border/60 bg-background/60 p-4 text-sm text-primary">
               <Clock className="mb-2 inline h-4 w-4" /> Short, declarative answers outperform rambling show notes.
@@ -135,7 +133,7 @@ const stats = [
   {
     label: "Distribution output",
     before: "Manual post writing per channel",
-    after: "Scripts for social + newsletter + summary cards",
+    after: "Scripts for X, LinkedIn, and Substack",
     delta: "Multi-channel",
   },
 ];
@@ -163,11 +161,11 @@ const rows = [
     pick: "Clip tools (video) · AioCast (written scripts)",
   },
   {
-    feature: "Localized publish cadence",
+    feature: "7-day publish plan",
     a: "Minimal",
     b: "Minimal",
-    c: "Region + timezone recommendations",
-    pick: "AioCast.com (distribution cadence)",
+    c: "7 lines with timing hints (adapt locally)",
+    pick: "AioCast.com (rollout suggestions)",
   },
 ];
 
@@ -177,16 +175,15 @@ export function EditingStackView() {
       <section className="relative overflow-hidden border-b border-border bg-gradient-hero bg-grid-subtle">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge className="bg-primary/10 text-primary">Tool · Content OS</Badge>
+            <Badge className="bg-primary/10 text-primary">Podcast to blog workflow</Badge>
             <Badge className="border border-border bg-transparent text-muted-foreground">AI-optimized articles</Badge>
           </div>
           <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-[2.75rem] lg:text-5xl lg:leading-tight">
             Drop one audio file. Pull out a complete growth asset bundle.
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
-            Keep your recording stack. We focus on the missing layer: publish-ready
-            SEO article, blog version, social scripts, summary variants, and a
-            localized posting plan your team can execute weekly.
+            Keep your recording stack. Paste show notes or upload a short clip — get an SEO article draft, FAQ blocks,
+            social scripts for X / LinkedIn / Substack, SRT, and a 7-day publish plan in one free run.
           </p>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -307,20 +304,18 @@ export function EditingStackView() {
 
       <section className="border-b border-border bg-gradient-to-b from-[#07070c] to-background py-20">
         <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <Badge>The Podcast Content OS</Badge>
+          <Badge>Pro toolkit preview</Badge>
           <h2 className="mt-6 text-4xl font-bold sm:text-5xl">$39</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            <span className="line-through">$79 standalone value</span> · save $40 during launch
+            <span className="line-through">$79 standalone value</span> · planned launch price — checkout not live yet
           </p>
           <div className="mx-auto mt-10 max-w-xl text-left">
             <Card className="border-primary/40 bg-secondary/60">
               <CardContent className="space-y-4 p-8">
                 {[
-                  "SEO article template with intent blocks + FAQ structure",
-                  "20 ready-to-use social post templates for X, LinkedIn & Substack",
-                  "Weekly localized publishing planner",
-                  "Summary-card generator framework (50/150/300 words)",
-                  "Free updates for 12 months as AI search and podcast SEO evolves",
+                  "Same outputs as today’s free growth pack (article, FAQ, social scripts, SRT, 7-day plan)",
+                  "Future: saved templates, batch runs, and deeper automation when billing ships",
+                  "Email notification when paid checkout opens — try the free tool first",
                 ].map((line) => (
                   <div key={line} className="flex gap-3 text-sm">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />

@@ -657,6 +657,9 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
             <p className="text-sm text-muted-foreground">Alt title: {pack.seoReport.altTitle}</p>
           )}
           <p className="text-sm text-muted-foreground">{pack.seoReport.estimatedTrafficHint}</p>
+          <p className="text-xs text-muted-foreground">
+            Editorial hints only — not live search volume, ranking, or competitor data.
+          </p>
         </CardContent>
       </Card>
 

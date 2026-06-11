@@ -33,7 +33,7 @@ export default function PrivacyPage() {
         <h2 className="text-lg font-semibold text-foreground">1. What we collect</h2>
         <ul className="list-inside list-disc space-y-2">
           <li>
-            <strong className="text-foreground">Account and contact data:</strong> email address when you subscribe to
+            <strong className="text-foreground">Contact and email data:</strong> email address when you subscribe to
             updates, join a waitlist, request delivery of generated outputs, or use &quot;Find my packs&quot; recovery.
           </li>
           <li>

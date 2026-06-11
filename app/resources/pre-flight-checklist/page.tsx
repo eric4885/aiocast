@@ -102,13 +102,13 @@ export default function PreFlightChecklistPage() {
         </Card>
 
         <p className="mt-10 text-center text-sm text-muted-foreground print-hide">
-          Want the full editing OS?{" "}
+          Want the growth pack?{" "}
           <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
             See Pro toolkit
           </Link>
           {" · "}
           <Link href="/tools/seo-growth-pack" className="text-primary underline-offset-4 hover:underline">
-            Check your recording quality
+            Generate free SEO pack
           </Link>
           .
         </p>

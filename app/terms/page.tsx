@@ -36,10 +36,11 @@ export default function TermsPage() {
           reasonable notice where appropriate.
         </p>
 
-        <h2 className="text-lg font-semibold text-foreground">2. Eligibility and accounts</h2>
+        <h2 className="text-lg font-semibold text-foreground">2. Eligibility and email</h2>
         <p>
           You must be able to form a binding contract in your jurisdiction. Where the Service collects an email address,
-          you agree to provide accurate contact information.
+          you agree to provide accurate contact information. There is no password-based account — access is via private
+          pack links and optional email recovery.
         </p>
         <p>
           If you subscribe to the weekly briefing, checklist, or a waitlist, you agree to receive the resource you
@@ -133,10 +134,13 @@ export default function TermsPage() {
 
         <h2 className="text-lg font-semibold text-foreground">12. Governing law and disputes</h2>
         <p>
-          These Terms are governed by the laws of the United States and the State of Delaware, excluding conflict-of-law
-          rules, unless mandatory consumer protections in your country say otherwise. Courts in Delaware have exclusive
-          jurisdiction for business disputes where permitted; consumers may have non-waivable rights in their home
-          country.
+          These Terms are governed by applicable law where the operator is established, excluding conflict-of-law rules.
+          Mandatory consumer protections in your country of residence remain unaffected. Disputes should first be raised
+          via{" "}
+          <a href={`mailto:${siteConfig.contactEmail}`} className="text-primary hover:underline">
+            {siteConfig.contactEmail}
+          </a>
+          .
         </p>
 
         <h2 className="text-lg font-semibold text-foreground">13. Changes</h2>

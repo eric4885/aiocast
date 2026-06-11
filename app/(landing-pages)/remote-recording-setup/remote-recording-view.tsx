@@ -38,11 +38,11 @@ export function RemoteRecordingView() {
             <Badge className="border border-border bg-transparent text-muted-foreground">Local Schedule</Badge>
           </div>
           <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-[2.75rem] lg:text-5xl lg:leading-tight">
-            Publish your episode at the right time, in the right timezone, for the right audience — automatically.
+            Plan when to publish your SEO and social outputs across regions
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
-            Map where listeners actually live, then line up article drops and social posts so they land during peak
-            attention — without guessing from a single default clock.
+            A publishing cadence guide — map article drops and social posts to the regions you care about. Full
+            timezone automation is on the roadmap; today the free growth pack includes a 7-day plan you adapt manually.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Button size="lg" asChild>
@@ -52,7 +52,7 @@ export function RemoteRecordingView() {
               </Link>
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link href="/ai-podcast-editing-stack">Open Content OS</Link>
+              <Link href="/tools/seo-growth-pack">Generate free growth pack</Link>
             </Button>
           </div>
           <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
@@ -73,8 +73,8 @@ export function RemoteRecordingView() {
                 Execution stack for regional growth
               </h2>
               <p className="mt-3 text-muted-foreground">
-                Keep your existing recording stack. This layer translates each episode into location-aware publishing
-                actions.
+                Keep your existing recording stack. This page is a cadence template — the free growth pack already ships
+                a 7-day publish plan you can map to your regions.
               </p>
               <div className="mt-8 space-y-6">
                 {kit.map((item) => {
@@ -161,10 +161,10 @@ export function RemoteRecordingView() {
 
       <FunnelNextStep
         eyebrow="Next step"
-        title="Layer on the full Content OS"
-        description="Pair this cadence with AI-optimized articles, FAQs, and scripts generated from the same episode audio."
-        href="/ai-podcast-editing-stack"
-        linkLabel="Open Content OS →"
+        title="Generate assets from the same episode"
+        description="Pair your cadence with an SEO article draft, FAQ blocks, and social scripts from the free growth pack."
+        href="/tools/seo-growth-pack"
+        linkLabel="Generate growth pack →"
       />
     </motion.div>
   );

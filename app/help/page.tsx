@@ -47,8 +47,9 @@ export default function HelpPage() {
             to 5 minutes of audio (MP3, M4A, or WAV) for automatic transcription on the free tier.
           </li>
           <li>
-            <strong className="text-foreground">Limits:</strong> Three runs per email per calendar month (when an email
-            is provided), three per IP per day, and about one minute between submissions from the same IP.
+            <strong className="text-foreground">Limits:</strong> When enabled: three runs per email per calendar month
+            (when an email is provided), three per IP per day, and about one minute between submissions from the same IP.
+            During launch we may temporarily relax caps — check the tool page for the current status.
           </li>
           <li>
             <strong className="text-foreground">Delivery:</strong> Your pack opens on-site as soon as generation

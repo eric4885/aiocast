@@ -22,7 +22,7 @@ const nav = [
     label: "Social scripts",
     badge: "Soon",
   },
-  { href: "/remote-recording-setup", label: "Publish schedule" },
+  { href: "/remote-recording-setup", label: "Publish plan" },
 ] as const;
 
 export function Header() {

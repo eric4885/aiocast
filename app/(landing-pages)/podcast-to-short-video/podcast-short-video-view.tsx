@@ -14,19 +14,19 @@ const steps = [
     title: "Extract platform angles",
     body: "Pull the strongest opinions, stories, and frameworks from your transcript to seed channel-specific narratives.",
     icon: MessageSquareText,
-    output: "→ ~5 post angles per episode",
+    output: "Planned: ~5 post angles per episode",
   },
   {
     title: "Generate scripts, not clips",
-    body: "Deliver ready-to-edit copy for X, LinkedIn, newsletter intros, and community posts in your voice.",
+    body: "Deliver ready-to-edit copy for X, LinkedIn, and Substack in your voice.",
     icon: PenLine,
-    output: "→ X thread (7 tweets) + LinkedIn hook + newsletter intro",
+    output: "Today in pack: 1 X post + LinkedIn + Substack script per episode",
   },
   {
     title: "Schedule by region",
-    body: "Attach timezone-aware slots so posts go live when listeners are actually scrolling.",
+    body: "Line up posts across the week — adapt timing hints to your own regions.",
     icon: CalendarClock,
-    output: "→ 3 posting slots per priority region",
+    output: "Today in pack: 7-day publish plan · Planned: regional slot picker",
   },
 ];
 
@@ -118,8 +118,8 @@ export function PodcastShortVideoView() {
 
       <FunnelNextStep
         eyebrow="Next step"
-        title="Align posts with regional timing"
-        description="Pair scripts with timezone-aware publishing guidance before you scale spend."
+        title="Plan your weekly rollout"
+        description="The free growth pack includes a 7-day publish plan — pair it with your social scripts before standalone tooling ships."
         href="/remote-recording-setup"
         linkLabel="Open Local schedule guide →"
       />

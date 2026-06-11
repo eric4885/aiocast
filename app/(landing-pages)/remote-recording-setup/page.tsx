@@ -3,14 +3,14 @@ import { RemoteRecordingView } from "./remote-recording-view";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Localized publishing strategy — podcast growth by region",
+  title: "7-day publish plan guide — podcast rollout by region",
   description:
-    "Turn each episode into a region-aware schedule with channel intent mapping for search and social growth.",
+    "Cadence template for lining up SEO articles and social posts. The free growth pack includes a 7-day plan you adapt to your regions.",
   alternates: { canonical: `${siteConfig.url}/remote-recording-setup` },
   openGraph: {
-    title: "Localized podcast publishing strategy",
+    title: "Podcast publish schedule guide",
     description:
-      "Plan when and where to publish your SEO and social outputs by timezone.",
+      "Plan when to ship SEO and social outputs — free pack includes a 7-day rollout you adapt locally.",
     url: `${siteConfig.url}/remote-recording-setup`,
   },
 };

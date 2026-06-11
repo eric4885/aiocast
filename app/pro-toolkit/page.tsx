@@ -22,7 +22,7 @@ const perks = [
   "1 long-form blog post (about 900–1,300 words) + 3 Q&A blocks structured for search",
   "Ready-to-post scripts for X, LinkedIn & Substack — just copy and publish",
   "Best quote highlights from your episode + subtitle file for YouTube/video reuse",
-  "Localized publishing strategy by region and timezone",
+  "7-day publish plan with timing hints you can adapt locally",
 ];
 
 export default function ProToolkitPage() {
@@ -94,7 +94,7 @@ export default function ProToolkitPage() {
               <div className="rounded-xl border border-border bg-background/70 p-4">
                 <p className="text-xs text-muted-foreground">X Post (mockup)</p>
                 <p className="mt-2 text-sm">
-                  &quot;I turned my episode into a Google-ranking article in 48 hours. Same mic, same show — just better
+                  &quot;I turned my episode into a search-ready article in 48 hours. Same mic, same show — just better
                   packaging for search.&quot;
                 </p>
                 <p className="mt-2 text-xs text-primary">

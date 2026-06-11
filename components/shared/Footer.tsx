@@ -148,7 +148,7 @@ export function Footer() {
 
               <Link className="hover:text-foreground" href="/remote-recording-setup">
 
-                Localized podcast publishing schedule
+                7-day publish plan guide
 
               </Link>
 

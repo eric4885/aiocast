@@ -9,7 +9,7 @@ type FooterOptions = {
 
 function mailingLine(): string {
   if (siteConfig.mailingAddress) return siteConfig.mailingAddress;
-  return `${siteConfig.legalEntity} — request postal address via ${siteConfig.contactEmail}`;
+  return `${siteConfig.legalEntity} · ${siteConfig.contactEmail}`;
 }
 
 export function unsubscribeUrl(email?: string): string {
