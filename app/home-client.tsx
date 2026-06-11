@@ -408,7 +408,7 @@ export function HomePageClient() {
                   ) : HOME_RSS_UI_ENABLED && analysisMode === "rss" ? (
                     "Analyze RSS"
                   ) : (
-                    "Analyze keyword"
+                    "Get title ideas"
                   )}
                 </Button>
               </div>
@@ -429,11 +429,6 @@ export function HomePageClient() {
             </div>
           )}
 
-          <div className="mt-4 rounded-full border border-border bg-secondary/60 px-3 py-2.5 sm:px-4">
-            <p className="text-center text-xs font-medium leading-relaxed text-muted-foreground sm:text-[13px]">
-              🚀 Beta · Free during launch
-            </p>
-          </div>
           <p className="mt-4 text-sm font-medium text-foreground/90">
             Every great podcast deserves to be heard.
           </p>
@@ -786,11 +781,14 @@ export function HomePageClient() {
                 className="min-h-12 w-full touch-manipulation px-5 sm:min-h-11 sm:w-auto"
                 onClick={handleGenerateMore}
                 disabled={regenLoading || optimizeLoading}
-                title="Run another model pass for up to five fresh alternate titles on the same topic."
+                title="Same topic — request fresh title angles from the model."
               >
-                {regenLoading ? "Generating..." : "Generate More"}
+                {regenLoading ? "Working…" : "More title ideas"}
               </Button>
             </div>
+            <p className="mt-2 text-center text-xs text-muted-foreground">
+              Same topic — new angles. Edit the box above and click Get title ideas for a new topic.
+            </p>
             {copyToast && (
               <p className="mt-3 rounded-xl border border-emerald-500/35 bg-emerald-950/40 px-4 py-3 text-center text-xs leading-relaxed text-emerald-100" role="status">
                 {copyToast}
