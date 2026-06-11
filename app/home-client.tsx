@@ -994,61 +994,6 @@ export function HomePageClient() {
           <p className="mx-auto mt-3 max-w-md text-center text-xs text-muted-foreground">
             No credit card required. Paste a transcript on the free tool to generate your pack.
           </p>
-          <div className={cn("mt-10 grid gap-4 text-left", HOME_RSS_UI_ENABLED ? "sm:grid-cols-3" : "sm:grid-cols-2")}>
-            <Link
-              href="/?tab=keyword#analyze-tool"
-              className="group block rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <p className="text-3xl" aria-hidden>
-                🔍
-              </p>
-              <p className="mt-3 flex items-center gap-2 text-lg font-bold tracking-tight text-foreground">
-                Keyword Intel
-                <span className="text-primary transition group-hover:translate-x-0.5" aria-hidden>
-                  →
-                </span>
-              </p>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
-                Explore demand signals from public podcast catalogs (estimated).
-              </p>
-            </Link>
-            {HOME_RSS_UI_ENABLED && (
-            <Link
-              href="/?tab=rss#analyze-tool"
-              className="group block rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <p className="text-3xl" aria-hidden>
-                📊
-              </p>
-              <p className="mt-3 flex items-center gap-2 text-lg font-bold tracking-tight text-foreground">
-                RSS Health
-                <span className="text-primary transition group-hover:translate-x-0.5" aria-hidden>
-                  →
-                </span>
-              </p>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
-                See your score &amp; fixes.
-              </p>
-            </Link>
-            )}
-            <Link
-              href="/tools/seo-growth-pack"
-              className="group block rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:border-primary/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <p className="text-3xl" aria-hidden>
-                📄
-              </p>
-              <p className="mt-3 flex items-center gap-2 text-lg font-bold tracking-tight text-foreground">
-                SEO growth pack
-                <span className="text-primary transition group-hover:translate-x-0.5" aria-hidden>
-                  →
-                </span>
-              </p>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
-                Article draft, FAQs, social scripts, and a 7-day schedule from your transcript.
-              </p>
-            </Link>
-          </div>
           <p className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-foreground sm:gap-x-3">
             <span className="inline-flex min-h-[44px] items-center">© {new Date().getFullYear()} AioCast</span>
             <span aria-hidden className="hidden text-border sm:inline">
