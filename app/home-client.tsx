@@ -6,7 +6,6 @@ import { FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
 import {
   BarChart3,
   Check,
-  Info,
   Loader2,
   Rocket,
   ShieldAlert,
@@ -108,9 +107,8 @@ export function HomePageClient() {
 
   useEffect(() => {
     if (!titleResult) return;
-    const idxInPick = pickVariants.findIndex((v) => v.title === titleResult.optimalTitle);
-    setSelectedTitle(idxInPick >= 0 ? idxInPick : 0);
-  }, [titleResult, pickVariants]);
+    setSelectedTitle(0);
+  }, [titleResult]);
 
   useEffect(() => {
     const tab = searchParams.get("tab");
@@ -770,17 +768,16 @@ export function HomePageClient() {
                           </div>
                         </div>
                         <div className="flex shrink-0 flex-col items-end gap-2 sm:pt-1">
-                          {idx === bestPickIndex ? (
-                            <span
-                              className="inline-flex max-w-[11rem] items-center gap-1 rounded-full border border-violet-400/60 bg-violet-500/15 px-2.5 py-1.5 text-left text-[11px] font-semibold leading-snug text-violet-200 sm:max-w-none sm:text-xs"
-                              title="Top pick based on clarity and topic fit."
-                            >
-                              Top pick
-                              <Info className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden />
+                          {selectedTitle === idx ? (
+                            <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/15 px-2.5 py-1.5 text-xs font-semibold text-primary">
+                              <Check className="mr-1 h-3 w-3" /> Your pick
                             </span>
-                          ) : selectedTitle === idx ? (
-                            <span className="inline-flex w-fit items-center rounded-full border border-success/50 bg-success/15 px-2.5 py-1.5 text-xs font-semibold text-success">
-                              <Check className="mr-1 h-3 w-3" /> Selected
+                          ) : idx === bestPickIndex ? (
+                            <span
+                              className="inline-flex max-w-[11rem] items-center rounded-full border border-border bg-secondary/80 px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground sm:max-w-none sm:text-xs"
+                              title="One starting point if you want a nudge — pick any line you prefer."
+                            >
+                              Suggested
                             </span>
                           ) : null}
                         </div>
@@ -790,6 +787,9 @@ export function HomePageClient() {
                 );
               })}
             </div>
+            <p className="mt-3 text-center text-xs text-muted-foreground">
+              Copy uses <strong className="font-medium text-foreground/90">Your pick</strong> only — Suggested is optional.
+            </p>
             <div className="mt-4 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3 md:gap-4">
               <Button
                 variant="secondary"
