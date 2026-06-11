@@ -28,6 +28,17 @@ import { cn } from "@/lib/utils";
 const HOME_RSS_UI_ENABLED = false;
 
 const SAVED_TITLES_KEY = "aiocast_saved_titles_v1";
+
+type SavedTitleEntry = { topic: string; title: string; savedAt: number };
+
+function readSavedTitles(): SavedTitleEntry[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(SAVED_TITLES_KEY) || "[]") as unknown;
+    return Array.isArray(raw) ? (raw as SavedTitleEntry[]) : [];
+  } catch {
+    return [];
+  }
+}
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -71,6 +82,7 @@ export function HomePageClient() {
   const [copied, setCopied] = useState(false);
   const [copyToast, setCopyToast] = useState<string | null>(null);
   const [savedAck, setSavedAck] = useState(false);
+  const [savedTitles, setSavedTitles] = useState<SavedTitleEntry[]>([]);
   const [regenLoading, setRegenLoading] = useState(false);
   const [rssLoading, setRssLoading] = useState(false);
   const [rssLivePreview, setRssLivePreview] = useState<(RssPreviewOk & { feedUrl?: string }) | null>(null);
@@ -104,6 +116,10 @@ export function HomePageClient() {
     });
     return best;
   }, [pickVariants, submittedTopic]);
+
+  useEffect(() => {
+    setSavedTitles(readSavedTitles());
+  }, []);
 
   useEffect(() => {
     if (!titleResult) return;
@@ -297,6 +313,7 @@ export function HomePageClient() {
       }>;
       prev.unshift({ topic: submittedTopic.trim(), title: t, savedAt: Date.now() });
       localStorage.setItem(SAVED_TITLES_KEY, JSON.stringify(prev.slice(0, 40)));
+      setSavedTitles(readSavedTitles());
       setSavedAck(true);
       window.setTimeout(() => setSavedAck(false), 3500);
     } catch {
@@ -485,7 +502,12 @@ export function HomePageClient() {
                 <span className="text-primary">&quot;{submittedTopic}&quot;</span>
               </p>
               <p className="mx-auto max-w-lg text-sm text-muted-foreground">
-                Copy one line into Apple Podcasts, Spotify, or your show notes — then generate the full growth pack below.
+                Copy a title into your podcast host (Apple Podcasts, Spotify, etc.). For the article and social scripts,
+                open{" "}
+                <Link href="/tools/seo-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
+                  Generate SEO pack
+                </Link>{" "}
+                with your transcript or show notes — that&apos;s a separate step.
               </p>
             </div>
 
@@ -803,9 +825,9 @@ export function HomePageClient() {
                 variant="secondary"
                 className="min-h-12 w-full touch-manipulation px-5 sm:min-h-11 sm:w-auto"
                 onClick={handleSaveTitle}
-                title="Save this title in your browser (localStorage). No account required."
+                title="Save to this browser only — appears in the list below."
               >
-                {savedAck ? <>✓ Saved</> : "Save to my titles"}
+                {savedAck ? <>✓ Saved</> : "Save in this browser"}
               </Button>
               <Button
                 variant="secondary"
@@ -823,10 +845,45 @@ export function HomePageClient() {
               </p>
             )}
             {copied && !copyToast && (
-              <p className="mt-3 text-center text-xs text-emerald-300">Paste it where your audience will see it.</p>
+              <p className="mt-3 text-center text-xs text-emerald-300">Paste it into your episode title field.</p>
+            )}
+            {savedTitles.length > 0 && (
+              <div className="mt-6 rounded-xl border border-border bg-secondary/30 p-4 text-left">
+                <p className="text-sm font-semibold text-foreground">Saved in this browser</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Stored on this device only — clearing site data removes them.
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {savedTitles.slice(0, 8).map((entry) => (
+                    <li
+                      key={`${entry.savedAt}-${entry.title.slice(0, 24)}`}
+                      className="flex flex-col gap-2 rounded-lg border border-border/80 bg-background/60 p-3 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div className="min-w-0">
+                        <p className="break-words text-sm font-medium text-foreground">{entry.title}</p>
+                        <p className="mt-0.5 truncate text-xs text-muted-foreground">Topic: {entry.topic}</p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        className="shrink-0"
+                        onClick={() => {
+                          void navigator.clipboard.writeText(entry.title).then(() => {
+                            setCopyToast(`Copied saved title (${entry.title.length} chars)`);
+                            window.setTimeout(() => setCopyToast(null), 3500);
+                          });
+                        }}
+                      >
+                        Copy
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
             <p className="mt-5 text-center text-sm text-muted-foreground">
-              Titles save in this browser only. For pack recovery across devices, add your email when you{" "}
+              Cross-device pack backup: add your email when you{" "}
               <Link href="/tools/seo-growth-pack" className="font-semibold text-primary underline-offset-4 hover:underline">
                 generate a growth pack
               </Link>
