@@ -6,15 +6,13 @@ import { FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
 import {
   BarChart3,
   Check,
-  Flame,
-  Heart,
   Info,
   Loader2,
   Rocket,
   ShieldAlert,
   TrendingUp,
 } from "lucide-react";
-import type { TitleOptimizationResult } from "@/lib/title-optimization";
+import type { SearchDemandLevel, TitleOptimizationResult } from "@/lib/title-optimization";
 import type { RssPreviewOk } from "@/lib/rss-feed-preview";
 import {
   API_TOPIC_ERROR_MESSAGE,
@@ -23,9 +21,6 @@ import {
 } from "@/lib/topic-input";
 import {
   combinedSEOClarityScore,
-  computeClarityScore,
-  computeEmotionScore,
-  computeSEOScore,
   styleLaneLabel,
 } from "@/lib/title-heuristics";
 import { cn } from "@/lib/utils";
@@ -38,12 +33,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-function parseBoostPct(s: string): number {
-  const m = String(s)
-    .replace(/%/g, "")
-    .trim()
-    .match(/^([+-]?\d+(?:\.\d+)?)/);
-  return m ? Number(m[1]) : 0;
+function topicBreadthLabel(level: SearchDemandLevel): "Broad" | "Moderate" | "Narrow" {
+  if (level === "High") return "Broad";
+  if (level === "Low") return "Narrow";
+  return "Moderate";
+}
+
+function topicBreadthHint(breadth: ReturnType<typeof topicBreadthLabel>): string {
+  if (breadth === "Broad") {
+    return "This phrase covers a wide theme — you can keep it open or narrow to one outcome in the title.";
+  }
+  if (breadth === "Narrow") {
+    return "This phrase is fairly focused — you can stay specific or widen the hook if you prefer.";
+  }
+  return "This phrase sits in the middle — pick the title angle that matches how you want to frame the episode.";
+}
+
+function titleAuditLabel(score: number): string {
+  if (score >= 72) return "Reads specific";
+  if (score >= 48) return "Reads balanced";
+  return "Reads broad";
 }
 
 export function HomePageClient() {
@@ -74,10 +83,12 @@ export function HomePageClient() {
 
   const sortedVariants = useMemo(() => {
     if (!titleResult) return [];
+    const topic = submittedTopic.trim();
+    if (!topic) return [...titleResult.variants];
     return [...titleResult.variants].sort(
-      (a, b) => parseBoostPct(b.estimatedUplift) - parseBoostPct(a.estimatedUplift),
+      (a, b) => combinedSEOClarityScore(b.title, topic) - combinedSEOClarityScore(a.title, topic),
     );
-  }, [titleResult]);
+  }, [titleResult, submittedTopic]);
 
   const pickVariants = useMemo(() => sortedVariants.slice(0, 3), [sortedVariants]);
 
@@ -257,7 +268,7 @@ export function HomePageClient() {
     }
   };
 
-  const pendingMsg = "Analyzing search demand and crafting titles — often a few seconds to a minute…";
+  const pendingMsg = "Crafting title options for your topic — often a few seconds to a minute…";
 
   const selectedTitleText = pickVariants[selectedTitle]?.title ?? titleResult?.optimalTitle ?? "";
 
@@ -466,59 +477,32 @@ export function HomePageClient() {
         {analysisMode === "keyword" && !optimizeLoading && titleResult && (
           <div className="mx-auto mt-8 max-w-4xl space-y-5 sm:mt-10">
             <div className="space-y-3 text-center">
-              <p className="inline-flex max-w-full flex-wrap justify-center rounded-full border border-success/40 bg-success/10 px-3 py-1.5 text-[11px] font-semibold leading-snug text-success sm:text-xs">
-                INSTANT RESULT — NO SIGNUP REQUIRED
-              </p>
               {resultMeta?.warning && (
                 <p className="mx-auto max-w-xl rounded-lg border border-amber-500/35 bg-amber-950/35 px-3 py-2 text-center text-xs leading-relaxed text-amber-100/95">
                   {resultMeta.warning}
                 </p>
               )}
-              {resultMeta && (
-                <p className="mx-auto inline-flex max-w-full flex-wrap justify-center rounded-full border border-violet-400/40 bg-violet-500/10 px-3 py-1.5 text-center text-[11px] font-medium leading-snug text-violet-200">
-                  Data Mode: {resultMeta.mode === "forced" ? "Forced" : "Auto Language"} · Output:{" "}
-                  {resultMeta.outputLanguage === "zh" ? "Chinese" : "English"}
-                </p>
-              )}
               <p className="mt-2 break-words px-1 text-xl font-bold leading-snug tracking-tight sm:text-2xl">
-                AioCast keyword analysis for:{" "}
+                Title ideas for{" "}
                 <span className="text-primary">&quot;{submittedTopic}&quot;</span>
+              </p>
+              <p className="mx-auto max-w-lg text-sm text-muted-foreground">
+                Copy one line into Apple Podcasts, Spotify, or your show notes — then generate the full growth pack below.
               </p>
             </div>
 
             <div className="space-y-6">
               <Card className="rounded-2xl border border-primary/30 bg-card shadow-lg shadow-black/15">
-                <CardContent className="space-y-5 p-6 text-center sm:p-8">
-                  <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    <Flame className="h-4 w-4 shrink-0 text-warning" />
-                    Optimal title
+                <CardContent className="space-y-4 p-6 text-center sm:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Recommended title
                   </p>
                   <p className="break-words text-xl font-bold leading-snug tracking-tight sm:text-2xl md:text-[1.75rem]">
                     {sortedVariants[0]?.title ?? titleResult.optimalTitle}
                   </p>
-                  <p className="text-[15px] text-muted-foreground">Modeled reach uplift vs. baseline title</p>
-                  <div>
-                    <p className="text-3xl font-bold tabular-nums text-emerald-400 sm:text-4xl">
-                      {titleResult.boostPercentage}
-                    </p>
-                    <p className="mx-auto mt-2 max-w-md text-[11px] leading-snug text-muted-foreground">
-                      *Based on median reach change after title optimization across 1,200+ comparable shows (directional
-                      benchmark — not your channel&apos;s guaranteed downloads).
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="mx-auto h-2.5 max-w-md overflow-hidden rounded-full bg-secondary">
-                      <div
-                        className="h-full rounded-full bg-emerald-500 sm:bg-gradient-to-r sm:from-emerald-500 sm:to-lime-400"
-                        style={{
-                          width: `${Math.min(100, Math.max(8, Math.abs(parseBoostPct(titleResult.boostPercentage))))}%`,
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Projected listener delta implied by the comparison below (model estimate).
-                    </p>
-                  </div>
+                  {sortedVariants[0]?.type && (
+                    <p className="text-sm text-muted-foreground">Angle: {sortedVariants[0].type}</p>
+                  )}
                 </CardContent>
               </Card>
 
@@ -527,25 +511,11 @@ export function HomePageClient() {
                   <CardContent className="space-y-4 p-6 text-left sm:p-8">
                     <p className="flex items-center gap-2 text-base font-semibold tracking-tight text-foreground">
                       <TrendingUp className="h-4 w-4 shrink-0 text-violet-400" />
-                      Your title score (this episode)
+                      Your current title
                     </p>
-                    <div className="flex flex-wrap items-end gap-3">
-                      <span className="text-4xl font-bold tabular-nums text-violet-300 sm:text-5xl">
-                        {titleResult.titleAudit.score}
-                      </span>
-                      <span className="pb-1 text-sm font-medium text-muted-foreground">/ 100</span>
-                      <span
-                        className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${
-                          titleResult.titleAudit.score >= 72
-                            ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
-                            : titleResult.titleAudit.score >= 48
-                              ? "border-amber-500/40 bg-amber-500/15 text-amber-200"
-                              : "border-rose-500/35 bg-rose-500/10 text-rose-200"
-                        }`}
-                      >
-                        Heuristic audit
-                      </span>
-                    </div>
+                    <span className="inline-flex rounded-full border border-border bg-secondary/80 px-3 py-1 text-sm font-semibold text-foreground/90">
+                      {titleAuditLabel(titleResult.titleAudit.score)}
+                    </span>
                     <p className="text-[15px] leading-relaxed text-muted-foreground">{titleResult.titleAudit.headline}</p>
                     <div className="rounded-xl border border-border/80 bg-secondary/40 px-3 py-2">
                       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
@@ -574,28 +544,17 @@ export function HomePageClient() {
                 <CardContent className="space-y-4 p-6 sm:p-8">
                   <p className="flex items-start gap-2 text-base font-semibold leading-snug tracking-tight">
                     <BarChart3 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    <span>Search Demand & Optimization Recommendations</span>
+                    <span>Topic direction &amp; keywords</span>
                   </p>
                   <div className="flex flex-wrap items-center gap-2 text-sm">
                     <span
-                      className={`rounded-full border px-2 py-0.5 ${
-                        titleResult.searchDemand.level === "High"
-                          ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
-                          : titleResult.searchDemand.level === "Medium"
-                            ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
-                            : "border-slate-500/40 bg-slate-500/15 text-slate-300"
-                      }`}
+                      className="rounded-full border border-border bg-secondary/80 px-2 py-0.5 text-foreground/90"
                     >
-                      {titleResult.searchDemand.level} demand
-                    </span>
-                    <span className="rounded-full border border-primary/35 bg-primary/10 px-2 py-0.5 text-primary">
-                      Trend: {titleResult.searchDemand.trend}
+                      Topic breadth: {topicBreadthLabel(titleResult.searchDemand.level).toLowerCase()}
                     </span>
                   </div>
                   <p className="break-words text-[15px] leading-relaxed text-muted-foreground">
-                    Demand for &quot;{submittedTopic}&quot; is <strong className="text-foreground">{titleResult.searchDemand.level}</strong>{" "}
-                    with {titleResult.searchDemand.trend} momentum. These terms inform search intent clustering and angle
-                    selection.
+                    {topicBreadthHint(topicBreadthLabel(titleResult.searchDemand.level))}
                   </p>
                   <div>
                     <p className="text-[15px] font-medium text-foreground">Suggested keywords</p>
@@ -605,13 +564,12 @@ export function HomePageClient() {
                       ))}
                     </ul>
                     <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
-                      *Terms pass stopword removal and a directional demand proxy; pair with Google Keyword Planner for
-                      exact monthly search volume.
+                      Suggested phrases from your topic — optional starting points, not search-volume data.
                     </p>
                   </div>
-                  <p className="flex items-center gap-2 pt-2 text-[15px] font-semibold">
-                    <ShieldAlert className="h-4 w-4 shrink-0 text-warning" />
-                    {showOldTitleRisk ? "Your old title risk" : titleResult.titleAudit ? "Also watch" : "Optimization gaps"}
+                    <p className="flex items-center gap-2 pt-2 text-[15px] font-semibold">
+                    <ShieldAlert className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    {showOldTitleRisk ? "If you keep your current wording" : titleResult.titleAudit ? "Optional notes" : "Things to consider"}
                   </p>
                   {titleResult.titleAudit ? (
                     <ul className="space-y-2 text-[15px] leading-relaxed text-muted-foreground">
@@ -634,62 +592,6 @@ export function HomePageClient() {
                   <p className="pt-2 text-xs text-muted-foreground">
                     Model-based signals from your topic phrasing (estimate).
                   </p>
-                </CardContent>
-              </Card>
-
-              <Card className="rounded-2xl border border-border bg-card">
-                <CardContent className="space-y-4 p-6 sm:p-8">
-                  <p className="text-base font-semibold tracking-tight text-foreground">
-                    Staying with your current title? Here&apos;s the cost:
-                  </p>
-                  <p className="rounded-lg border border-amber-500/40 bg-amber-950/40 px-3 py-2 text-left text-xs leading-relaxed text-amber-100/95">
-                    <span className="font-semibold text-amber-50">Disclaimer: </span>
-                    Modeled median-style reach for shows in similar topic clusters on podcast platforms — not your
-                    channel&apos;s actual analytics. Same idea as a category benchmark: useful directionally, not a
-                    download guarantee for your account.
-                  </p>
-                  <p className="text-[13px] leading-relaxed text-muted-foreground">
-                    Estimated based on average podcast title refresh outcomes in comparable niches — illustrative only.
-                  </p>
-                  <p className="text-center text-sm font-semibold tabular-nums text-foreground">
-                    ~{titleResult.comparison.current.toLocaleString()}→~
-                    {titleResult.comparison.optimized.toLocaleString()}{" "}
-                    <span className="font-normal text-muted-foreground">listeners (est.)</span>
-                  </p>
-                  <div className="space-y-3 text-[15px]">
-                    <p className="font-medium text-muted-foreground">
-                      Current reach (est.): ~{titleResult.comparison.current.toLocaleString()} listeners
-                    </p>
-                    <div className="h-3 overflow-hidden rounded-full bg-secondary">
-                      <div
-                        className="h-full rounded-full bg-rose-500/90"
-                        style={{
-                          width: `${Math.max(
-                            4,
-                            (titleResult.comparison.current /
-                              Math.max(titleResult.comparison.current, titleResult.comparison.optimized, 1)) *
-                              100,
-                          )}%`,
-                        }}
-                      />
-                    </div>
-                    <p className="font-medium text-muted-foreground">
-                      After title refresh (est.): ~{titleResult.comparison.optimized.toLocaleString()} listeners
-                    </p>
-                    <div className="h-3 overflow-hidden rounded-full bg-secondary">
-                      <div
-                        className="h-full rounded-full bg-primary sm:bg-gradient-to-r sm:from-violet-500 sm:to-primary"
-                        style={{
-                          width: `${Math.max(
-                            4,
-                            (titleResult.comparison.optimized /
-                              Math.max(titleResult.comparison.current, titleResult.comparison.optimized, 1)) *
-                              100,
-                          )}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -829,13 +731,10 @@ export function HomePageClient() {
 
         {analysisMode === "keyword" && titleResult && (
           <div className="mx-auto mt-10 max-w-3xl sm:mt-12">
-            <p className="text-center text-2xl font-bold leading-tight text-balance sm:text-4xl">Pick Your New Title</p>
+            <p className="text-center text-2xl font-bold leading-tight text-balance sm:text-3xl">Pick a title to use</p>
             <div className="mt-5 space-y-3">
               {pickVariants.map((variant, idx) => {
                 const lane = styleLaneLabel(variant.type, variant.title);
-                const seo = computeSEOScore(variant.title, submittedTopic);
-                const em = computeEmotionScore(variant.title);
-                const cl = computeClarityScore(variant.title);
                 const optionLetter = ["A", "B", "C"][idx] ?? String(idx + 1);
                 return (
                   <Card
@@ -868,27 +767,15 @@ export function HomePageClient() {
                             <p className="break-words text-[15px] font-semibold leading-relaxed sm:text-base">
                               {variant.title}
                             </p>
-                            <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-                              <span className="inline-flex items-center gap-1 font-medium text-foreground/90">
-                                <TrendingUp className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
-                                SEO {seo}/10
-                              </span>
-                              <span className="inline-flex items-center gap-1 font-medium text-foreground/90">
-                                <Heart className="h-3.5 w-3.5 shrink-0 text-rose-300" />
-                                Emotion {em}/10
-                              </span>
-                              <span className="font-medium text-foreground/90">Clarity {cl}/10</span>
-                              <span className="text-muted-foreground">· Uplift {variant.estimatedUplift}</span>
-                            </div>
                           </div>
                         </div>
                         <div className="flex shrink-0 flex-col items-end gap-2 sm:pt-1">
                           {idx === bestPickIndex ? (
                             <span
                               className="inline-flex max-w-[11rem] items-center gap-1 rounded-full border border-violet-400/60 bg-violet-500/15 px-2.5 py-1.5 text-left text-[11px] font-semibold leading-snug text-violet-200 sm:max-w-none sm:text-xs"
-                              title="Highest combined SEO + Clarity score among these three options."
+                              title="Top pick based on clarity and topic fit."
                             >
-                              Best SEO Score
+                              Top pick
                               <Info className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden />
                             </span>
                           ) : selectedTitle === idx ? (
@@ -991,11 +878,11 @@ export function HomePageClient() {
                 </li>
                 <li className="flex gap-2">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>Heuristic title score (hook, length, specificity — not store rankings)</span>
+                  <span>Topic breadth hint (broad / moderate / narrow — you pick the angle)</span>
                 </li>
                 <li className="flex gap-2">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>Suggested topic keywords (directional; not live search volume or competitor scans)</span>
+                  <span>Suggested topic keywords (optional starting points — not rankings or volume data)</span>
                 </li>
               </ul>
             </div>
@@ -1007,12 +894,12 @@ export function HomePageClient() {
               Your phrase is locked into every variant so titles stay on your episode theme.
             </li>
             <li>
-              <strong className="text-foreground">2. Demand estimate — </strong>
-              The model labels intent as high/medium/low — a directional hint, not catalog-wide data.
+              <strong className="text-foreground">2. Topic breadth — </strong>
+              We label whether your phrase reads broad or narrow — a framing hint only; you choose the final angle.
             </li>
             <li>
-              <strong className="text-foreground">3. Variant scoring — </strong>
-              Each line is checked for hook patterns (proof, tension, specificity); uplift stays in a credible band.
+              <strong className="text-foreground">3. Pick &amp; copy — </strong>
+              Choose the line that fits your episode, copy it, then run the growth pack for the full article and scripts.
             </li>
           </ol>
           <Button size="lg" className="mx-auto mt-6 flex min-h-[52px] w-full max-w-md touch-manipulation px-8 text-base font-semibold sm:min-h-12 sm:px-10" asChild>
