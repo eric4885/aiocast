@@ -18,7 +18,7 @@
     "OPENAI_TRANSCRIBE_MODEL": "whisper-1",
     "TRANSCRIBE_ENABLED": "true",
     "RESEND_FROM_EMAIL": "AioCast <hello@aiocast.com>",
-    "RATE_LIMIT_DISABLED": "true",
+    "RATE_LIMIT_DISABLED": "false",
     "TITLE_OUTPUT_LANGUAGE": "en",
     "FREE_MONTHLY_LIMIT": "3",
     "FREE_IP_DAILY_LIMIT": "3",
