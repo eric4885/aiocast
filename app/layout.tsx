@@ -119,6 +119,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() ?? "";
+
   return (
     <html lang="en" className="dark">
       <body
@@ -129,7 +131,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <CookieConsent />
-        <SiteAnalytics />
+        <SiteAnalytics measurementId={gaMeasurementId} />
       </body>
     </html>
   );
