@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, Loader2, Mic2, Sparkles, UploadCloud } from "lucide-react";
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { samplePack } from "@/lib/sample-pack";
+import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -102,6 +104,10 @@ export function GrowthPackClient({
     setOpeningChest(true);
     setSubmitSuccess(false);
     setError(null);
+    trackEvent(AnalyticsEvents.generatePackStart, {
+      input_mode: inputMode,
+      has_email: Boolean(email.trim()),
+    });
     try {
       const formData = new FormData();
       if (email.trim()) formData.append("email", email.trim());
@@ -125,6 +131,11 @@ export function GrowthPackClient({
       }
       setOpeningChest(false);
       setSubmitSuccess(true);
+      trackEvent(AnalyticsEvents.generatePackSuccess, {
+        input_mode: inputMode,
+        has_email: Boolean(email.trim()),
+        will_transcribe: willTranscribe,
+      });
       window.setTimeout(() => {
         window.location.assign(payload.resultUrl!);
       }, willTranscribe ? 1200 : 1800);
@@ -477,6 +488,11 @@ export function GrowthPackClient({
                         ))}
                       </ul>
                     </div>
+                    <p className="mt-4 text-xs">
+                      <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
+                        Open full public example →
+                      </Link>
+                    </p>
                   </div>
                 )}
               </CardContent>

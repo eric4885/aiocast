@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GrowthPackClient } from "./growth-pack-client";
 import { rateLimitsDisabled } from "@/lib/rate-limit-config";
+import { growthPackAppJsonLd } from "@/lib/growth-pack-app-schema";
 import { growthPackFaqJsonLd } from "@/lib/growth-pack-faq-schema";
 import { siteConfig } from "@/lib/data";
 
@@ -20,11 +21,12 @@ export const metadata: Metadata = {
   },
 };
 
-function GrowthPackFaqJsonLd() {
+function GrowthPackJsonLd() {
+  const payload = [growthPackFaqJsonLd(), growthPackAppJsonLd()];
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(growthPackFaqJsonLd()) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }}
     />
   );
 }
@@ -37,7 +39,7 @@ export default function SeoGrowthPackPage({
   const fromRemote = searchParams?.from === "remote";
   return (
     <>
-      <GrowthPackFaqJsonLd />
+      <GrowthPackJsonLd />
       <Suspense fallback={<div className="min-h-[40vh]" aria-hidden />}>
         <GrowthPackClient fromRemoteSetup={fromRemote} rateLimitsDisabled={rateLimitsDisabled()} />
       </Suspense>

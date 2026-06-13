@@ -60,6 +60,14 @@ export default function HelpPage() {
           <Link href="/tools/seo-growth-pack" className="font-medium text-primary hover:underline">
             Open Generate pack →
           </Link>
+          {" · "}
+          <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary hover:underline">
+            Workflow guide
+          </Link>
+          {" · "}
+          <Link href="/examples/sample-growth-pack" className="font-medium text-primary hover:underline">
+            Example output
+          </Link>
         </p>
       </section>
 

@@ -5,12 +5,12 @@ import { siteConfig } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Podcast to social scripts — growth copy from one episode",
   description:
-    "Generate multi-platform social scripts from podcast audio: X thread, LinkedIn draft, newsletter lead, and CTA variants.",
+    "Social script workflow preview — today, X, LinkedIn, and Substack copy ship inside the free SEO growth pack. Join the waitlist for standalone tooling.",
   alternates: { canonical: `${siteConfig.url}/podcast-to-short-video` },
   openGraph: {
     title: "Podcast audio -> social script workflow",
     description:
-      "Turn episode insights into ready-to-edit growth scripts instead of manual post writing.",
+      "Preview page for podcast social scripts — full pack available now; standalone workflow coming soon.",
     url: `${siteConfig.url}/podcast-to-short-video`,
   },
 };

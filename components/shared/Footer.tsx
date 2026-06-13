@@ -120,6 +120,26 @@ export function Footer() {
 
             <li>
 
+              <Link className="hover:text-foreground" href="/examples/sample-growth-pack">
+
+                Sample growth pack output
+
+              </Link>
+
+            </li>
+
+            <li>
+
+              <Link className="hover:text-foreground" href="/guides/podcast-to-blog-post">
+
+                Podcast to blog guide
+
+              </Link>
+
+            </li>
+
+            <li>
+
               <Link className="hover:text-foreground" href="/ai-podcast-editing-stack">
 
                 Podcast to SEO article workflow

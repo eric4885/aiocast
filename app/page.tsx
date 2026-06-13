@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AnalysisErrorBoundary } from "@/components/AnalysisErrorBoundary";
 import { siteConfig } from "@/lib/data";
+import { HomeLearnMore } from "@/components/seo/HomeLearnMore";
 import { HomePageClient } from "./home-client";
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function HomePage() {
     <AnalysisErrorBoundary>
       <Suspense fallback={<div className="min-h-[40vh] bg-background" aria-hidden />}>
         <HomePageClient />
+        <HomeLearnMore />
       </Suspense>
     </AnalysisErrorBoundary>
   );

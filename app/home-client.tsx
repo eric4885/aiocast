@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 
 /** RSS diagnosis hidden until audit is data-backed; /api/rss-preview kept for later. */
 const HOME_RSS_UI_ENABLED = false;
@@ -141,6 +142,7 @@ export function HomePageClient() {
     if (!trimmed) return;
     setOptimizeError(null);
     setOptimizeLoading(true);
+    trackEvent(AnalyticsEvents.titleIdeasSubmit);
     try {
       const res = await fetch("/api/title-optimize", {
         method: "POST",
@@ -167,6 +169,9 @@ export function HomePageClient() {
       setTitleResult(payload.data);
       setResultMeta(payload.meta ?? null);
       setSubmittedTopic(payload.meta?.normalizedTopic ?? trimmed);
+      trackEvent(AnalyticsEvents.titleIdeasSuccess, {
+        has_audit: Boolean(payload.data.titleAudit),
+      });
       setCopied(false);
       setCopyToast(null);
     } catch {
@@ -275,6 +280,7 @@ export function HomePageClient() {
       window.setTimeout(() => setCopied(false), 1600);
       const preview = full.length <= 20 ? full : `${full.slice(0, 20)}…`;
       setCopyToast(`Copied (${full.length} chars): ${preview}`);
+      trackEvent(AnalyticsEvents.titleIdeasCopy);
       window.setTimeout(() => setCopyToast(null), 4500);
     } catch {
       setOptimizeError("Copy failed. Please copy manually.");
@@ -285,6 +291,7 @@ export function HomePageClient() {
     if (!submittedTopic || regenLoading) return;
     setRegenLoading(true);
     setCopyToast(null);
+    trackEvent(AnalyticsEvents.titleIdeasRegenerate);
     await runKeywordAnalysis(submittedTopic);
     setRegenLoading(false);
   };

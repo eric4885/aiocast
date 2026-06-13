@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Find my packs",
   description: "Recover private links to your AioCast SEO growth packs by email.",
   alternates: { canonical: `${siteConfig.url}/my-packs` },
-  robots: { index: true, follow: true },
+  robots: { index: false, follow: true },
 };
 
 export default function MyPacksPage() {

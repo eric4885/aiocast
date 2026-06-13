@@ -20,6 +20,7 @@ import {
   articleToHtml,
   articleToMarkdown,
 } from "@/lib/article-export";
+import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -291,6 +292,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         return;
       }
       setEmailSent(true);
+      trackEvent(AnalyticsEvents.packEmailBackup);
     } catch {
       setEmailError("Could not send email. Try again.");
     } finally {
