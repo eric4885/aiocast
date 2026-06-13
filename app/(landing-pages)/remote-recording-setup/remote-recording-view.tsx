@@ -52,7 +52,7 @@ export function RemoteRecordingView() {
               </Link>
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link href="/tools/seo-growth-pack">Generate free growth pack</Link>
+              <Link href="/tools/seo-growth-pack">Generate SEO pack</Link>
             </Button>
           </div>
           <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
@@ -151,7 +151,7 @@ export function RemoteRecordingView() {
                   </p>
                 </div>
                 <Button variant="secondary" className="w-full" asChild>
-                  <Link href="/contact">Sample template — request access</Link>
+                  <Link href="/contact?intent=timezone-analysis">Join waitlist — timezone templates</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -164,7 +164,7 @@ export function RemoteRecordingView() {
         title="Generate assets from the same episode"
         description="Pair your cadence with an SEO article draft, FAQ blocks, and social scripts from the free growth pack."
         href="/tools/seo-growth-pack"
-        linkLabel="Generate growth pack →"
+        linkLabel="Generate SEO pack →"
       />
     </motion.div>
   );

@@ -418,7 +418,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       {!emailSent && token && (
         <Card className="border-primary/25 bg-primary/5">
           <CardContent className="space-y-3 p-6">
-            <p className="font-semibold">Save this pack — email backup recommended</p>
+            <p className="font-semibold">Email backup for this pack (recommended)</p>
             <p className="text-sm text-muted-foreground">
               Your browser may lose this private URL. Send a backup to your inbox and use{" "}
               <Link href="/my-packs" className="text-primary underline-offset-4 hover:underline">
@@ -600,7 +600,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       <Card>
         <CardContent className="space-y-4 p-6">
-          <p className="font-semibold">Social script matrix</p>
+          <p className="font-semibold">Social scripts</p>
           <div className="grid gap-3 lg:grid-cols-1">
             <SocialBlock
               label="X"
@@ -656,7 +656,12 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
           {pack.seoReport.altTitle && (
             <p className="text-sm text-muted-foreground">Alt title: {pack.seoReport.altTitle}</p>
           )}
-          <p className="text-sm text-muted-foreground">{pack.seoReport.estimatedTrafficHint}</p>
+          {pack.seoReport.estimatedTrafficHint && (
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground/85">Editorial angle hint:</span>{" "}
+              {pack.seoReport.estimatedTrafficHint}
+            </p>
+          )}
           <p className="text-xs text-muted-foreground">
             Editorial hints only — not live search volume, ranking, or competitor data.
           </p>
@@ -667,7 +672,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       <div className="flex flex-col items-center gap-3 pb-8 sm:flex-row sm:justify-center">
         <Button size="lg" asChild>
-          <Link href="/pro-toolkit">Explore Pro toolkit</Link>
+          <Link href="/pro-toolkit">See Pro toolkit (preview)</Link>
         </Button>
         <Button size="lg" variant="secondary" asChild>
           <Link href={TOOL_HREF}>Generate another pack</Link>

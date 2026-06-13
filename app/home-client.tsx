@@ -467,20 +467,6 @@ export function HomePageClient() {
             </div>
 
             <div className="space-y-6">
-              <Card className="rounded-2xl border border-primary/30 bg-card shadow-lg shadow-black/15">
-                <CardContent className="space-y-4 p-6 text-center sm:p-8">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Recommended title
-                  </p>
-                  <p className="break-words text-xl font-bold leading-snug tracking-tight sm:text-2xl md:text-[1.75rem]">
-                    {sortedVariants[0]?.title ?? titleResult.optimalTitle}
-                  </p>
-                  {sortedVariants[0]?.type && (
-                    <p className="text-sm text-muted-foreground">Angle: {sortedVariants[0].type}</p>
-                  )}
-                </CardContent>
-              </Card>
-
               {titleResult.titleAudit && (
                 <Card className="rounded-2xl border border-violet-500/25 bg-card shadow-md shadow-black/10">
                   <CardContent className="space-y-4 p-6 text-left sm:p-8">
@@ -501,7 +487,7 @@ export function HomePageClient() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-[15px] font-medium text-foreground">Tailored fixes</p>
+                      <p className="text-[15px] font-medium text-foreground">Ideas to try</p>
                       <ul className="mt-2 list-disc space-y-2 pl-5 text-[15px] leading-relaxed text-muted-foreground">
                         {titleResult.titleAudit.improvements.map((line, idx) => (
                           <li key={`${idx}-${line.slice(0, 24)}`}>{line}</li>
@@ -544,7 +530,7 @@ export function HomePageClient() {
                   </div>
                     <p className="flex items-center gap-2 pt-2 text-[15px] font-semibold">
                     <ShieldAlert className="h-4 w-4 shrink-0 text-muted-foreground" />
-                    {showOldTitleRisk ? "If you keep your current wording" : titleResult.titleAudit ? "Optional notes" : "Things to consider"}
+                    {showOldTitleRisk ? "If you keep your current wording" : titleResult.titleAudit ? "Optional notes" : "Optional angles to try"}
                   </p>
                   {titleResult.titleAudit ? (
                     <ul className="space-y-2 text-[15px] leading-relaxed text-muted-foreground">
@@ -559,9 +545,9 @@ export function HomePageClient() {
                     </ul>
                   ) : (
                     <ul className="space-y-2 text-[15px] leading-relaxed text-muted-foreground">
-                      <li>Missing searchable phrases listeners actually type</li>
-                      <li>Flat hook — no clear reason to tap</li>
-                      <li>No concrete number, scene, or proof anchor</li>
+                      <li>Consider searchable phrases listeners might type for this topic.</li>
+                      <li>Try a clearer hook so the title earns a tap in the feed.</li>
+                      <li>Optional: add a number, scene, or proof anchor if it fits your episode.</li>
                     </ul>
                   )}
                   <p className="pt-2 text-xs text-muted-foreground">
@@ -877,14 +863,14 @@ export function HomePageClient() {
           <Button size="lg" className="mx-auto mt-6 flex min-h-[52px] w-full max-w-md touch-manipulation px-8 text-base font-semibold sm:min-h-12 sm:px-10" asChild>
             <Link href="/tools/seo-growth-pack">
               <Rocket className="mr-2 h-4 w-4" />
-              Try free growth pack
+              Generate SEO pack
             </Link>
           </Button>
           <p className="mx-auto mt-3 max-w-md text-center text-xs text-muted-foreground">
             No credit card required. Paste a transcript on the free tool to generate your pack.
           </p>
           <p className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-foreground sm:gap-x-3">
-            <span className="inline-flex min-h-[44px] items-center">© {new Date().getFullYear()} AioCast</span>
+            <span className="inline-flex min-h-[44px] items-center">© {new Date().getFullYear()} AioCast.com</span>
             <span aria-hidden className="hidden text-border sm:inline">
               ·
             </span>

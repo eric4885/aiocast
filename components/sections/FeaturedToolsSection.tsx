@@ -48,9 +48,9 @@ export function FeaturedToolsSection() {
   const [copied, setCopied] = useState<"" | "x" | "linkedin">("");
 
   const xPost =
-    "Most podcasts publish and disappear. We turn one episode URL into a Google-ready article, social scripts, and a 7-day schedule. That is how you compound audience and search traffic.";
+    "Most podcasts publish and disappear. We turn one transcript into a Google-ready article, social scripts, and a 7-day schedule. That is how you compound audience and search traffic.";
   const linkedInPost =
-    "Podcasters do not need more editing tools. They need distribution assets. One URL in, then a 3-piece growth pack out: SEO article, social script matrix, and local publishing schedule.";
+    "Podcasters do not need more editing tools. They need distribution assets. Paste one transcript, then a 3-piece growth pack out: SEO article, social scripts, and a 7-day publish plan.";
 
   const copyPost = async (platform: "x" | "linkedin", content: string) => {
     try {
@@ -72,7 +72,7 @@ export function FeaturedToolsSection() {
             for the cost of one meal per month.
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Drop one episode in. Pull a complete growth asset bundle out.
+            Paste show notes or upload audio. Pull a complete growth asset bundle out.
           </p>
         </div>
 

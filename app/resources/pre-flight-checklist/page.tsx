@@ -104,11 +104,11 @@ export default function PreFlightChecklistPage() {
         <p className="mt-10 text-center text-sm text-muted-foreground print-hide">
           Want the growth pack?{" "}
           <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
-            See Pro toolkit
+            See Pro toolkit (preview)
           </Link>
           {" · "}
           <Link href="/tools/seo-growth-pack" className="text-primary underline-offset-4 hover:underline">
-            Generate free SEO pack
+            Generate SEO pack
           </Link>
           .
         </p>

@@ -126,7 +126,7 @@ const stats = [
   },
   {
     label: "Search coverage",
-    before: "Raw transcript pages with weak ranking signals",
+    before: "Long unstructured transcript pages",
     after: "Intent-structured article + FAQ blocks",
     delta: "Search-first",
   },
@@ -179,7 +179,7 @@ export function EditingStackView() {
             <Badge className="border border-border bg-transparent text-muted-foreground">AI-optimized articles</Badge>
           </div>
           <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-[2.75rem] lg:text-5xl lg:leading-tight">
-            Drop one audio file. Pull out a complete growth asset bundle.
+            Paste show notes or upload audio — pull out a complete growth asset bundle.
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
             Keep your recording stack. Paste show notes or upload a short clip — get an SEO article draft, FAQ blocks,
@@ -204,7 +204,7 @@ export function EditingStackView() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Button size="lg" asChild>
               <Link href="/tools/seo-growth-pack">
-                Try free
+                Generate SEO pack
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -325,7 +325,7 @@ export function EditingStackView() {
                 <div className="pt-4">
                   <Button size="lg" className="w-full" asChild>
                     <Link href="/pro-toolkit">
-                      Explore Pro toolkit &amp; pricing
+                      See Pro toolkit (preview)
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>

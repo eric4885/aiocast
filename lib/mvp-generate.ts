@@ -113,6 +113,7 @@ Rules:
 - socialSubstack: ready-to-post newsletter intro (150–400 words). Plain text only — NO placeholder links.
 - schedule: 7 lines tied to THIS episode's topics, not generic "publish episode" filler.
 - faq: 3 Q&A pairs grounded in the transcript.
+- seoReport.estimatedTrafficHint: one short editorial angle sentence (how to frame the topic for search) — NO traffic numbers, impressions, or ranking promises.
 
 Context transcript:
 ${transcript.slice(0, 8000)}
@@ -322,7 +323,7 @@ function defaultSeoReport() {
     altTitle: "Podcast SEO Workflow: From Audio to Search Traffic",
     altDescription: "A step-by-step loop to convert podcast episodes into discoverable content assets.",
     estimatedTrafficHint:
-      "Early stage topics in this cluster often reach 200-800 monthly impressions within 4-8 weeks.",
+      "Frame around a specific listener problem and one concrete outcome — avoid generic 'podcast tips' phrasing.",
   };
 }
 

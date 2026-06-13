@@ -181,13 +181,12 @@ export function GrowthPackClient({
           <ul className="mt-2 space-y-1">
             <li>Paste transcript/show notes, or upload audio for automatic transcription</li>
             <li>Audio: up to 5 minutes · 10 MB max · MP3, M4A, or WAV recommended</li>
-            {rateLimitsDisabled ? (
-              <li className="text-amber-200">Usage limits temporarily disabled for testing.</li>
-            ) : (
-              <>
-                <li>Per email: 3 free runs per month · Per IP: 3 per day</li>
-                <li>Please wait 1 minute between submissions from the same IP</li>
-              </>
+            <li>Per email: 3 free runs per month · Per IP: 3 per day</li>
+            <li>Please wait 1 minute between submissions from the same IP</li>
+            {rateLimitsDisabled && (
+              <li className="text-muted-foreground/90">
+                Launch preview — limits above are temporarily relaxed while we tune the free tier.
+              </li>
             )}
           </ul>
         </div>

@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Pro toolkit — Audio to SEO growth assets",
   description:
-    "Convert one episode into AIO long-form content, FAQ search blocks, social script matrix, and highlight assets.",
+    "Convert one episode into AIO long-form content, FAQ search blocks, social scripts, and highlight assets.",
   alternates: { canonical: `${siteConfig.url}/pro-toolkit` },
   openGraph: {
     title: "AioCast.com growth asset toolkit",
@@ -66,7 +66,7 @@ export default function ProToolkitPage() {
               <div className="space-y-3">
                 <Button size="lg" className="w-full" asChild>
                   <Link href="/tools/seo-growth-pack">
-                    Start free — generate my pack
+                    Generate SEO pack
                   </Link>
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
