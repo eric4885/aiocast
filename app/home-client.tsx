@@ -306,35 +306,11 @@ export function HomePageClient() {
     <section className="relative min-h-screen overflow-x-hidden bg-background bg-grid-subtle pb-[max(2.5rem,env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-4xl px-4 pb-16 pt-4 sm:px-6 sm:pb-20 sm:pt-7 lg:pb-24">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:tracking-[0.2em]">
-            Free podcast SEO tool
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Try an episode title or topic phrase below — then generate the full pack when you are ready.
           </p>
-          <div className="sm:hidden">
-            <h1 className="mt-2 text-balance text-[1.55rem] font-bold leading-[1.18] tracking-tight text-foreground max-[380px]:text-[1.35rem]">
-              Turn show notes into a <span className="text-primary">SEO growth pack</span>
-            </h1>
-            <p className="mt-2 text-sm font-medium leading-snug text-muted-foreground">
-              Article draft, FAQ, social scripts, SRT — from one episode.
-            </p>
-            <p className="mx-auto mt-2 max-w-2xl text-xs leading-snug text-muted-foreground/90">
-              Paste a transcript or try an episode title below — both free, no signup.
-            </p>
-          </div>
-          <div className="hidden sm:block">
-            <h1 className="mt-3 text-balance break-words text-[clamp(1.45rem,4vw+0.55rem,3.35rem)] font-bold leading-[1.08] tracking-tight text-foreground md:text-[clamp(1.625rem,5vw+0.35rem,3.5rem)]">
-              <span className="block">
-                Turn show notes into a <span className="text-primary">search-ready growth pack</span>
-              </span>
-            </h1>
-            <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-              Paste transcript or upload audio — get an SEO article, FAQ blocks, social scripts, and SRT in one run.
-            </p>
-            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground/90">
-              Optional: test an episode title or topic phrase in the box below.
-            </p>
-          </div>
 
-          <form id="analyze-tool" onSubmit={handleAnalyze} className="relative z-10 mx-auto mt-3 max-w-2xl sm:mt-6">
+          <form id="analyze-tool" onSubmit={handleAnalyze} className="relative z-10 mx-auto mt-4 max-w-2xl sm:mt-6">
             <div className="rounded-2xl border border-border bg-card/90 p-3 shadow-lg shadow-black/20 ring-1 ring-border/80 sm:p-5">
               {HOME_RSS_UI_ENABLED && (
               <div

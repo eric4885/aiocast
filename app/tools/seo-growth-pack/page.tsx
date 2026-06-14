@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GrowthPackClient } from "./growth-pack-client";
 import { rateLimitsDisabled } from "@/lib/rate-limit-config";
-import { growthPackAppJsonLd } from "@/lib/growth-pack-app-schema";
-import { growthPackFaqJsonLd } from "@/lib/growth-pack-faq-schema";
+import { growthPackPageJsonLd } from "@/lib/growth-pack-page-schema";
 import { siteConfig } from "@/lib/data";
 
 const canonical = `${siteConfig.url}/tools/seo-growth-pack`;
@@ -22,11 +21,10 @@ export const metadata: Metadata = {
 };
 
 function GrowthPackJsonLd() {
-  const payload = [growthPackFaqJsonLd(), growthPackAppJsonLd()];
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(growthPackPageJsonLd()) }}
     />
   );
 }
