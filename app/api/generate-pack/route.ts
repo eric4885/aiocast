@@ -89,7 +89,7 @@ export async function POST(req: Request) {
     console.info("[generate-pack] rate limits disabled via RATE_LIMIT_DISABLED");
   }
 
-  const ipGuard = await checkIpGuards(ip);
+  const ipGuard = await checkIpGuards(ip, email || undefined);
   if (!ipGuard.allowed) {
     if (ipGuard.code === "IP_COOLDOWN") {
       return NextResponse.json(
@@ -102,8 +102,9 @@ export async function POST(req: Request) {
     }
     return NextResponse.json(
       {
-        error: "Free daily IP limit reached (3/day). Try again tomorrow.",
+        error: `Free daily limit reached (${ipGuard.dailyLimit}/day). Upgrade to Pro for unlimited generations, or try again tomorrow.`,
         code: "IP_DAILY_LIMIT",
+        upgradeUrl: "/pro-toolkit",
       },
       { status: 429 },
     );
@@ -115,8 +116,9 @@ export async function POST(req: Request) {
     if (!usage.allowed) {
       return NextResponse.json(
         {
-          error: `Free monthly email limit reached (${usage.used}/${usage.limit}). Try again next month.`,
+          error: `Free monthly email limit reached (${usage.used}/${usage.limit}). Upgrade to Pro for unlimited generations.`,
           code: "LIMIT_REACHED",
+          upgradeUrl: "/pro-toolkit",
         },
         { status: 429 },
       );

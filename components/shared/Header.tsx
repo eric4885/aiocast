@@ -15,14 +15,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const nav = [
-  { href: "/tools/seo-growth-pack", label: "SEO growth pack" },
-  { href: "/ai-podcast-editing-stack", label: "Podcast to blog" },
-  {
-    href: "/podcast-to-short-video",
-    label: "Social scripts",
-    badge: "Soon",
-  },
-  { href: "/remote-recording-setup", label: "Publish plan" },
+  { href: "/tools/seo-growth-pack", label: "Generate" },
+  { href: "/ai-podcast-editing-stack", label: "How it works" },
+  { href: "/resources", label: "Resources" },
 ] as const;
 
 export function Header() {
@@ -51,34 +46,19 @@ export function Header() {
                   pathname === item.href && "bg-secondary text-foreground",
                 )}
               >
-                <span className="inline-flex items-center gap-2">
-                  {item.label}
-                  {"badge" in item && item.badge ? (
-                    <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
-                      {item.badge}
-                    </span>
-                  ) : null}
-                </span>
+                {item.label}
               </Link>
             ))}
           </nav>
         )}
 
         <div className="hidden items-center gap-2 md:flex">
-          {isHome ? (
-            <Button size="sm" asChild>
-              <Link href="/tools/seo-growth-pack">Generate SEO pack</Link>
-            </Button>
-          ) : (
-            <>
-              <Button variant="secondary" size="sm" asChild>
-                <Link href="/pro-toolkit">Pro toolkit</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link href="/tools/seo-growth-pack">Generate SEO pack</Link>
-              </Button>
-            </>
-          )}
+          <Button variant="secondary" size="sm" asChild>
+            <Link href="/pro-toolkit">Pricing</Link>
+          </Button>
+          <Button size="sm" asChild>
+            <Link href="/tools/seo-growth-pack">Generate pack</Link>
+          </Button>
         </div>
 
         <div className="flex shrink-0 items-center gap-2 md:hidden">
@@ -96,20 +76,15 @@ export function Header() {
             <DropdownMenuContent align="end" className="w-56 border-border bg-secondary">
               {nav.map((item) => (
                 <DropdownMenuItem key={item.href} asChild>
-                  <Link href={item.href} onClick={() => setOpen(false)} className="flex items-center justify-between gap-2">
-                    <span>{item.label}</span>
-                    {"badge" in item && item.badge ? (
-                      <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-amber-200">
-                        {item.badge}
-                      </span>
-                    ) : null}
+                  <Link href={item.href} onClick={() => setOpen(false)}>
+                    {item.label}
                   </Link>
                 </DropdownMenuItem>
               ))}
               <DropdownMenuSeparator className="bg-border" />
               <DropdownMenuItem asChild>
                 <Link href="/pro-toolkit" onClick={() => setOpen(false)}>
-                  Pro toolkit
+                  Pricing
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -117,13 +92,6 @@ export function Header() {
                   Generate pack
                 </Link>
               </DropdownMenuItem>
-              {isHome ? (
-                <DropdownMenuItem asChild>
-                  <Link href="/contact" onClick={() => setOpen(false)}>
-                    Contact
-                  </Link>
-                </DropdownMenuItem>
-              ) : null}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

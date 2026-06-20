@@ -97,7 +97,7 @@ export function MyPacksClient() {
       <h1 className="mt-6 text-3xl font-bold tracking-tight">Find my packs</h1>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
         Enter the email you used when generating a pack. We&apos;ll send a private link that lists every pack tied to
-        that address (last 20). Links expire after 24 hours.
+        that address (last 5 on free · unlimited on Pro). Links expire after 24 hours.
       </p>
 
       {!tokenFromUrl && (

@@ -7,6 +7,8 @@ import {
 } from "@/lib/persistent-backend";
 import { checkIpRateLimit, type IpGuardResult } from "@/lib/rate-limit";
 import { ipCooldownMs, ipDailyLimit, rateLimitsDisabled } from "@/lib/rate-limit-config";
+import { pricing } from "@/lib/pricing";
+import { isProEmail } from "@/lib/pro-subscription";
 
 export type { IpGuardResult };
 
@@ -93,6 +95,10 @@ export async function checkAndConsumeUsage(email: string) {
   }
 
   const key = email.trim().toLowerCase();
+  if (await isProEmail(key)) {
+    return { allowed: true, used: 0, limit: Number.POSITIVE_INFINITY, pro: true as const };
+  }
+
   const currentMonth = monthKey();
 
   return withSnapshot((snapshot) => {
@@ -110,8 +116,11 @@ export async function checkAndConsumeUsage(email: string) {
   });
 }
 
-export async function checkIpGuards(ip: string): Promise<IpGuardResult> {
+export async function checkIpGuards(ip: string, email?: string): Promise<IpGuardResult> {
   if (rateLimitsDisabled()) {
+    return { allowed: true, code: "OK", used: 0, dailyLimit: ipDailyLimit() };
+  }
+  if (email && (await isProEmail(email))) {
     return { allowed: true, code: "OK", used: 0, dailyLimit: ipDailyLimit() };
   }
   return checkIpRateLimit({
@@ -175,10 +184,15 @@ export function resultPath(id: string, accessToken: string) {
   return `/results/${id}?token=${encodeURIComponent(accessToken)}`;
 }
 
-const MAX_PACKS_PER_EMAIL = 20;
 const MY_PACKS_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+const PRO_MAX_PACKS_PER_EMAIL = 100;
 
 export type { EmailPackEntry };
+
+export async function maxPacksForEmail(email: string): Promise<number> {
+  if (await isProEmail(email)) return PRO_MAX_PACKS_PER_EMAIL;
+  return pricing.free.packHistoryLimit;
+}
 
 export async function indexPackForEmail(
   email: string,
@@ -186,6 +200,8 @@ export async function indexPackForEmail(
 ) {
   const key = email.trim().toLowerCase();
   if (!key.includes("@")) return;
+
+  const cap = await maxPacksForEmail(key);
 
   await withSnapshot((snapshot) => {
     const list = snapshot.emailPackIndex[key] ?? [];
@@ -196,7 +212,7 @@ export async function indexPackForEmail(
       title: entry.title?.trim() || "SEO growth pack",
       createdAt: entry.createdAt ?? Date.now(),
     });
-    snapshot.emailPackIndex[key] = next.slice(0, MAX_PACKS_PER_EMAIL);
+    snapshot.emailPackIndex[key] = next.slice(0, cap);
   });
 }
 

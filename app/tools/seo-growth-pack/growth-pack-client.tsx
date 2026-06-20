@@ -193,6 +193,12 @@ export function GrowthPackClient({
             <li>Paste transcript/show notes, or upload audio for automatic transcription</li>
             <li>Audio: up to 5 minutes · 10 MB max · MP3, M4A, or WAV recommended</li>
             <li>Per email: 3 free runs per month · Per IP: 3 per day</li>
+            <li>
+              <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
+                Pro
+              </Link>
+              : unlimited runs · FAQ JSON-LD · full pack history (use the same email at checkout)
+            </li>
             <li>Please wait 1 minute between submissions from the same IP</li>
             {rateLimitsDisabled && (
               <li className="text-muted-foreground/90">

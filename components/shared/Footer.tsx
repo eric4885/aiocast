@@ -188,7 +188,7 @@ export function Footer() {
 
               <Link className="hover:text-foreground" href="/pro-toolkit">
 
-                Podcast SEO pro toolkit
+                Pro pricing
 
               </Link>
 

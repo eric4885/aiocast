@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SubscribeForm } from "@/components/shared/SubscribeForm";
+import { CheckoutButtons } from "@/components/pricing/CheckoutButtons";
+import { pricing, proPerks } from "@/lib/pricing";
 import { pageVariants } from "@/lib/motion";
 
 function AssetBundleArticle() {
@@ -304,33 +306,34 @@ export function EditingStackView() {
 
       <section className="border-b border-border bg-gradient-to-b from-[#07070c] to-background py-20">
         <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <Badge>Pro toolkit preview</Badge>
-          <h2 className="mt-6 text-4xl font-bold sm:text-5xl">$39</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            <span className="line-through">$79 standalone value</span> · planned launch price — checkout not live yet
+          <Badge className="bg-accent/15 text-accent">AioCast Pro</Badge>
+          <h2 className="mt-6 text-4xl font-bold sm:text-5xl">
+            ${pricing.pro.monthlyUsd}
+            <span className="text-2xl font-semibold text-muted-foreground">/month</span>
+          </h2>
+          <p className="mt-2 text-sm text-success font-medium">
+            First month ${pricing.pro.firstMonthUsd} · or ${pricing.pro.annualUsd}/year
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            First {pricing.pro.annualEarlyBirdSlots} annual subscribers get {pricing.pro.annualBonusMonths} bonus months
+            (14 months total).
           </p>
           <div className="mx-auto mt-10 max-w-xl text-left">
             <Card className="border-primary/40 bg-secondary/60">
               <CardContent className="space-y-4 p-8">
-                {[
-                  "Same outputs as today’s free growth pack (article, FAQ, social scripts, SRT, 7-day plan)",
-                  "Future: saved templates, batch runs, and deeper automation when billing ships",
-                  "Email notification when paid checkout opens — try the free tool first",
-                ].map((line) => (
+                {proPerks.map((line) => (
                   <div key={line} className="flex gap-3 text-sm">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                     <span>{line}</span>
                   </div>
                 ))}
                 <div className="pt-4">
-                  <Button size="lg" className="w-full" asChild>
-                    <Link href="/pro-toolkit">
-                      See Pro toolkit (preview)
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
+                  <CheckoutButtons />
                   <p className="mt-3 text-center text-xs text-muted-foreground">
-                    Checkout and refund terms will be shown at purchase when billing goes live. Try the free pack today.
+                    Use the same email at checkout and when you generate packs.{" "}
+                    <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
+                      Full pricing details
+                    </Link>
                   </p>
                 </div>
               </CardContent>

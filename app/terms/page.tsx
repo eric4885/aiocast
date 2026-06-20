@@ -115,9 +115,12 @@ export default function TermsPage() {
         <p>
           We may apply rate limits on free tools (for example per email and per IP daily caps, plus a short cooldown
           between submissions from the same IP). Limits are described on the tool page and may change. You agree not to
-          circumvent limits or abuse the Service. When paid checkout is offered, price, billing, and refund terms will be
-          presented at purchase and may supplement these Terms. Until checkout is live, references to “Pro” or upgrades
-          are forward-looking and may link to waitlists or contact flows.
+          circumvent limits or abuse the Service. Paid Pro subscriptions are billed through our payment provider (Creem);
+          price, billing interval, and refund terms are shown at checkout and on the{" "}
+          <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
+            pricing page
+          </Link>
+          .
         </p>
 
         <h2 className="text-lg font-semibold text-foreground">10. Indemnity</h2>

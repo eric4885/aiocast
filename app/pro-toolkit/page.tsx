@@ -1,112 +1,129 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { CheckoutButtons } from "@/components/pricing/CheckoutButtons";
+import { ProStatusChecker } from "@/components/pricing/ProStatusChecker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { freePerks, pricing, proPerks } from "@/lib/pricing";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Pro toolkit — Audio to SEO growth assets",
+  title: "Pricing — AioCast Pro",
   description:
-    "Convert one episode into AIO long-form content, FAQ search blocks, social scripts, and highlight assets.",
+    "Free podcast SEO growth pack (3/day). Pro $12/mo or $99/yr — unlimited generations, FAQ JSON-LD, full pack history.",
   alternates: { canonical: `${siteConfig.url}/pro-toolkit` },
   openGraph: {
-    title: "AioCast.com growth asset toolkit",
-    description:
-      "From podcast audio to searchable growth assets.",
+    title: "AioCast Pro pricing",
+    description: "Unlimited podcast-to-SEO packs with FAQ schema export.",
     url: `${siteConfig.url}/pro-toolkit`,
   },
 };
 
-const perks = [
-  "1 long-form blog post (about 900–1,300 words) + 3 Q&A blocks structured for search",
-  "Ready-to-post scripts for X, LinkedIn & Substack — just copy and publish",
-  "Best quote highlights from your episode + subtitle file for YouTube/video reuse",
-  "7-day publish plan with timing hints you can adapt locally",
-];
+export default function ProToolkitPage({
+  searchParams,
+}: {
+  searchParams?: { checkout?: string };
+}) {
+  const checkout = searchParams?.checkout;
 
-export default function ProToolkitPage() {
   return (
     <div className="border-b border-border bg-gradient-hero bg-grid-subtle">
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:py-28">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-          MVP Toolkit
-        </p>
-        <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
-          Podcast to Search Growth Engine
-        </h1>
+      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:py-24">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Pricing</p>
+        <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">Simple plans for podcast SEO</h1>
         <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-          Turn episodes into long-form articles built for search, snippet-ready FAQs,
-          and ready-to-post social copy — so listeners find you before they find a competitor. Today&apos;s free pack
-          runs on text you paste (transcript or show notes); paid tiers may add deeper automation later.
+          Start free with {pricing.free.ipDailyLimit} generations per day. Upgrade when you publish weekly and need
+          unlimited packs, FAQ JSON-LD, and full history in{" "}
+          <Link href="/my-packs" className="text-primary underline-offset-4 hover:underline">
+            Find my packs
+          </Link>
+          .
         </p>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <Card className="border-primary/40 bg-secondary/70">
+        {checkout === "success" && (
+          <p className="mt-6 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
+            Payment received — Pro activates in a minute. Use the <strong>same email</strong> at checkout when you
+            generate packs.
+          </p>
+        )}
+        {checkout === "canceled" && (
+          <p className="mt-6 rounded-xl border border-border bg-secondary/50 px-4 py-3 text-sm text-muted-foreground">
+            Checkout canceled. You can still use the free tier anytime.
+          </p>
+        )}
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <Card className="border-border/80">
             <CardContent className="space-y-6 p-8">
               <div>
-                <p className="text-sm text-muted-foreground line-through">$79</p>
-                <div className="flex flex-wrap items-baseline gap-3">
-                  <span className="text-5xl font-bold">$39</span>
-                  <span className="text-sm font-semibold text-success">Planned launch price</span>
-                </div>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Checkout is not live yet — the same outputs are available now via the free growth pack when you paste a
-                  transcript.
+                <p className="text-sm font-semibold text-muted-foreground">Free</p>
+                <p className="mt-2 text-4xl font-bold">$0</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {pricing.free.ipDailyLimit} packs / day per IP · last {pricing.free.packHistoryLimit} saved packs
                 </p>
               </div>
-              <ul className="space-y-4">
-                {perks.map((item) => (
+              <ul className="space-y-3">
+                {freePerks.map((item) => (
+                  <li key={item} className="flex gap-3 text-sm">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button variant="secondary" className="w-full" asChild>
+                <Link href="/tools/seo-growth-pack">Generate free pack</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-primary/45 bg-secondary/70 shadow-glow">
+            <CardContent className="space-y-6 p-8">
+              <div>
+                <p className="text-sm font-semibold text-accent">Pro — launch pricing</p>
+                <div className="mt-2 flex flex-wrap items-baseline gap-2">
+                  <span className="text-4xl font-bold">${pricing.pro.monthlyUsd}</span>
+                  <span className="text-muted-foreground">/month</span>
+                </div>
+                <p className="mt-2 text-sm text-success font-medium">
+                  First month ${pricing.pro.firstMonthUsd} · or ${pricing.pro.annualUsd}/year
+                </p>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  First {pricing.pro.annualEarlyBirdSlots} annual subscribers automatically get{" "}
+                  {pricing.pro.annualBonusMonths} bonus months (14 months total) — applied on our side after payment.
+                </p>
+              </div>
+              <ul className="space-y-3">
+                {proPerks.map((item) => (
                   <li key={item} className="flex gap-3 text-sm">
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <div className="space-y-3">
-                <Button size="lg" className="w-full" asChild>
-                  <Link href="/tools/seo-growth-pack">
-                    Generate SEO pack
-                  </Link>
-                </Button>
-                <p className="text-center text-xs text-muted-foreground">
-                  No payment on this preview. Use the free tool to ship drafts today; we&apos;ll email when paid checkout
-                  opens.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-border/70">
-            <CardContent className="space-y-4 p-8 text-sm text-muted-foreground">
-              <p className="font-semibold text-foreground">Growth preview</p>
-              <div className="rounded-xl border border-border bg-background/70 p-4">
-                <p className="text-xs text-muted-foreground">Google Search (illustrative)</p>
-                <p className="mt-2 text-xs text-primary">YourPodcast.com/ep-42-ai-tools</p>
-                <p className="mt-1 text-sm font-semibold text-foreground">
-                  Ep 42: The AI tools that cut my editing time in half (full breakdown)
-                </p>
-                <p className="mt-1 text-xs">
-                  AI-optimized long-form write-up + FAQ blocks derived from your episode — shown here as if it lived on
-                  your site.
-                </p>
-              </div>
-              <div className="rounded-xl border border-border bg-background/70 p-4">
-                <p className="text-xs text-muted-foreground">X Post (mockup)</p>
-                <p className="mt-2 text-sm">
-                  &quot;I turned my episode into a search-ready article in 48 hours. Same mic, same show — just better
-                  packaging for search.&quot;
-                </p>
-                <p className="mt-2 text-xs text-primary">
-                  Illustrative metrics only · Views 24.8K · Reposts 312 · Bookmarks 1.2K
-                </p>
-              </div>
-              <p>
-                Example preview only. Real outcomes vary by topic quality and distribution execution.
-              </p>
+              <CheckoutButtons />
             </CardContent>
           </Card>
         </div>
+
+        <ProStatusChecker />
+
+        <Card className="mt-8 border-border/70">
+          <CardContent className="space-y-3 p-6 text-sm text-muted-foreground">
+            <p className="font-semibold text-foreground">How Pro unlocks</p>
+            <p>
+              We match your subscription to the email you use at Creem checkout. Enter that same email when generating a
+              pack (or on the result page backup form) so limits lift automatically.
+            </p>
+            <p>
+              Questions?{" "}
+              <Link href="/contact" className="text-primary underline-offset-4 hover:underline">
+                Contact us
+              </Link>{" "}
+              or email {siteConfig.contactEmail}.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

@@ -28,6 +28,10 @@ export type PersistedSnapshot = {
   myPacksTokens: Record<string, MyPacksToken>;
   /** Emails that opted out of non-transactional mail (unix ms). */
   unsubscribed: Record<string, number>;
+  /** Active Pro subscriptions keyed by email. */
+  proSubscribers: Record<string, import("@/lib/pro-subscription").ProRecord>;
+  /** How many annual Early Bird (+2 month) slots have been claimed (max 50). */
+  annualEarlyBirdCount: number;
 };
 
 const REDIS_KEY = "aiocast:v1:snapshot";
@@ -48,6 +52,8 @@ function emptySnapshot(): PersistedSnapshot {
     emailPackIndex: {},
     myPacksTokens: {},
     unsubscribed: {},
+    proSubscribers: {},
+    annualEarlyBirdCount: 0,
   };
 }
 

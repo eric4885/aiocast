@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/guides/podcast-faq-for-seo",
     "/guides/show-notes-template",
     "/my-packs",
+    "/resources",
     "/resources/pre-flight-checklist",
   ];
 

@@ -21,6 +21,8 @@ import {
   articleToMarkdown,
 } from "@/lib/article-export";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
+import { FaqSchemaSection } from "@/components/results/FaqSchemaSection";
+import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -464,6 +466,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         </p>
       )}
 
+      <ProUpsellCard email={backupEmail} variant="compact" />
+
       <Card>
         <CardContent className="space-y-4 p-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
@@ -596,6 +600,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
                 <p className="mt-1 text-sm text-muted-foreground">{f.a}</p>
               </div>
             ))}
+            <FaqSchemaSection articleTitle={pack.seoArticle.title} faq={pack.faq} defaultEmail={backupEmail} />
           </CardContent>
         </Card>
       )}
@@ -674,7 +679,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       <div className="flex flex-col items-center gap-3 pb-8 sm:flex-row sm:justify-center">
         <Button size="lg" asChild>
-          <Link href="/pro-toolkit">See Pro toolkit (preview)</Link>
+          <Link href="/pro-toolkit">See Pro pricing</Link>
         </Button>
         <Button size="lg" variant="secondary" asChild>
           <Link href={TOOL_HREF}>Generate another pack</Link>
