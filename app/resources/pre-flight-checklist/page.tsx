@@ -9,11 +9,12 @@ import { CHECKLIST_MD_PATH } from "@/lib/checklist-markdown";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Pre-flight checklist — recording guardrails",
+  title: "Podcast pre-flight checklist — printable recording guardrails",
   description:
-    "Printable checklist for noise, gain staging, backups, and editing order — free from AioCast.com.",
+    "Free preflight checklist for podcast recording: room noise, gain staging, backups, and editing order — printable from AioCast.com.",
+  alternates: { canonical: `${siteConfig.url}/resources/pre-flight-checklist` },
   openGraph: {
-    title: "Podcast pre-flight checklist",
+    title: "Podcast pre-flight checklist (printable)",
     url: `${siteConfig.url}/resources/pre-flight-checklist`,
   },
 };
@@ -51,10 +52,11 @@ export default function PreFlightChecklistPage() {
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:py-24 print:max-w-none print:py-8">
         <p className="text-sm font-semibold text-primary">Free resource</p>
         <h1 className="mt-3 text-4xl font-bold tracking-tight">
-          Podcast pre-flight checklist
+          Podcast pre-flight checklist (printable)
         </h1>
         <p className="mt-4 text-muted-foreground">
-          Same checklist included in our weekly AI tools briefing — bookmark this page or save a copy for offline use.
+          A preflight checklist for podcast recording — room noise, gain staging, backups, and editing order. Same list
+          included in our weekly AI tools briefing; bookmark this page or save a copy for offline use.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3 print-hide">
@@ -101,17 +103,18 @@ export default function PreFlightChecklistPage() {
           </CardContent>
         </Card>
 
-        <p className="mt-10 text-center text-sm text-muted-foreground print-hide">
-          Want the growth pack?{" "}
-          <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
-            See Pro pricing
-          </Link>
-          {" · "}
-          <Link href="/tools/seo-growth-pack" className="text-primary underline-offset-4 hover:underline">
-            Generate SEO pack
-          </Link>
-          .
-        </p>
+        <Card className="mt-10 border-primary/25 bg-primary/5 print-hide">
+          <CardContent className="space-y-4 p-8">
+            <p className="text-lg font-semibold text-foreground">Recorded clean? Turn the episode into SEO content</p>
+            <p className="text-sm text-muted-foreground">
+              Paste a transcript or show notes into the free growth pack — get an SEO blog draft, FAQ blocks, social
+              scripts, and a 7-day publish plan.
+            </p>
+            <Button size="lg" asChild>
+              <Link href="/tools/seo-growth-pack">Generate free SEO growth pack</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

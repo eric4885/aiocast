@@ -6,7 +6,7 @@ import { siteConfig } from "@/lib/data";
 export const metadata: Metadata = {
   title: "How to turn a podcast into a blog post (step-by-step)",
   description:
-    "A practical workflow for indie podcasters: transcript to SEO article, FAQ blocks, and social promotion — with a free tool to draft the pack.",
+    "Step-by-step podcast to blog post workflow for indie hosts: transcript to SEO article, FAQ blocks, and social promotion — with a free tool to draft the pack.",
   alternates: { canonical: `${siteConfig.url}/guides/podcast-to-blog-post` },
   openGraph: {
     title: "Podcast to blog post workflow",
@@ -18,12 +18,12 @@ export default function PodcastToBlogGuidePage() {
   return (
     <GuideLayout
       title="How to turn a podcast episode into a blog post"
-      description="Search engines index text, not your RSS audio file. This is a realistic weekly loop for indie hosts — no agency required."
+      description="A step-by-step podcast to blog post workflow for indie hosts — transcript to SEO article, FAQ blocks, and social promotion."
     >
       <h2>Why bother?</h2>
       <p>
-        Spotify and Apple Podcasts rarely send organic search traffic to your site. A written article on your domain
-        gives Google something to rank — and gives listeners a place to share when they recommend an episode.
+        Spotify and Apple Podcasts rarely send organic search traffic to your site. A podcast-to-blog post on your
+        domain gives Google something to rank — and gives listeners a place to share when they recommend an episode.
       </p>
 
       <h2>Step 1 — Export a transcript (good enough beats perfect)</h2>
@@ -71,6 +71,16 @@ export default function PodcastToBlogGuidePage() {
           full example output
         </Link>{" "}
         before you run your own episode.
+      </p>
+
+      <h2>Try it on your episode</h2>
+      <p>
+        Paste a transcript or bullet show notes into the{" "}
+        <Link href="/tools/seo-growth-pack" className="text-primary hover:underline">
+          free SEO growth pack generator
+        </Link>
+        . You get a podcast-to-blog draft, FAQ blocks, X / LinkedIn / Substack scripts, and a 7-day publish schedule in
+        one pass — then edit like a human before you hit publish.
       </p>
     </GuideLayout>
   );
