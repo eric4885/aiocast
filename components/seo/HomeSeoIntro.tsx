@@ -9,11 +9,12 @@ export function HomeSeoIntro() {
           Free podcast SEO tool
         </p>
         <h1 className="mx-auto mt-3 max-w-3xl text-balance text-[clamp(1.55rem,4vw+0.55rem,3rem)] font-bold leading-[1.12] tracking-tight text-foreground">
-          Turn show notes into a <span className="text-primary">search-ready SEO growth pack</span>
+          Turn show notes into a <span className="text-primary">publish-ready SEO draft pack</span>
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-          AioCast.com helps indie podcasters repurpose one episode into an SEO article draft, FAQ blocks, and social
-          scripts for X / LinkedIn / Substack — paste a transcript or upload up to 5 minutes of audio on the free tier.
+          AioCast helps indie podcasters repurpose one episode into an SEO article draft, FAQ blocks, social scripts,
+          and a 7-day publish plan — paste a transcript or upload up to 5 minutes of audio. You edit and publish on your
+          own site; rankings take time and are never guaranteed.
           Try the{" "}
           <Link href="#analyze-tool" className="font-medium text-primary underline-offset-4 hover:underline">
             title tryout

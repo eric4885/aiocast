@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: `%s · ${siteConfig.name}`,
   },
   description:
-    "Paste podcast show notes or upload audio — get an SEO blog draft, FAQ blocks, social scripts, and a 7-day publish schedule. Free podcast-to-blog repurposing for indie hosts.",
+    "Paste podcast show notes or upload audio — get an SEO blog draft, FAQ blocks, social scripts, and a 7-day publish plan. Edit and publish on your site; no ranking guarantees.",
   keywords: [
     "podcast content repurposing",
     "podcast SEO article generator",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: `${siteConfig.name} — Paste show notes, get podcast SEO pack`,
     description:
-      "Paste show notes or upload audio — SEO article draft, social scripts, and publish schedule from one podcast episode.",
+      "Paste show notes or upload audio — SEO article draft, social scripts, and a 7-day publish plan. Edit on your site before expecting search traffic.",
     images: [
       {
         url: "/opengraph-image",

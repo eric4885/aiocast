@@ -22,6 +22,7 @@ import {
 } from "@/lib/article-export";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { FaqSchemaSection } from "@/components/results/FaqSchemaSection";
+import { PublishWorkflowCard } from "@/components/results/PublishWorkflowCard";
 import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
@@ -415,9 +416,11 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       {isAi && (
         <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
-          AI-generated draft — review facts and tone before publishing.
+          AI-generated draft — review facts and tone, then publish on your own site.
         </div>
       )}
+
+      <PublishWorkflowCard />
 
       {!emailSent && token && (
         <Card className="border-primary/25 bg-primary/5">
@@ -475,8 +478,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
               <p className="font-semibold">SEO article draft</p>
               <p className="mt-1 text-xs text-muted-foreground">
                 AI-rewritten blog post for search — not your raw show notes. ~{wordCount.toLocaleString()}{" "}
-                words · aim for 800–1,500 for a solid SEO post. Copy/Download use Markdown or HTML; paste into your CMS
-                and adjust headings if needed.
+                words · aim for 800–1,500 for a solid SEO post. Copy/Download use Markdown or HTML (includes optional
+                AioCast attribution — remove before publishing if you prefer).
               </p>
             </div>
             <div className="flex flex-wrap gap-2">

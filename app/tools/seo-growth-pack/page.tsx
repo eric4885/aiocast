@@ -10,7 +10,7 @@ const canonical = `${siteConfig.url}/tools/seo-growth-pack`;
 export const metadata: Metadata = {
   title: "Podcast SEO growth pack — paste show notes, get blog + social scripts",
   description:
-    "Paste podcast show notes or upload audio — generate an SEO blog draft, FAQ blocks, social scripts, SRT subtitles, and a 7-day publish schedule in one pass.",
+    "Paste podcast show notes or upload audio — generate an SEO blog draft, FAQ blocks, social scripts, SRT subtitles, and a 7-day publish schedule. Edit and publish on your site.",
   alternates: { canonical },
   openGraph: {
     title: "Podcast SEO growth pack generator",

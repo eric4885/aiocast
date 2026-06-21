@@ -7,6 +7,14 @@ type SeoArticle = {
 
 type FaqItem = { q: string; a: string };
 
+const ATTRIBUTION_MARKDOWN =
+  "\n\n---\n\n_Draft generated with [AioCast](https://aiocast.com) — podcast-to-SEO workflow. Remove this line before publishing if you prefer._\n";
+
+const ATTRIBUTION_HTML = `
+  <footer style="margin-top:2.5rem;padding-top:1rem;border-top:1px solid #ddd;color:#666;font-size:0.85rem;">
+    <p>Draft generated with <a href="https://aiocast.com">AioCast</a> — podcast-to-SEO workflow. Remove this footer before publishing if you prefer.</p>
+  </footer>`;
+
 function normalizeHeading(text: string): string {
   return text.trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -83,7 +91,7 @@ export function articleToMarkdown(article: SeoArticle, faq: FaqItem[] = []): str
       lines.push(`### ${item.q}`, "", item.a.trim(), "");
     }
   }
-  return lines.join("\n").trim() + "\n";
+  return lines.join("\n").trim() + ATTRIBUTION_MARKDOWN;
 }
 
 export function articleToHtml(article: SeoArticle, faq: FaqItem[] = []): string {
@@ -120,6 +128,7 @@ export function articleToHtml(article: SeoArticle, faq: FaqItem[] = []): string 
     ${bodyToHtmlParagraphs(body)}
     ${faqHtml}
   </article>
+  ${ATTRIBUTION_HTML}
 </body>
 </html>`;
 }

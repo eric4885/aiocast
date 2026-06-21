@@ -184,8 +184,8 @@ export function GrowthPackClient({
         <p className="text-sm font-semibold text-primary">Free tool</p>
         <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Generate my SEO growth pack</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Paste show notes or upload audio — you&apos;ll get an SEO article draft, social scripts, and a 7-day publish
-          plan.
+          Paste show notes or upload audio — get an SEO article draft, social scripts, and a 7-day publish plan. Edit
+          and publish on your own blog; search traffic takes weeks and is never guaranteed.
         </p>
         <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-muted-foreground">
           <p className="font-semibold text-primary">Free plan limits</p>

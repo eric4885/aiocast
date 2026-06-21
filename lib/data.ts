@@ -1,6 +1,6 @@
 ﻿export const siteConfig = {
   name: "AioCast.com",
-  tagline: "Turn podcast audio into SEO growth assets.",
+  tagline: "Turn podcast episodes into publish-ready SEO drafts.",
   url: "https://aiocast.com",
   contactEmail: "hello@aiocast.com",
   /** Legal name shown in Privacy, Terms, and email footers (CAN-SPAM). */

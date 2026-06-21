@@ -38,9 +38,9 @@ const aiHintCards = [
     value: "Your podcast claims can be quoted in assistant-style answers.",
   },
   {
-    title: "Compounding distribution",
+    title: "Compounding workflow",
     icon: Gift,
-    value: "One upload becomes a reusable weekly asset drop, not a one-time post.",
+    value: "One upload becomes a reusable weekly draft + schedule — if you publish the article.",
   },
 ];
 
@@ -48,9 +48,9 @@ export function FeaturedToolsSection() {
   const [copied, setCopied] = useState<"" | "x" | "linkedin">("");
 
   const xPost =
-    "Most podcasts publish and disappear. We turn one transcript into a Google-ready article, social scripts, and a 7-day schedule. That is how you compound audience and search traffic.";
+    "Most podcasts publish audio and stop. I use a draft pack: SEO article outline, FAQ blocks, social scripts, and a 7-day publish checklist — then edit and post on my own site.";
   const linkedInPost =
-    "Podcasters do not need more editing tools. They need distribution assets. Paste one transcript, then a 3-piece growth pack out: SEO article, social scripts, and a 7-day publish plan.";
+    "Podcasters do not need more editing tools. They need publish-ready drafts. One transcript → SEO article draft, FAQ blocks, social scripts, and a 7-day plan — then you ship on your blog.";
 
   const copyPost = async (platform: "x" | "linkedin", content: string) => {
     try {
@@ -68,11 +68,11 @@ export function FeaturedToolsSection() {
         <div className="max-w-2xl">
           <p className="text-sm font-semibold text-primary">Why this wins</p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            You are not buying software. It is like hiring a full-time SEO operator
-            for the cost of one meal per month.
+            Draft faster. Publish on your site. Promote with a plan.
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Paste show notes or upload audio. Pull a complete growth asset bundle out.
+            Paste show notes or upload audio — pull a complete draft bundle, then edit and publish where Google can index
+            your words.
           </p>
         </div>
 
