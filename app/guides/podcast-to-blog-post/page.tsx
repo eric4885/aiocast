@@ -132,9 +132,19 @@ export default function PodcastToBlogGuidePage() {
         <strong>Tools:</strong> Descript, Riverside, Otter.ai, or your host&apos;s built-in export (Buzzsprout,
         Transistor, Substack, etc.).
       </p>
+
+      <h3>Podcast show notes template</h3>
       <p>
-        <strong>Pro tip:</strong> No full transcript? Paste bullet show notes or a rough outline instead. You need a
-        semantic data dump of the core ideas—not a literary script.
+        No full transcript yet? Use a structured outline instead of a wall of bullets. Our{" "}
+        <Link href="/guides/show-notes-template" className="text-primary hover:underline">
+          podcast show notes template
+        </Link>{" "}
+        gives you SEO-ready fields—hook, takeaways, topic seeds, and one listener question—so you can paste a semantic
+        data dump into the growth pack without waiting on a full transcript export.
+      </p>
+      <p>
+        <strong>Pro tip:</strong> Fill the template before you record when possible. Better inputs mean cleaner
+        subheadings and FAQ blocks in Step 3.
       </p>
 
       <h2>Step 2 — Pick one problem-solving target keyword</h2>
