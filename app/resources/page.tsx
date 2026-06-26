@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 
 const items = [
   {
-    title: "Podcast to blog post (SEO workflow)",
+    title: "Podcast to SEO blog post (5-step framework)",
     href: "/guides/podcast-to-blog-post",
-    description: "Turn episodes into search-ready articles with intent mapping and internal links.",
+    description: "Turn transcripts into SEO articles for Google and AI search — with real-world examples.",
     icon: FileText,
   },
   {
