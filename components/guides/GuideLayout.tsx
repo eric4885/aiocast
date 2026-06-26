@@ -25,8 +25,8 @@ export function GuideLayout({
         </p>
         <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-primary">Guide</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-        <p className="mt-4 text-lg text-muted-foreground">{description}</p>
-        <article className="prose prose-invert mt-10 max-w-none space-y-6 text-[15px] leading-relaxed text-muted-foreground [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_li]:mt-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:text-foreground [&_ul]:list-disc [&_ul]:pl-5">
+        <p className="mt-5 text-lg leading-relaxed text-muted-foreground sm:leading-loose">{description}</p>
+        <article className="prose prose-invert mt-10 max-w-none space-y-6 text-[15px] leading-relaxed text-muted-foreground [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:mt-8 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-foreground [&_li]:mt-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:text-foreground [&_ul]:list-disc [&_ul]:pl-5">
           {children}
         </article>
         <div className="mt-12 flex flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:items-center">

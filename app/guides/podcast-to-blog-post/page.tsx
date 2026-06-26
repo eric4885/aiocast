@@ -18,8 +18,13 @@ export const metadata: Metadata = {
   },
 };
 
-const externalLink =
-  "text-primary underline-offset-4 hover:underline";
+const externalLink = "text-primary underline-offset-4 hover:underline";
+
+const calloutBox =
+  "rounded-xl border border-border bg-secondary/40 p-5 text-base leading-relaxed text-foreground/90";
+
+const proCalloutBox =
+  "rounded-xl border border-primary/30 bg-secondary/40 p-5 text-base leading-relaxed text-foreground/90 sm:text-[17px]";
 
 export default function PodcastToBlogGuidePage() {
   return (
@@ -28,12 +33,14 @@ export default function PodcastToBlogGuidePage() {
       description="A practical workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
     >
       <h2>In short</h2>
-      <p>
-        Spotify and Apple Podcasts are closed ecosystems—they rarely send sustainable organic traffic to your domain. To
-        get free search traffic and show up in AI-generated answers, you need structured text on your own site. This
-        5-step checklist shows how to turn a transcript into an SEO-ready article in minutes, edit it like a human, and
-        promote it across channels.
-      </p>
+      <div className={calloutBox}>
+        <p className="m-0">
+          Spotify and Apple Podcasts are closed ecosystems—they rarely send sustainable organic traffic to your domain. To
+          get free search traffic and show up in AI-generated answers, you need structured text on your own site. This
+          5-step checklist shows how to turn a transcript into an SEO-ready article in minutes, edit it like a human,
+          and promote it across channels.
+        </p>
+      </div>
 
       <h2>Does this actually work? Two real examples</h2>
       <p>
@@ -262,14 +269,16 @@ export default function PodcastToBlogGuidePage() {
         </Link>
         .
       </p>
-      <p>
-        <strong>Go further:</strong>{" "}
-        <Link href="/pro-toolkit" className="text-primary hover:underline">
-          Start Pro for $1.90 your first month
-        </Link>{" "}
-        — unlimited packs so you can ship every week ($12/mo after). The free tier includes 3 runs per month if you want
-        to test before upgrading.
-      </p>
+      <div className={proCalloutBox}>
+        <p className="m-0">
+          <strong className="text-foreground">Go further:</strong>{" "}
+          <Link href="/pro-toolkit" className="font-semibold text-primary hover:underline">
+            Start Pro for $1.90 your first month
+          </Link>{" "}
+          — unlimited packs so you can ship every week ($12/mo after). The free tier includes 3 runs per month if you
+          want to test before upgrading.
+        </p>
+      </div>
     </GuideLayout>
   );
 }
