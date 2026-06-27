@@ -36,9 +36,12 @@ export default function PodcastToBlogGuidePage() {
       <div className={calloutBox}>
         <p className="m-0">
           Spotify and Apple Podcasts are closed ecosystems—they rarely send sustainable organic traffic to your domain. To
-          get free search traffic and show up in AI-generated answers, you need structured text on your own site. This
-          5-step checklist shows how to turn a transcript into an SEO-ready article in minutes, edit it like a human,
-          and promote it across channels.
+          get free search traffic and show up in AI-generated answers, you need structured text on your own site. On{" "}
+          <Link href="/" className="text-primary hover:underline">
+            AioCast
+          </Link>
+          , you can paste a full transcript and get a first draft in minutes; this 5-step checklist walks through
+          editing, on-page SEO, and promotion so you ship like a human—not a copy-paste bot.
         </p>
       </div>
 
@@ -266,11 +269,15 @@ export default function PodcastToBlogGuidePage() {
 
       <h2>Run it on your episode today</h2>
       <p>
-        Stop leaving spoken knowledge trapped in audio players. Paste a transcript or bullet notes into the{" "}
-        <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
-          AIOCAST Strategic SEO Engine
+        Stop leaving spoken knowledge trapped in audio players. Start on{" "}
+        <Link href="/" className="text-primary hover:underline">
+          AioCast
         </Link>
-        —get a long-form draft, FAQ blocks, and platform-specific scripts in one dashboard.
+        —paste a transcript or bullet notes into the{" "}
+        <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
+          free SEO growth pack
+        </Link>{" "}
+        and get a long-form draft, FAQ blocks, and platform-specific scripts in one dashboard.
       </p>
       <p>
         Want to see what the output looks like first? Browse our{" "}

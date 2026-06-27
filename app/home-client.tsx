@@ -37,6 +37,9 @@ export function HomePageClient() {
                 placeholder="Paste your transcript or show notes here — even a rough outline works…"
                 className="w-full resize-y rounded-xl border border-border bg-background px-4 py-3 text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               />
+              <p className="mt-2 text-xs text-muted-foreground">
+                Full transcripts welcome — paste everything, no need to trim.
+              </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <Button
                   type="submit"
