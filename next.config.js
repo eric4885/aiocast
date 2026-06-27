@@ -21,6 +21,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/",
+        has: [{ type: "query", key: "tab", value: "keyword" }],
+        destination: "/tools/title-generator",
+        permanent: false,
+      },
+      {
         source: "/downloads/pre-flight-checklist.md",
         destination: "/api/downloads/pre-flight-checklist",
         permanent: true,

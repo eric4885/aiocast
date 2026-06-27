@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/podcast-to-short-video",
     "/remote-recording-setup",
     "/tools/seo-growth-pack",
+    "/tools/title-generator",
     "/examples/sample-growth-pack",
     "/guides/podcast-to-blog-post",
     "/guides/podcast-faq-for-seo",

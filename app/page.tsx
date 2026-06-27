@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { AnalysisErrorBoundary } from "@/components/AnalysisErrorBoundary";
 import { siteConfig } from "@/lib/data";
 import { HomeLearnMore } from "@/components/seo/HomeLearnMore";
@@ -34,10 +33,8 @@ export default function HomePage() {
     <AnalysisErrorBoundary>
       <HomePageJsonLd />
       <HomeSeoIntro />
-      <Suspense fallback={<div className="min-h-[40vh] bg-background" aria-hidden />}>
-        <HomePageClient />
-        <HomeLearnMore />
-      </Suspense>
+      <HomePageClient />
+      <HomeLearnMore />
     </AnalysisErrorBoundary>
   );
 }

@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { samplePack } from "@/lib/sample-pack";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
+import { consumeTranscriptPrefill } from "@/lib/transcript-prefill";
 import { cn } from "@/lib/utils";
 
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -48,6 +49,14 @@ export function GrowthPackClient({
       setInputMode("audio");
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    const prefill = consumeTranscriptPrefill();
+    if (prefill) {
+      setTranscript(prefill);
+      setInputMode("transcript");
+    }
+  }, []);
 
   const validateFile = useCallback(async (next: File | null) => {
     setError(null);
