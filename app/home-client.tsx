@@ -303,14 +303,89 @@ export function HomePageClient() {
   }, [titleResult, submittedTopic]);
 
   return (
-    <section className="relative min-h-screen overflow-x-hidden bg-background bg-grid-subtle pb-[max(2.5rem,env(safe-area-inset-bottom))]">
+    <section className="relative overflow-x-hidden bg-background bg-grid-subtle pb-[max(2.5rem,env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-4xl px-4 pb-16 pt-4 sm:px-6 sm:pb-20 sm:pt-7 lg:pb-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Try an episode title or topic phrase below — then generate the full pack when you are ready.
+        <div id="generate-pack" className="mx-auto max-w-2xl text-center">
+          <div className="rounded-2xl border border-primary/40 bg-card/90 p-6 shadow-lg shadow-black/20 ring-1 ring-primary/20 sm:p-8">
+            <p className="text-[15px] leading-relaxed text-muted-foreground">
+              Drop your transcript or show notes — one pass gets your SEO draft pack.
+            </p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Button
+                size="lg"
+                className="min-h-[52px] w-full touch-manipulation px-8 text-base font-semibold sm:w-auto"
+                asChild
+              >
+                <Link href="/tools/seo-growth-pack#pack-transcript-only">
+                  <Rocket className="mr-2 h-4 w-4" />
+                  Generate Draft Pack
+                </Link>
+              </Button>
+              <Button size="lg" variant="secondary" className="min-h-[52px] w-full sm:w-auto" asChild>
+                <Link href="/examples/sample-growth-pack">See example output</Link>
+              </Button>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">Free tier · No credit card required</p>
+          </div>
+        </div>
+
+        <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
+          <h2 className="text-balance text-2xl font-bold leading-tight tracking-tight sm:text-[2rem] sm:leading-snug md:text-3xl">
+            What you get in one run
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
+            Skip the blank page. Paste once, edit like a human, and ship on your domain — rankings take weeks and are
+            never guaranteed.
+          </p>
+          <ul className="mx-auto mt-8 max-w-lg space-y-3 text-left text-[15px] leading-relaxed text-muted-foreground">
+            <li className="flex gap-2">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+              <span>
+                <strong className="text-foreground">SEO article draft</strong> — intent-based headings, meta description,
+                and keywords
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+              <span>
+                <strong className="text-foreground">FAQ blocks</strong> — structured Q&amp;A for Google and AI search
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+              <span>
+                <strong className="text-foreground">Social scripts</strong> — LinkedIn, X, and newsletter copy
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+              <span>
+                <strong className="text-foreground">7-day publish plan</strong> — a rhythm to ship every week
+              </span>
+            </li>
+          </ul>
+          <Button
+            size="lg"
+            className="mx-auto mt-8 flex min-h-[52px] w-full max-w-md touch-manipulation px-8 text-base font-semibold sm:min-h-12 sm:px-10"
+            asChild
+          >
+            <Link href="/tools/seo-growth-pack#pack-transcript-only">
+              <Rocket className="mr-2 h-4 w-4" />
+              Generate Draft Pack
+            </Link>
+          </Button>
+        </div>
+
+        <div id="analyze-tool" className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 sm:mt-14 sm:pt-10">
+          <h2 className="text-center text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+            Optional: free episode title ideas
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
+            Bonus tool — sharpen your episode headline before you record. For the full article and social scripts, use
+            Generate Draft Pack above.
           </p>
 
-          <form id="analyze-tool" onSubmit={handleAnalyze} className="relative z-10 mx-auto mt-4 max-w-2xl sm:mt-6">
+          <form onSubmit={handleAnalyze} className="relative z-10 mx-auto mt-6 max-w-2xl">
             <div className="rounded-2xl border border-border bg-card/90 p-3 shadow-lg shadow-black/20 ring-1 ring-border/80 sm:p-5">
               {HOME_RSS_UI_ENABLED && (
               <div
@@ -367,7 +442,7 @@ export function HomePageClient() {
                   placeholder={
                     HOME_RSS_UI_ENABLED && analysisMode === "rss"
                       ? "Your RSS URL"
-                      : "e.g. Try an episode title or topic (optional)"
+                      : "Episode title or topic phrase"
                   }
                   className="min-h-[48px] border-border bg-background px-3 text-base text-foreground placeholder:text-muted-foreground sm:px-4 md:text-sm"
                   autoComplete={HOME_RSS_UI_ENABLED && analysisMode === "rss" ? "url" : "on"}
@@ -411,10 +486,6 @@ export function HomePageClient() {
               {optimizeError}
             </div>
           )}
-
-          <p className="mt-4 text-sm font-medium text-foreground/90">
-            Every great podcast deserves to be heard.
-          </p>
         </div>
 
         {analysisMode === "keyword" && optimizeLoading && (
@@ -781,76 +852,8 @@ export function HomePageClient() {
         )}
 
         <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
-          <p className="text-balance text-2xl font-bold leading-tight tracking-tight sm:text-[2rem] sm:leading-snug md:text-4xl">
-            What you get today
-          </p>
-          <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-            The main product is the <strong className="text-foreground">SEO growth pack</strong> — everything below the
-            button. The title box above is a free bonus to sharpen episode headlines.
-          </p>
-          <div className="mx-auto mt-8 max-w-xl space-y-6 text-left text-[15px] leading-relaxed text-muted-foreground">
-            <div>
-              <p className="text-base font-semibold text-foreground">SEO growth pack</p>
-              <ul className="mt-3 space-y-2">
-                <li className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>SEO article draft with meta description &amp; keywords</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>FAQ blocks, social scripts (X, LinkedIn, Substack)</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>SRT &amp; highlights from your transcript</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>7-day publish plan</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-base font-semibold text-foreground">Title tryout (this page)</p>
-              <ul className="mt-3 space-y-2">
-                <li className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>1 recommended title plus up to 3 alternate angles per run</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>Topic breadth hint (broad / moderate / narrow — you pick the angle)</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-                  <span>Suggested topic keywords (optional starting points — not rankings or volume data)</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <p className="mx-auto mt-8 max-w-xl text-left text-sm font-semibold text-foreground">How the title tryout works</p>
-          <ol className="mx-auto mt-3 max-w-xl space-y-3 text-left text-[15px] leading-relaxed text-muted-foreground">
-            <li>
-              <strong className="text-foreground">1. Topic anchor — </strong>
-              Your phrase is locked into every variant so titles stay on your episode theme.
-            </li>
-            <li>
-              <strong className="text-foreground">2. Topic breadth — </strong>
-              We label whether your phrase reads broad or narrow — a framing hint only; you choose the final angle.
-            </li>
-            <li>
-              <strong className="text-foreground">3. Pick &amp; copy — </strong>
-              Choose the line that fits your episode, copy it, then run the growth pack for the full article and scripts.
-            </li>
-          </ol>
-          <Button size="lg" className="mx-auto mt-6 flex min-h-[52px] w-full max-w-md touch-manipulation px-8 text-base font-semibold sm:min-h-12 sm:px-10" asChild>
-            <Link href="/tools/seo-growth-pack">
-              <Rocket className="mr-2 h-4 w-4" />
-              Generate SEO pack
-            </Link>
-          </Button>
-          <p className="mx-auto mt-3 max-w-md text-center text-xs text-muted-foreground">
-            No credit card required. Paste a transcript on the free tool to generate your pack.
+          <p className="mx-auto max-w-md text-center text-xs text-muted-foreground">
+            No credit card required on the free tier. Paste a transcript on the tool page to generate your pack.
           </p>
           <p className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-foreground sm:gap-x-3">
             <span className="inline-flex min-h-[44px] items-center">© {new Date().getFullYear()} AioCast.com</span>

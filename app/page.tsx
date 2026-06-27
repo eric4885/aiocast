@@ -4,26 +4,35 @@ import { AnalysisErrorBoundary } from "@/components/AnalysisErrorBoundary";
 import { siteConfig } from "@/lib/data";
 import { HomeLearnMore } from "@/components/seo/HomeLearnMore";
 import { HomeSeoIntro } from "@/components/seo/HomeSeoIntro";
+import { homePageJsonLd } from "@/lib/home-page-schema";
 import { HomePageClient } from "./home-client";
 
 export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
-  title: "Paste show notes → podcast SEO article & social scripts",
+  title: "Turn podcast into SEO blog posts in minutes — free draft pack",
   description:
-    "Free podcast repurposing tool: paste transcript or show notes, get an SEO blog draft, FAQ blocks, social scripts, and a 7-day schedule.",
+    "Paste transcript or show notes — get an SEO article draft, FAQ blocks, and social scripts in minutes. Free tier, no credit card.",
   openGraph: {
     url: siteConfig.url,
-    title: "Paste show notes → podcast SEO growth pack",
+    title: "Turn your podcast into SEO blog posts in minutes",
     description:
-      "Turn one podcast episode into search-ready content — blog draft, social scripts, and publish plan.",
+      "Stop wasting traffic in podcast apps. Paste notes or transcript for an SEO draft, FAQ blocks, and social scripts.",
   },
 };
+
+function HomePageJsonLd() {
+  const payload = homePageJsonLd();
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />
+  );
+}
 
 export default function HomePage() {
   return (
     <AnalysisErrorBoundary>
+      <HomePageJsonLd />
       <HomeSeoIntro />
       <Suspense fallback={<div className="min-h-[40vh] bg-background" aria-hidden />}>
         <HomePageClient />
