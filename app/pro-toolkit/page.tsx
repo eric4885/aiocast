@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { CheckoutButtons } from "@/components/pricing/CheckoutButtons";
 import { ProStatusChecker } from "@/components/pricing/ProStatusChecker";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { freePerks, pricing, proPerks } from "@/lib/pricing";
@@ -80,13 +81,17 @@ export default function ProToolkitPage({
           <Card className="border-primary/45 bg-secondary/70 shadow-glow">
             <CardContent className="space-y-6 p-8">
               <div>
-                <p className="text-sm font-semibold text-accent">Pro — launch pricing</p>
-                <div className="mt-2 flex flex-wrap items-baseline gap-2">
+                <p className="text-sm font-semibold text-accent">Pro</p>
+                <Badge className="mt-3 border border-primary/40 bg-primary/15 text-primary hover:bg-primary/15">
+                  Launch offer — first month only ${pricing.pro.firstMonthUsd}
+                </Badge>
+                <div className="mt-4 flex flex-wrap items-baseline gap-2">
                   <span className="text-4xl font-bold">${pricing.pro.monthlyUsd}</span>
-                  <span className="text-muted-foreground">/month</span>
+                  <span className="text-lg text-muted-foreground">/ month</span>
                 </div>
-                <p className="mt-2 text-sm text-success font-medium">
-                  First month ${pricing.pro.firstMonthUsd} · or ${pricing.pro.annualUsd}/year
+                <p className="mt-2 text-sm text-muted-foreground">Standard monthly price after your first month.</p>
+                <p className="mt-3 text-sm text-foreground/90">
+                  Or <strong className="text-foreground">${pricing.pro.annualUsd}/year</strong> billed annually
                 </p>
                 <p className="mt-2 text-xs text-muted-foreground">
                   First {pricing.pro.annualEarlyBirdSlots} annual subscribers automatically get{" "}

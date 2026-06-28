@@ -64,27 +64,32 @@ export function CheckoutButtons({ defaultEmail = "", compact = false }: Props) {
       <div className={compact ? "flex flex-col gap-2 sm:flex-row" : "grid gap-3 sm:grid-cols-2"}>
         <Button
           size={compact ? "sm" : "lg"}
-          className="w-full"
+          className="h-auto w-full flex-col gap-0.5 py-3"
           disabled={loading !== null}
           onClick={() => void startCheckout("monthly")}
         >
           {loading === "monthly" ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : null}
-          Pro ${pricing.pro.monthlyUsd}/mo
-          <span className="ml-1 text-xs opacity-80">(first month ${pricing.pro.firstMonthUsd})</span>
+          <span>Start Pro — ${pricing.pro.monthlyUsd}/mo</span>
+          {!compact && (
+            <span className="text-xs font-normal opacity-90">
+              First month ${pricing.pro.firstMonthUsd}, then ${pricing.pro.monthlyUsd}/mo
+            </span>
+          )}
         </Button>
         <Button
           size={compact ? "sm" : "lg"}
           variant="secondary"
-          className="w-full"
+          className="h-auto w-full flex-col gap-0.5 py-3"
           disabled={loading !== null}
           onClick={() => void startCheckout("annual")}
         >
           {loading === "annual" ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : null}
-          ${pricing.pro.annualUsd}/year
+          <span>${pricing.pro.annualUsd}/year</span>
+          {!compact && <span className="text-xs font-normal opacity-80">Billed annually</span>}
         </Button>
       </div>
 
