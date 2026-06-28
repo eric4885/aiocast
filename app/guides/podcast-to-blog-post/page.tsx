@@ -135,15 +135,27 @@ export default function PodcastToBlogGuidePage() {
         <strong>Tools:</strong> Descript, Riverside, Otter.ai, or your host&apos;s built-in export (Buzzsprout,
         Transistor, Substack, etc.).
       </p>
+      <p>
+        Before you export, run through our{" "}
+        <Link href="/resources/pre-flight-checklist" className="text-primary hover:underline">
+          preflight checklist for podcast recording
+        </Link>{" "}
+        — clean audio means cleaner transcripts and less time fixing garbage before SEO editing.
+      </p>
 
       <h3>Podcast show notes template</h3>
       <p>
-        No full transcript yet? Use a structured outline instead of a wall of bullets. Our{" "}
+        No full transcript yet? Use a structured outline instead of a wall of bullets. Fill in a hook, three to five
+        takeaways, topic seeds for future H2 headings, and one listener question — that semantic dump is enough to feed
+        the growth pack without waiting on a full transcript export. See the{" "}
         <Link href="/guides/show-notes-template" className="text-primary hover:underline">
-          podcast show notes template
+          full copy-paste outline
         </Link>{" "}
-        gives you SEO-ready fields—hook, takeaways, topic seeds, and one listener question—so you can paste a semantic
-        data dump into the growth pack without waiting on a full transcript export.
+        when you want the blank fields; paste the result into the{" "}
+        <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
+          free SEO growth pack
+        </Link>{" "}
+        when you are ready to generate.
       </p>
       <p>
         <strong>Pro tip:</strong> Fill the template before you record when possible. Better inputs mean cleaner
