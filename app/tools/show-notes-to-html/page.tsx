@@ -36,13 +36,11 @@ function FaqJsonLd() {
   );
 }
 
-/** Gray release: noindex until QA pass — then remove robots override and add to sitemap.ts */
 export const metadata: Metadata = {
   title: "Show notes to HTML converter — free paste tool for podcasters",
   description:
     "Convert podcast show notes or Markdown outlines to paste-ready HTML for WordPress and Ghost. Free, runs in your browser.",
   alternates: { canonical },
-  robots: { index: false, follow: true },
   openGraph: {
     title: "Show notes to HTML converter",
     description: "Paste show notes — get HTML for your episode page.",

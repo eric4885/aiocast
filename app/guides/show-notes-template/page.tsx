@@ -140,6 +140,11 @@ One listener question this episode answers: What is the cheapest way to get sepa
             Example growth pack output
           </Link>
         </li>
+        <li>
+          <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
+            Show notes → HTML converter
+          </Link>
+        </li>
       </ul>
     </GuideLayout>
   );

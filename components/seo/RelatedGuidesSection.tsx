@@ -16,6 +16,11 @@ const guides = [
     description: "Copy-paste outline when you do not have a full transcript yet.",
   },
   {
+    href: "/tools/show-notes-to-html",
+    title: "Show notes → HTML converter",
+    description: "Paste your outline — get WordPress-ready HTML without a CMS plugin.",
+  },
+  {
     href: "/resources/pre-flight-checklist",
     title: "Preflight recording checklist",
     description: "Room noise, gain staging, and backups — cleaner audio means better transcripts.",

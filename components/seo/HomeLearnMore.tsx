@@ -27,6 +27,11 @@ export function HomeLearnMore() {
             </Link>
           </li>
           <li>
+            <Link href="/tools/show-notes-to-html" className="font-medium text-primary underline-offset-4 hover:underline">
+              Show notes → HTML converter
+            </Link>
+          </li>
+          <li>
             <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
               Example growth pack
             </Link>

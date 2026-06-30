@@ -116,6 +116,10 @@ export function HomePageClient() {
             <Link href="/tools/free-podcast-title-generator" className="font-medium text-primary underline-offset-4 hover:underline">
               Try the free title generator
             </Link>
+            . Formatting notes for your site?{" "}
+            <Link href="/tools/show-notes-to-html" className="font-medium text-primary underline-offset-4 hover:underline">
+              Show notes → HTML
+            </Link>
             .
           </p>
         </div>

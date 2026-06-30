@@ -120,6 +120,16 @@ export function Footer() {
 
             <li>
 
+              <Link className="hover:text-foreground" href="/tools/show-notes-to-html">
+
+                Show notes to HTML converter
+
+              </Link>
+
+            </li>
+
+            <li>
+
               <Link className="hover:text-foreground" href="/examples/sample-growth-pack">
 
                 Sample growth pack output

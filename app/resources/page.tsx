@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ListChecks, Mic } from "lucide-react";
+import { Code, FileText, ListChecks, Mic } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { siteConfig } from "@/lib/data";
 
@@ -28,6 +28,12 @@ const items = [
     href: "/guides/show-notes-template",
     description: "Copy-paste template before you run the growth pack generator.",
     icon: FileText,
+  },
+  {
+    title: "Show notes to HTML converter",
+    href: "/tools/show-notes-to-html",
+    description: "Turn outlines or Markdown show notes into paste-ready HTML for WordPress and Ghost.",
+    icon: Code,
   },
   {
     title: "Pre-flight recording checklist",
