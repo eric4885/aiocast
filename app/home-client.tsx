@@ -113,7 +113,7 @@ export function HomePageClient() {
           </Button>
           <p className="mx-auto mt-6 text-sm text-muted-foreground">
             Need episode title ideas only?{" "}
-            <Link href="/tools/title-generator" className="font-medium text-primary underline-offset-4 hover:underline">
+            <Link href="/tools/free-podcast-title-generator" className="font-medium text-primary underline-offset-4 hover:underline">
               Try the free title generator
             </Link>
             .

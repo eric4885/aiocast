@@ -21,10 +21,15 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/tools/title-generator",
+        destination: "/tools/free-podcast-title-generator",
+        permanent: true,
+      },
+      {
         source: "/",
         has: [{ type: "query", key: "tab", value: "keyword" }],
-        destination: "/tools/title-generator",
-        permanent: false,
+        destination: "/tools/free-podcast-title-generator",
+        permanent: true,
       },
       {
         source: "/downloads/pre-flight-checklist.md",
