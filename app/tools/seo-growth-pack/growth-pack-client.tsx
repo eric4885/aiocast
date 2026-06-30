@@ -11,6 +11,7 @@ import { samplePack } from "@/lib/sample-pack";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { consumeTranscriptPrefill } from "@/lib/transcript-prefill";
 import { cn } from "@/lib/utils";
+import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 const MAX_SECONDS = 300;
@@ -550,6 +551,10 @@ export function GrowthPackClient({
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        <div className="mt-12 max-w-3xl">
+          <RelatedGuidesSection />
         </div>
       </div>
     </div>

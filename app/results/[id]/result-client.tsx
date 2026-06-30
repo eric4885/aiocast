@@ -24,6 +24,7 @@ import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { FaqSchemaSection } from "@/components/results/FaqSchemaSection";
 import { PublishWorkflowCard } from "@/components/results/PublishWorkflowCard";
 import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
+import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -679,6 +680,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       </Card>
 
       <PublishChecklist />
+
+      <RelatedGuidesSection />
 
       <div className="flex flex-col items-center gap-3 pb-8 sm:flex-row sm:justify-center">
         <Button size="lg" asChild>
