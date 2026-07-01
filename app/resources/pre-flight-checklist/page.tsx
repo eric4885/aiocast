@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { SubscribeForm } from "@/components/shared/SubscribeForm";
 import { SavePdfButton } from "./print-button";
 import { CHECKLIST_MD_PATH } from "@/lib/checklist-markdown";
+import { newsletterBlurb } from "@/lib/pricing-copy";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -173,7 +174,7 @@ export default function PreFlightChecklistPage() {
               source="preflight_checklist"
               submitLabel="Send me the briefing"
               layout="stack"
-              finePrint="Weekly AI tools for podcasters. Unsubscribe anytime."
+              finePrint={newsletterBlurb}
             />
           </CardContent>
         </Card>

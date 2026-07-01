@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideLayout } from "@/components/guides/GuideLayout";
 import { siteConfig } from "@/lib/data";
+import { pricing } from "@/lib/pricing";
+import { freeTierProMention } from "@/lib/pricing-copy";
 
 const faq = [
   {
@@ -61,7 +63,7 @@ export default function PodcastToBlogGuidePage() {
     <>
     <FaqJsonLd />
     <GuideLayout
-      title="How to Turn a Podcast Episode into an SEO Blog Post: A 5-Step Framework"
+      title="Podcast to Blog Post: 5-Step SEO Framework"
       description="A practical workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
     >
       <h2>In short</h2>
@@ -268,7 +270,7 @@ export default function PodcastToBlogGuidePage() {
         <Link href="/guides/podcast-faq-for-seo" className="text-primary hover:underline">
           Podcast FAQ blocks for SEO guide
         </Link>
-        .
+        . Need a refresher on FAQ structure before you publish? Same guide walks through honest Q&amp;A pairs.
       </p>
 
       <h2>Step 4 — Implement basic on-page SEO</h2>
@@ -360,7 +362,7 @@ export default function PodcastToBlogGuidePage() {
           <Link href="/pro-toolkit" className="font-semibold text-primary hover:underline">
             Start Pro for $1.90 your first month
           </Link>{" "}
-          — unlimited packs so you can ship every week ($12/mo after). The free tier includes 3 runs per month if you
+          — unlimited packs so you can ship every week (${pricing.pro.monthlyUsd}/mo after). {freeTierProMention()} if you
           want to test before upgrading.
         </p>
       </div>

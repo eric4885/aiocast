@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { SubscribeForm } from "@/components/shared/SubscribeForm";
 
 import { siteConfig } from "@/lib/data";
+import { newsletterBlurb, newsletterHeading } from "@/lib/pricing-copy";
 
 
 
@@ -160,15 +161,9 @@ export function Footer() {
 
             <li>
 
-              <Link className="hover:text-foreground" href="/podcast-to-short-video">
+              <Link className="hover:text-foreground" href="/remote-recording-setup">
 
-                Podcast social script templates{" "}
-
-                <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-amber-200">
-
-                  Coming soon
-
-                </span>
+                7-day publish plan guide
 
               </Link>
 
@@ -176,9 +171,9 @@ export function Footer() {
 
             <li>
 
-              <Link className="hover:text-foreground" href="/remote-recording-setup">
+              <Link className="hover:text-foreground" href="/podcast-to-short-video">
 
-                7-day publish plan guide
+                Podcast social scripts (in pack)
 
               </Link>
 
@@ -212,11 +207,11 @@ export function Footer() {
 
         <div>
 
-          <p className="text-sm font-semibold text-foreground">Weekly AI tools briefing</p>
+          <p className="text-sm font-semibold text-foreground">{newsletterHeading}</p>
 
           <p className="mt-2 text-sm text-muted-foreground">
 
-            One email per week — new workflows, benchmarks, and template updates.
+            {newsletterBlurb}
 
           </p>
 

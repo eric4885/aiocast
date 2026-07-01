@@ -74,7 +74,7 @@ export function CheckoutButtons({ defaultEmail = "", compact = false }: Props) {
           <span>Start Pro — ${pricing.pro.monthlyUsd}/mo</span>
           {!compact && (
             <span className="text-xs font-normal opacity-90">
-              First month ${pricing.pro.firstMonthUsd}, then ${pricing.pro.monthlyUsd}/mo
+              First month ${pricing.pro.firstMonthUsd}, then ${pricing.pro.monthlyUsd}/mo · Renews monthly · cancel anytime
             </span>
           )}
         </Button>
@@ -89,7 +89,7 @@ export function CheckoutButtons({ defaultEmail = "", compact = false }: Props) {
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : null}
           <span>${pricing.pro.annualUsd}/year</span>
-          {!compact && <span className="text-xs font-normal opacity-80">Billed annually</span>}
+          {!compact && <span className="text-xs font-normal opacity-80">Separate annual checkout · not auto-switched from monthly</span>}
         </Button>
       </div>
 

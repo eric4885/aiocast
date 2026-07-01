@@ -12,6 +12,8 @@ import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { consumeTranscriptPrefill } from "@/lib/transcript-prefill";
 import { cn } from "@/lib/utils";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
+import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
+import { aiDraftDisclaimer, freeLimitsToolLine } from "@/lib/pricing-copy";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 const MAX_SECONDS = 300;
@@ -189,7 +191,7 @@ export function GrowthPackClient({
 
   return (
     <div className="border-b border-border bg-gradient-hero bg-grid-subtle">
-      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:py-24">
+      <div className="mx-auto max-w-5xl px-4 pb-24 py-16 sm:px-6 lg:py-24">
         {fromRemoteSetup && (
           <div className="mb-8 rounded-2xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-muted-foreground sm:px-5">
             <span className="font-semibold text-primary">Tip:</span> Upload up to{" "}
@@ -208,7 +210,7 @@ export function GrowthPackClient({
           <ul className="mt-2 space-y-1">
             <li>Paste transcript/show notes, or upload audio for automatic transcription</li>
             <li>Audio: up to 5 minutes · 10 MB max · MP3, M4A, or WAV recommended</li>
-            <li>Per email: 3 free runs per month · Per IP: 3 per day</li>
+            <li>{freeLimitsToolLine}</li>
             <li>
               <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
                 Pro
@@ -295,8 +297,8 @@ export function GrowthPackClient({
                             </span>
                           ) : (
                             <>
-                              Add existing show notes to enhance context
-                              <span className="text-xs text-muted-foreground/80">(optional)</span>
+                              Skip — audio only is fine
+                              <span className="text-xs text-muted-foreground/80"> · or add notes (optional)</span>
                             </>
                           )}
                         </button>
@@ -396,6 +398,7 @@ export function GrowthPackClient({
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">Step 3</p>
                 <p className="mt-1 text-base font-semibold text-foreground">Generate</p>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{aiDraftDisclaimer}</p>
                 {error && (
                   <p className="mt-2 text-sm text-rose-300" role="alert">
                     {error}
@@ -556,6 +559,8 @@ export function GrowthPackClient({
         <div className="mt-12 max-w-3xl">
           <RelatedGuidesSection />
         </div>
+
+        <ProStickyPromo className="mt-8 lg:hidden" />
       </div>
     </div>
   );

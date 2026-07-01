@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,16 +14,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const generateLinks = [
+  { href: "/tools/seo-growth-pack", label: "SEO growth pack" },
+  { href: "/tools/free-podcast-title-generator", label: "Title generator" },
+  { href: "/tools/show-notes-to-html", label: "Show notes → HTML" },
+] as const;
+
 const nav = [
-  { href: "/tools/seo-growth-pack", label: "Generate" },
-  { href: "/ai-podcast-editing-stack", label: "How it works" },
+  { href: "/guides/podcast-to-blog-post", label: "How it works" },
   { href: "/resources", label: "Resources" },
 ] as const;
+
+function isGeneratePath(pathname: string) {
+  return generateLinks.some((l) => pathname === l.href || pathname.startsWith(`${l.href}/`));
+}
 
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const isHome = pathname === "/";
+  const generateActive = isGeneratePath(pathname);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md">
@@ -35,22 +44,41 @@ export function Header() {
           </span>
         </Link>
 
-        {!isHome && (
-          <nav className="hidden items-center gap-1 md:flex">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
+        <nav className="hidden items-center gap-1 md:flex">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
                 className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground",
-                  pathname === item.href && "bg-secondary text-foreground",
+                  "inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary hover:text-foreground",
+                  generateActive ? "bg-secondary text-foreground" : "text-muted-foreground",
                 )}
               >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        )}
+                Generate
+                <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-52 border-border bg-secondary">
+              {generateLinks.map((item) => (
+                <DropdownMenuItem key={item.href} asChild>
+                  <Link href={item.href}>{item.label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {nav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground",
+                pathname === item.href && "bg-secondary text-foreground",
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
         <div className="hidden items-center gap-2 md:flex">
           <Button variant="secondary" size="sm" asChild>
@@ -74,6 +102,17 @@ export function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 border-border bg-secondary">
+              <p className="px-2 py-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Generate
+              </p>
+              {generateLinks.map((item) => (
+                <DropdownMenuItem key={item.href} asChild>
+                  <Link href={item.href} onClick={() => setOpen(false)}>
+                    {item.label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator className="bg-border" />
               {nav.map((item) => (
                 <DropdownMenuItem key={item.href} asChild>
                   <Link href={item.href} onClick={() => setOpen(false)}>
@@ -85,11 +124,6 @@ export function Header() {
               <DropdownMenuItem asChild>
                 <Link href="/pro-toolkit" onClick={() => setOpen(false)}>
                   Pricing
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/tools/seo-growth-pack" onClick={() => setOpen(false)}>
-                  Generate pack
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>

@@ -25,6 +25,7 @@ import { FaqSchemaSection } from "@/components/results/FaqSchemaSection";
 import { PublishWorkflowCard } from "@/components/results/PublishWorkflowCard";
 import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
+import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -384,7 +385,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
     (pack.transcript ? articleNeedsDistinctRewrite(pack.seoArticle.body, pack.transcript) : false);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-4 py-14">
+    <div className="mx-auto max-w-5xl space-y-6 px-4 pb-24 py-14">
       {copyToast && (
         <p
           className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-100 shadow-lg"
@@ -683,7 +684,9 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       <RelatedGuidesSection />
 
-      <div className="flex flex-col items-center gap-3 pb-8 sm:flex-row sm:justify-center">
+      <ProStickyPromo className="mb-4 sm:mb-0" />
+
+      <div className="flex flex-col items-center gap-3 pb-24 sm:pb-8 sm:flex-row sm:justify-center">
         <Button size="lg" asChild>
           <Link href="/pro-toolkit">See Pro pricing</Link>
         </Button>

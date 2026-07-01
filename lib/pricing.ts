@@ -24,7 +24,8 @@ export const proPerks = [
 ] as const;
 
 export const freePerks = [
-  "3 generations per day per IP",
+  `${pricing.free.ipDailyLimit} generations per day per IP`,
+  `${pricing.free.emailMonthlyLimit} generations per month per email`,
   "Full SEO article draft, FAQ blocks, social scripts",
   "Markdown & HTML download",
   "Email backup & pack recovery",

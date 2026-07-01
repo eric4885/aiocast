@@ -2,11 +2,13 @@
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { CheckoutButtons } from "@/components/pricing/CheckoutButtons";
+import { PricingTrustBlock } from "@/components/pricing/PricingTrustBlock";
 import { ProStatusChecker } from "@/components/pricing/ProStatusChecker";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { freePerks, pricing, proPerks } from "@/lib/pricing";
+import { freeTierPricingLine } from "@/lib/pricing-copy";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -27,9 +29,39 @@ export default function ProToolkitPage({
   searchParams?: { checkout?: string };
 }) {
   const checkout = searchParams?.checkout;
+  const base = siteConfig.url.replace(/\/$/, "");
+
+  const offerJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "AioCast Pro",
+    description: "Unlimited podcast SEO growth pack generations with FAQ JSON-LD export.",
+    brand: { "@type": "Brand", name: siteConfig.name },
+    offers: [
+      {
+        "@type": "Offer",
+        name: "Monthly",
+        price: pricing.pro.monthlyUsd,
+        priceCurrency: "USD",
+        url: `${base}/pro-toolkit`,
+        priceValidUntil: "2027-12-31",
+        description: `First month promotional price $${pricing.pro.firstMonthUsd}, then $${pricing.pro.monthlyUsd}/month.`,
+      },
+      {
+        "@type": "Offer",
+        name: "Annual",
+        price: pricing.pro.annualUsd,
+        priceCurrency: "USD",
+        url: `${base}/pro-toolkit`,
+        priceValidUntil: "2027-12-31",
+        description: `Billed annually at $${pricing.pro.annualUsd}/year.`,
+      },
+    ],
+  };
 
   return (
     <div className="border-b border-border bg-gradient-hero bg-grid-subtle">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offerJsonLd) }} />
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:py-24">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Pricing</p>
         <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">Simple plans for podcast SEO</h1>
@@ -60,9 +92,7 @@ export default function ProToolkitPage({
               <div>
                 <p className="text-sm font-semibold text-muted-foreground">Free</p>
                 <p className="mt-2 text-4xl font-bold">$0</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {pricing.free.ipDailyLimit} packs / day per IP · last {pricing.free.packHistoryLimit} saved packs
-                </p>
+                <p className="mt-1 text-sm text-muted-foreground">{freeTierPricingLine()}</p>
               </div>
               <ul className="space-y-3">
                 {freePerks.map((item) => (
@@ -110,6 +140,8 @@ export default function ProToolkitPage({
             </CardContent>
           </Card>
         </div>
+
+        <PricingTrustBlock />
 
         <ProStatusChecker />
 

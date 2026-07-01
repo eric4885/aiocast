@@ -32,6 +32,11 @@ export function HomeLearnMore() {
             </Link>
           </li>
           <li>
+            <Link href="/guides/podcast-faq-for-seo" className="font-medium text-primary underline-offset-4 hover:underline">
+              FAQ blocks for SEO
+            </Link>
+          </li>
+          <li>
             <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
               Example growth pack
             </Link>

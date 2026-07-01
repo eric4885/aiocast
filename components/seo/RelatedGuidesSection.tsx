@@ -21,6 +21,11 @@ const guides = [
     description: "Paste your outline — get WordPress-ready HTML without a CMS plugin.",
   },
   {
+    href: "/guides/podcast-faq-for-seo",
+    title: "FAQ blocks for SEO",
+    description: "Structure Q&A pairs for snippets and AI answer engines — with JSON-LD tips.",
+  },
+  {
     href: "/resources/pre-flight-checklist",
     title: "Preflight recording checklist",
     description: "Room noise, gain staging, and backups — cleaner audio means better transcripts.",

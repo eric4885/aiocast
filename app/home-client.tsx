@@ -6,7 +6,7 @@ import { FormEvent, useState } from "react";
 import { Check, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
-import { pricing } from "@/lib/pricing";
+import { freeHeroTagline } from "@/lib/pricing-copy";
 import { saveTranscriptPrefill } from "@/lib/transcript-prefill";
 
 export function HomePageClient() {
@@ -33,12 +33,23 @@ export function HomePageClient() {
                 id="home-transcript"
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
-                rows={6}
+                rows={4}
                 placeholder="Paste your transcript or show notes here — even a rough outline works…"
-                className="w-full resize-y rounded-xl border border-border bg-background px-4 py-3 text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="w-full resize-y rounded-xl border border-border bg-background px-4 py-3 text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-sm:max-h-40 max-sm:overscroll-y-contain md:min-h-[180px]"
+                style={{ touchAction: "manipulation" }}
               />
               <p className="mt-2 text-xs text-muted-foreground">
                 Full transcripts welcome — paste everything, no need to trim.
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                No transcript yet?{" "}
+                <Link href="/guides/show-notes-template" className="font-medium text-primary underline-offset-4 hover:underline">
+                  Show notes template
+                </Link>
+                {" → "}
+                <Link href="/tools/seo-growth-pack#pack-transcript-only" className="font-medium text-primary underline-offset-4 hover:underline">
+                  Generate
+                </Link>
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <Button
@@ -60,7 +71,7 @@ export function HomePageClient() {
                 </Button>
               </div>
               <p className="mt-4 text-center text-sm font-medium text-foreground">
-                {pricing.free.ipDailyLimit} free packs per day · No credit card required
+                {freeHeroTagline}
               </p>
             </div>
           </form>
@@ -125,6 +136,29 @@ export function HomePageClient() {
         </div>
 
         <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
+          <p className="text-sm font-semibold text-foreground">Explore tools &amp; guides</p>
+          <ul className="mx-auto mt-3 flex max-w-lg flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+            <li>
+              <Link href="/guides/podcast-to-blog-post" className="text-primary underline-offset-4 hover:underline">
+                Podcast → blog guide
+              </Link>
+            </li>
+            <li>
+              <Link href="/tools/free-podcast-title-generator" className="text-primary underline-offset-4 hover:underline">
+                Title generator
+              </Link>
+            </li>
+            <li>
+              <Link href="/tools/show-notes-to-html" className="text-primary underline-offset-4 hover:underline">
+                Show notes → HTML
+              </Link>
+            </li>
+            <li>
+              <Link href="/examples/sample-growth-pack" className="text-primary underline-offset-4 hover:underline">
+                Example output
+              </Link>
+            </li>
+          </ul>
           <p className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-foreground sm:gap-x-3">
             <span className="inline-flex min-h-[44px] items-center">© {new Date().getFullYear()} AioCast.com</span>
             <span aria-hidden className="hidden text-border sm:inline">

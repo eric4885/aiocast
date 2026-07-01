@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { faqItems, siteConfig } from "@/lib/data";
+import { aiDraftDisclaimer, freeLimitsHelpLine } from "@/lib/pricing-copy";
 import {
   Accordion,
   AccordionContent,
@@ -47,9 +48,12 @@ export default function HelpPage() {
             to 5 minutes of audio (MP3, M4A, or WAV) for automatic transcription on the free tier.
           </li>
           <li>
-            <strong className="text-foreground">Limits:</strong> When enabled: three runs per email per calendar month
-            (when an email is provided), three per IP per day, and about one minute between submissions from the same IP.
-            During launch we may temporarily relax caps — check the tool page for the current status.
+            <strong className="text-foreground">Limits:</strong> When enabled: {freeLimitsHelpLine()}, and about one
+            minute between submissions from the same IP. During launch we may temporarily relax caps — check the tool
+            page for the current status.
+          </li>
+          <li>
+            <strong className="text-foreground">AI output:</strong> {aiDraftDisclaimer}
           </li>
           <li>
             <strong className="text-foreground">Delivery:</strong> Your pack opens on-site as soon as generation
@@ -63,6 +67,10 @@ export default function HelpPage() {
           {" · "}
           <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary hover:underline">
             Workflow guide
+          </Link>
+          {" · "}
+          <Link href="/guides/podcast-faq-for-seo" className="font-medium text-primary hover:underline">
+            FAQ for SEO
           </Link>
           {" · "}
           <Link href="/examples/sample-growth-pack" className="font-medium text-primary hover:underline">

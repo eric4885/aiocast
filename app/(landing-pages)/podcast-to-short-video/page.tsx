@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description:
     "Social script workflow preview — today, X, LinkedIn, and Substack copy ship inside the free SEO growth pack. Join the waitlist for standalone tooling.",
   alternates: { canonical: `${siteConfig.url}/podcast-to-short-video` },
+  robots: { index: false, follow: true },
   openGraph: {
     title: "Podcast audio -> social script workflow",
     description:

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,6 +15,7 @@ export function ShowNotesToHtmlClient() {
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [copied, setCopied] = useState<"fragment" | "full" | null>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const pasteableHtml = useMemo(
     () => showNotesToPasteableHtml(title, notes),
@@ -24,6 +25,16 @@ export function ShowNotesToHtmlClient() {
     () => showNotesToFullHtmlDocument(title, notes),
     [title, notes],
   );
+  const hasOutput = Boolean(pasteableHtml.trim());
+
+  const handleNotesChange = (value: string) => {
+    setNotes(value);
+    if (value.trim()) {
+      window.requestAnimationFrame(() => {
+        previewRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    }
+  };
 
   const copy = async (text: string, kind: "fragment" | "full") => {
     if (!text.trim()) return;
@@ -62,61 +73,71 @@ export function ShowNotesToHtmlClient() {
             <textarea
               id="show-notes-body"
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={10}
+              onChange={(e) => handleNotesChange(e.target.value)}
+              rows={8}
               placeholder={`## Hook\nIndie hosts can record interview-quality audio for under $200.\n\n- Treat the room before you upgrade the mic\n- Aim for -12 to -6 dBFS on speech`}
-              className="mt-2 w-full resize-y rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/30"
+              className="mt-2 w-full resize-y rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/30 max-sm:max-h-48 max-sm:overscroll-y-contain"
+              style={{ touchAction: "manipulation" }}
             />
           </div>
         </CardContent>
       </Card>
 
-      {pasteableHtml ? (
-        <Card className="border-primary/25">
-          <CardContent className="space-y-4 p-6">
-            <p className="text-sm font-semibold text-foreground">HTML preview (paste into WordPress / Ghost)</p>
-            <pre className="max-h-64 overflow-auto rounded-lg border border-border bg-secondary/40 p-3 text-xs text-foreground/90 whitespace-pre-wrap break-all">
-              {pasteableHtml}
-            </pre>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Button
-                type="button"
-                variant="secondary"
-                className="min-h-11"
-                onClick={() => void copy(pasteableHtml, "fragment")}
-              >
-                {copied === "fragment" ? (
-                  <>
-                    <Check className="mr-2 h-4 w-4" /> Copied
-                  </>
-                ) : (
-                  <>
-                    <Copy className="mr-2 h-4 w-4" /> Copy HTML block
-                  </>
-                )}
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                className="min-h-11"
-                onClick={() => void copy(fullDocument, "full")}
-              >
-                {copied === "full" ? (
-                  <>
-                    <Check className="mr-2 h-4 w-4" /> Copied
-                  </>
-                ) : (
-                  <>
-                    <Copy className="mr-2 h-4 w-4" /> Copy full .html
-                  </>
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <p className="text-center text-sm text-muted-foreground">Paste show notes above to generate HTML.</p>
-      )}
+      <div ref={previewRef}>
+        {hasOutput ? (
+          <Card className="border-primary/25">
+            <CardContent className="space-y-4 p-6">
+              <p className="text-sm font-semibold text-foreground">HTML preview (paste into WordPress / Ghost)</p>
+              <pre className="max-h-64 overflow-auto rounded-lg border border-border bg-secondary/40 p-3 text-xs text-foreground/90 whitespace-pre-wrap break-all">
+                {pasteableHtml}
+              </pre>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="min-h-11"
+                  onClick={() => void copy(pasteableHtml, "fragment")}
+                >
+                  {copied === "fragment" ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" /> Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="mr-2 h-4 w-4" /> Copy HTML block
+                    </>
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="min-h-11"
+                  onClick={() => void copy(fullDocument, "full")}
+                >
+                  {copied === "full" ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" /> Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="mr-2 h-4 w-4" /> Copy full .html
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="border-dashed border-border/80">
+            <CardContent className="p-6 text-center">
+              <p className="text-sm font-semibold text-foreground">Live HTML preview appears here</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Paste show notes above — headings and bullet lists convert automatically.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <Card className="border-primary/30 bg-primary/5">
         <CardContent className="space-y-3 p-6 text-center sm:text-left">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PublicPackPreview } from "@/components/examples/PublicPackPreview";
+import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -54,6 +55,7 @@ export default function SampleGrowthPackExamplePage() {
             transcript or show notes; always edit before publishing.
           </p>
           <PublicPackPreview />
+          <ProStickyPromo className="mt-10" />
         </div>
       </div>
     </>
