@@ -4,14 +4,14 @@ import { GuideLayout } from "@/components/guides/GuideLayout";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Podcast Show Notes Template (Free Copy-Paste Outline)",
+  title: "Show Notes for Podcast — Free Template + HTML Converter",
   description:
-    "Free podcast show notes template with SEO-ready fields — hook, takeaways, topic seeds, and one listener question. Copy-paste before you record or publish.",
+    "Free show notes for podcast — copy-paste template with hook, takeaways, and topic seeds. Format notes as HTML for WordPress or Ghost in one paste.",
   alternates: { canonical: `${siteConfig.url}/guides/show-notes-template` },
   openGraph: {
-    title: "Podcast show notes template (free copy-paste outline)",
+    title: "Show notes for podcast — free template + HTML converter",
     description:
-      "Hook, takeaways, topic seeds, and one listener question — a minimal podcast show notes template for faster SEO repurposing.",
+      "Structured show notes for podcast episodes — hook, takeaways, topic seeds, and one listener question. Paste into our HTML converter for your site.",
     url: `${siteConfig.url}/guides/show-notes-template`,
   },
 };
@@ -19,13 +19,24 @@ export const metadata: Metadata = {
 export default function ShowNotesTemplateGuidePage() {
   return (
     <GuideLayout
-      title="Podcast show notes template (SEO-ready outline)"
-      description="Most hosts either skip show notes or paste timestamp dumps nobody reads. This outline is the middle path — enough structure for SEO repurposing without writing a novel."
+      title="Show notes for podcast — free SEO-ready template"
+      description="Good show notes for podcast episodes are more than timestamp dumps. This copy-paste outline gives Google and skimmers something searchable — then paste into our HTML converter for your site."
     >
+      <h2>What are show notes for podcast episodes?</h2>
+      <p>
+        <strong>Show notes for podcast</strong> episodes are the written summary on your website or in your RSS feed —
+        hook, takeaways, links, and the one question this episode answers. Apple and Spotify show a thin blurb; your
+        domain should carry the full, indexable version. This template is that starting point.
+      </p>
+
       <h2>Copy-paste outline</h2>
       <p>
         Use this <strong>podcast show notes template</strong> before you record when you can. Better inputs mean cleaner
-        blog drafts, FAQ blocks, and social hooks after you publish.
+        blog drafts, FAQ blocks, and social hooks after you publish. Part of the full{" "}
+        <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
+          podcast to blog post workflow
+        </Link>
+        .
       </p>
       <pre className="overflow-x-auto rounded-lg border border-border bg-secondary/40 p-4 text-sm text-foreground/90">{`Episode title:
 One-sentence hook (who this is for + outcome):
@@ -107,7 +118,14 @@ One listener question this episode answers: What is the cheapest way to get sepa
         headings after you edit for search intent. The listener question anchors one long-tail keyword per episode.
       </p>
       <p>
-        Paste this filled template — or a full transcript — into the{" "}
+        Ready to publish on your site? Paste the filled outline into the{" "}
+        <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
+          show notes to HTML converter
+        </Link>{" "}
+        — get heading and list tags for WordPress, Ghost, or Webflow without writing markup by hand.
+      </p>
+      <p>
+        Want a full SEO article draft instead of formatted notes? Paste the template — or a full transcript — into the{" "}
         <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
           Generate SEO pack
         </Link>{" "}

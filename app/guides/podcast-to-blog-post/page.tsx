@@ -3,17 +3,47 @@ import Link from "next/link";
 import { GuideLayout } from "@/components/guides/GuideLayout";
 import { siteConfig } from "@/lib/data";
 
+const faq = [
+  {
+    q: "Do I need a full transcript to turn a podcast into a blog post?",
+    a: "No. A structured show-notes outline with a hook, takeaways, and one listener question is enough to generate a solid first draft. A full transcript gives richer detail, but do not skip publishing because the export is not perfect.",
+  },
+  {
+    q: "Can podcast show notes replace a transcript for SEO?",
+    a: "For many episodes, yes — if your notes include topic seeds and a searchable listener question, not just timestamps. Paste them into a growth pack or format them as HTML for your episode page; expand with transcript quotes when you have them.",
+  },
+  {
+    q: "How do I publish show notes as HTML on WordPress or Ghost?",
+    a: "After filling the show notes template, paste the outline into AioCast's free show notes to HTML converter. It outputs heading and list tags you can paste into WordPress, Ghost, or any CMS — no plugin required.",
+  },
+] as const;
+
+function FaqJsonLd() {
+  const payload = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />
+  );
+}
+
 export const metadata: Metadata = {
   title: {
-    absolute: "How to Turn a Podcast Episode into an SEO Blog Post: A 5-Step Framework | AIOCAST",
+    absolute: "Podcast to Blog Post: 5-Step SEO Framework (+ Free Tools) | AioCast",
   },
   description:
-    "Turn podcast transcripts into SEO articles that rank on Google and get cited by AI search. A practical 5-step checklist with real examples — draft yours in minutes.",
+    "Turn a podcast episode into an SEO blog post — transcript or show notes in, article draft out. Free template, title ideas, and HTML converter. 5-step checklist with real examples.",
   alternates: { canonical: `${siteConfig.url}/guides/podcast-to-blog-post` },
   openGraph: {
-    title: "How to Turn a Podcast Episode into an SEO Blog Post: A 5-Step Framework",
+    title: "Podcast to Blog Post: 5-Step SEO Framework (+ Free Tools)",
     description:
-      "Turn podcast transcripts into SEO articles that rank on Google and get cited by AI search. A practical 5-step checklist with real examples — draft yours in minutes.",
+      "Turn a podcast episode into an SEO blog post — transcript or show notes in, article draft out. Free template, title ideas, and HTML converter.",
     url: `${siteConfig.url}/guides/podcast-to-blog-post`,
   },
 };
@@ -28,6 +58,8 @@ const proCalloutBox =
 
 export default function PodcastToBlogGuidePage() {
   return (
+    <>
+    <FaqJsonLd />
     <GuideLayout
       title="How to Turn a Podcast Episode into an SEO Blog Post: A 5-Step Framework"
       description="A practical workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
@@ -149,13 +181,20 @@ export default function PodcastToBlogGuidePage() {
         takeaways, topic seeds for future H2 headings, and one listener question — that semantic dump is enough to feed
         the growth pack without waiting on a full transcript export. See the{" "}
         <Link href="/guides/show-notes-template" className="text-primary hover:underline">
-          full copy-paste outline
+          free show notes for podcast template
         </Link>{" "}
         when you want the blank fields; paste the result into the{" "}
         <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
           free SEO growth pack
         </Link>{" "}
         when you are ready to generate.
+      </p>
+      <p>
+        Publishing notes on your site before the full article is ready? Paste the filled outline into our{" "}
+        <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
+          show notes to HTML converter
+        </Link>{" "}
+        — it turns Markdown-style headings and bullet lists into a paste-ready block for WordPress, Ghost, or Webflow.
       </p>
       <p>
         <strong>Pro tip:</strong> Fill the template before you record when possible. Better inputs mean cleaner
@@ -179,6 +218,13 @@ export default function PodcastToBlogGuidePage() {
       </ul>
       <p>
         Every subheading, paragraph, and FAQ block in the next steps should support that one angle.
+      </p>
+      <p>
+        Stuck on the episode headline? Try the{" "}
+        <Link href="/tools/free-podcast-title-generator" className="text-primary hover:underline">
+          free podcast title generator
+        </Link>{" "}
+        — paste your topic phrase and pick a search-friendly angle before you write the blog title tag in Step 4.
       </p>
 
       <h2>Step 3 — Generate a draft pack, then edit like a human</h2>
@@ -269,6 +315,16 @@ export default function PodcastToBlogGuidePage() {
         correctly. Adapt scripts to what is trending in your niche—do not run on autopilot.
       </p>
 
+      <h2>Common questions</h2>
+      <dl className="space-y-4">
+        {faq.map((item) => (
+          <div key={item.q}>
+            <dt className="font-semibold text-foreground">{item.q}</dt>
+            <dd className="mt-1">{item.a}</dd>
+          </div>
+        ))}
+      </dl>
+
       <h2>What this strategy does not do</h2>
       <p>
         No tool guarantees a #1 ranking overnight. SEO and GEO are long-term compounding assets. You still need a
@@ -309,5 +365,6 @@ export default function PodcastToBlogGuidePage() {
         </p>
       </div>
     </GuideLayout>
+    </>
   );
 }
