@@ -6,7 +6,7 @@ import { FormEvent, useState } from "react";
 import { Check, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
-import { freeHeroTagline } from "@/lib/pricing-copy";
+import { freeHeroTagline, homePricingAnchor } from "@/lib/pricing-copy";
 import { saveTranscriptPrefill } from "@/lib/transcript-prefill";
 
 export function HomePageClient() {
@@ -72,6 +72,12 @@ export function HomePageClient() {
               </div>
               <p className="mt-4 text-center text-sm font-medium text-foreground">
                 {freeHeroTagline}
+              </p>
+              <p className="mt-2 text-center text-sm text-muted-foreground">
+                {homePricingAnchor()} —{" "}
+                <Link href="/pro-toolkit" className="font-medium text-primary underline-offset-4 hover:underline">
+                  See pricing
+                </Link>
               </p>
             </div>
           </form>

@@ -13,7 +13,13 @@ import { consumeTranscriptPrefill } from "@/lib/transcript-prefill";
 import { cn } from "@/lib/utils";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
 import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
-import { aiDraftDisclaimer, freeLimitsToolLine } from "@/lib/pricing-copy";
+import { PackDeliveryCards } from "@/components/tools/PackDeliveryCards";
+import {
+  contentPrivacyNote,
+  freeLimitsInline,
+  freeLimitsToolLine,
+  rankingDisclaimer,
+} from "@/lib/pricing-copy";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 const MAX_SECONDS = 300;
@@ -203,8 +209,11 @@ export function GrowthPackClient({
         <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Generate my SEO growth pack</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Paste show notes or upload audio — get an SEO article draft, social scripts, and a 7-day publish plan. Edit
-          and publish on your own blog; search traffic takes weeks and is never guaranteed.
+          and publish on your own blog.
         </p>
+
+        <PackDeliveryCards className="mt-6" />
+
         <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-muted-foreground">
           <p className="font-semibold text-primary">Free plan limits</p>
           <ul className="mt-2 space-y-1">
@@ -234,6 +243,10 @@ export function GrowthPackClient({
                 <p className="mt-1 text-base font-semibold text-foreground">Choose your starting point</p>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Pick whichever matches what you have today — transcript paste or audio upload.
+                </p>
+                <p className="mt-2 rounded-lg border border-border/60 bg-background/40 px-3 py-2 text-xs text-muted-foreground">
+                  <span className="font-medium text-foreground">Free:</span> {freeLimitsInline()}.{" "}
+                  {contentPrivacyNote}
                 </p>
                 <div
                   className="mt-4 flex flex-wrap gap-2 rounded-xl border border-border bg-background/50 p-1"
@@ -398,7 +411,6 @@ export function GrowthPackClient({
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">Step 3</p>
                 <p className="mt-1 text-base font-semibold text-foreground">Generate</p>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{aiDraftDisclaimer}</p>
                 {error && (
                   <p className="mt-2 text-sm text-rose-300" role="alert">
                     {error}
@@ -441,6 +453,7 @@ export function GrowthPackClient({
                     )}
                   </Button>
                 </span>
+                <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground">{rankingDisclaimer}</p>
               </div>
 
               {phase === "analyzing" && (
@@ -467,37 +480,9 @@ export function GrowthPackClient({
             </CardContent>
           </Card>
 
-          <div className="space-y-6">
+          <div className="hidden space-y-6 lg:block">
             <Card className="relative overflow-hidden border-border/80 shadow-[0_0_0_1px_rgba(99,102,241,0.15)]">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-              <CardContent className="space-y-6 p-8">
-                <div className="space-y-3 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/10 to-accent/5 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-primary">Fixed 3-piece delivery</p>
-                  <div className="rounded-lg border border-border bg-background/60 p-3">
-                    <p className="text-sm font-semibold text-foreground">
-                      <span aria-hidden>📄 </span>SEO Blog Post
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Title, meta description, H2 outline, and FAQ blocks you can paste into your site.
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-border bg-background/60 p-3">
-                    <p className="text-sm font-semibold text-foreground">
-                      <span aria-hidden>📱 </span>Social Scripts
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Ready-to-post copy for X, LinkedIn, and Substack — edit lightly and publish.
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-border bg-background/60 p-3">
-                    <p className="text-sm font-semibold text-foreground">
-                      <span aria-hidden>📅 </span>7-Day Publish Plan
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Week-long rollout suggestions with timing hints — pair with your analytics when you upgrade.
-                    </p>
-                  </div>
-                </div>
+              <CardContent className="p-8">
                 <div className="rounded-2xl border border-border/70 bg-secondary/40 p-4">
                   <p className="font-semibold">Delivery</p>
                   <p className="mt-2 text-sm text-muted-foreground">

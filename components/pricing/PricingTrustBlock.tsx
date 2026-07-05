@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { aiDraftDisclaimer } from "@/lib/pricing-copy";
+import { aiDraftDisclaimer, contentPrivacyNote } from "@/lib/pricing-copy";
 
 /** Honest pre-purchase trust — sample output + AI disclaimer, not fake testimonials. */
 export function PricingTrustBlock() {
@@ -32,7 +32,9 @@ export function PricingTrustBlock() {
           </li>
           <li className="flex gap-2">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-            <span>{aiDraftDisclaimer}</span>
+            <span>
+              {aiDraftDisclaimer} {contentPrivacyNote}
+            </span>
           </li>
         </ul>
       </CardContent>

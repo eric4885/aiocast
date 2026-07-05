@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { faqItems, siteConfig } from "@/lib/data";
-import { aiDraftDisclaimer, freeLimitsHelpLine } from "@/lib/pricing-copy";
+import { aiDraftDisclaimer, contentPrivacyNote, freeLimitsHelpLine } from "@/lib/pricing-copy";
 import {
   Accordion,
   AccordionContent,
@@ -53,7 +53,7 @@ export default function HelpPage() {
             page for the current status.
           </li>
           <li>
-            <strong className="text-foreground">AI output:</strong> {aiDraftDisclaimer}
+            <strong className="text-foreground">AI output:</strong> {aiDraftDisclaimer} {contentPrivacyNote}
           </li>
           <li>
             <strong className="text-foreground">Delivery:</strong> Your pack opens on-site as soon as generation
