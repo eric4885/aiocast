@@ -177,19 +177,21 @@ export default function PodcastToBlogGuidePage() {
         — clean audio means cleaner transcripts and less time fixing garbage before SEO editing.
       </p>
 
-      <h3>Podcast show notes template</h3>
+      <h3>How to use our podcast show notes template</h3>
       <p>
-        No full transcript yet? Use a structured outline instead of a wall of bullets. Fill in a hook, three to five
-        takeaways, topic seeds for future H2 headings, and one listener question — that semantic dump is enough to feed
-        the growth pack without waiting on a full transcript export. See the{" "}
+        Open the{" "}
         <Link href="/guides/show-notes-template" className="text-primary hover:underline">
-          free show notes for podcast template
-        </Link>{" "}
-        when you want the blank fields; paste the result into the{" "}
+          free podcast show notes template
+        </Link>
+        , copy the blank outline, and fill four fields before you record: a one-sentence hook, three to five takeaways,
+        topic seeds for future H2 headings, and one listener question. That single pass gives the growth pack enough
+        context to draft an SEO article even when you do not have a full transcript yet. Paste the filled outline into
+        the{" "}
         <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
           free SEO growth pack
         </Link>{" "}
-        when you are ready to generate.
+        when you are ready to generate — or format it first with the HTML converter if you want a live episode page
+        while the long-form post is still in draft.
       </p>
       <p>
         Publishing notes on your site before the full article is ready? Paste the filled outline into our{" "}
@@ -197,10 +199,8 @@ export default function PodcastToBlogGuidePage() {
           show notes to HTML converter
         </Link>{" "}
         — it turns Markdown-style headings and bullet lists into a paste-ready block for WordPress, Ghost, or Webflow.
-      </p>
-      <p>
-        <strong>Pro tip:</strong> Fill the template before you record when possible. Better inputs mean cleaner
-        subheadings and FAQ blocks in Step 3.
+        On Blogger, switch the post editor to HTML view and paste the converted block; add your audio embed or episode
+        link above the notes so the page stays useful while you finish the full article.
       </p>
 
       <h2>Step 2 — Pick one problem-solving target keyword</h2>
