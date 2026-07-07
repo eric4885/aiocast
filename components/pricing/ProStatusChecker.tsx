@@ -5,6 +5,7 @@ import { EarlyBirdBadge } from "@/components/pricing/EarlyBirdBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { pricing } from "@/lib/pricing";
 
 type StatusPayload = {
   pro?: boolean;
@@ -40,10 +41,10 @@ export function ProStatusChecker() {
     <Card className="mt-8 border-border/70">
       <CardContent className="space-y-4 p-6">
         <div>
-          <p className="font-semibold text-foreground">Check Pro status</p>
+          <p className="font-semibold text-foreground">Already subscribed?</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Enter the email you used at Creem checkout. Annual Early Bird (+2 months) is applied automatically for the
-            first 50 yearly subscribers — no coupon code needed.
+            Check whether Pro is active on your checkout email. Annual Early Bird (+2 months) applies automatically for
+            the first {pricing.pro.annualEarlyBirdSlots} yearly subscribers — no coupon needed.
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end">

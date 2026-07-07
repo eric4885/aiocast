@@ -119,7 +119,9 @@ export default function ProToolkitPage({
                   <span className="text-4xl font-bold">${pricing.pro.monthlyUsd}</span>
                   <span className="text-lg text-muted-foreground">/ month</span>
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground">Standard monthly price after your first month.</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  First month ${pricing.pro.firstMonthUsd}, then ${pricing.pro.monthlyUsd}/mo.
+                </p>
                 <p className="mt-3 text-sm text-foreground/90">
                   Or <strong className="text-foreground">${pricing.pro.annualUsd}/year</strong> billed annually
                 </p>

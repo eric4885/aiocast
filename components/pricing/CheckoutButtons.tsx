@@ -64,34 +64,35 @@ export function CheckoutButtons({ defaultEmail = "", compact = false }: Props) {
       <div className={compact ? "flex flex-col gap-2 sm:flex-row" : "grid gap-3 sm:grid-cols-2"}>
         <Button
           size={compact ? "sm" : "lg"}
-          className="h-auto w-full flex-col gap-0.5 py-3"
+          className="w-full"
           disabled={loading !== null}
           onClick={() => void startCheckout("monthly")}
         >
-          {loading === "monthly" ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : null}
-          <span>Start Pro — ${pricing.pro.monthlyUsd}/mo</span>
-          {!compact && (
-            <span className="text-xs font-normal opacity-90">
-              First month ${pricing.pro.firstMonthUsd}, then ${pricing.pro.monthlyUsd}/mo · Renews monthly · cancel anytime
-            </span>
-          )}
+          <span className="inline-flex items-center justify-center gap-2">
+            {loading === "monthly" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            Start Pro — ${pricing.pro.monthlyUsd}/mo
+          </span>
         </Button>
         <Button
           size={compact ? "sm" : "lg"}
           variant="secondary"
-          className="h-auto w-full flex-col gap-0.5 py-3"
+          className="w-full"
           disabled={loading !== null}
           onClick={() => void startCheckout("annual")}
         >
-          {loading === "annual" ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : null}
-          <span>${pricing.pro.annualUsd}/year</span>
-          {!compact && <span className="text-xs font-normal opacity-80">Separate annual checkout · not auto-switched from monthly</span>}
+          <span className="inline-flex items-center justify-center gap-2">
+            {loading === "annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            ${pricing.pro.annualUsd}/year
+          </span>
         </Button>
       </div>
+
+      {!compact && (
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Monthly plan: first month ${pricing.pro.firstMonthUsd}, then ${pricing.pro.monthlyUsd}/mo — renews monthly,
+          cancel anytime. Annual plan uses a separate checkout and is not auto-switched from monthly.
+        </p>
+      )}
 
       {error && (
         <p className="text-sm text-rose-300" role="alert">
