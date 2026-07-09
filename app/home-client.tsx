@@ -146,7 +146,7 @@ export function HomePageClient() {
           <ul className="mx-auto mt-3 flex max-w-lg flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
             <li>
               <Link href="/guides/podcast-to-blog-post" className="text-primary underline-offset-4 hover:underline">
-                Podcast → blog guide
+                Podcast to blog post guide
               </Link>
             </li>
             <li>

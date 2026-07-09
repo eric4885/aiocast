@@ -20,7 +20,7 @@ export function HomeSeoIntro() {
           </Link>{" "}
           or read the{" "}
           <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
-            workflow guide
+            how to turn a podcast into a blog post
           </Link>
           .
         </p>

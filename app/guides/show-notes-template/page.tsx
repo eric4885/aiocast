@@ -218,7 +218,7 @@ One listener question this episode answers: What is the cheapest way to get sepa
       <ul>
         <li>
           <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
-            Podcast → blog post (5-step framework)
+            How to turn a podcast into a blog post
           </Link>
         </li>
         <li>

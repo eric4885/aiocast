@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 const guides = [
   {
     href: "/guides/podcast-to-blog-post",
-    title: "Podcast → blog post guide",
-    description: "5-step framework — edit your draft, on-page SEO, and publish on your domain.",
+    title: "How to turn a podcast into a blog post",
+    description: "Step-by-step podcast to blog post workflow — draft, on-page SEO, and publish.",
   },
   {
     href: "/guides/show-notes-template",

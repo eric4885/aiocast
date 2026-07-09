@@ -106,7 +106,7 @@ export function PublicPackPreview() {
           <Link href="/tools/seo-growth-pack">Generate your own pack</Link>
         </Button>
         <Button size="lg" variant="secondary" asChild>
-          <Link href="/guides/podcast-to-blog-post">Read the workflow guide</Link>
+          <Link href="/guides/podcast-to-blog-post">Turn a podcast into a blog post</Link>
         </Button>
       </div>
     </div>

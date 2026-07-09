@@ -143,7 +143,7 @@ export function Footer() {
 
               <Link className="hover:text-foreground" href="/guides/podcast-to-blog-post">
 
-                Podcast to blog guide
+                Podcast to blog post
 
               </Link>
 

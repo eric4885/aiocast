@@ -13,7 +13,7 @@ export function HomeLearnMore() {
         <ul className="mx-auto mt-6 flex max-w-lg flex-col gap-2 text-left text-sm text-muted-foreground sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2">
           <li>
             <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
-              Podcast → blog post guide
+              Turn a podcast into a blog post
             </Link>
           </li>
           <li>

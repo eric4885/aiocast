@@ -7,12 +7,20 @@ import { freeTierProMention } from "@/lib/pricing-copy";
 
 const faq = [
   {
-    q: "Do I need a full transcript to turn a podcast into a blog post?",
-    a: "No. A structured show-notes outline with a hook, takeaways, and one listener question is enough to generate a solid first draft. A full transcript gives richer detail, but do not skip publishing because the export is not perfect.",
+    q: "How do I turn a podcast into a blog post?",
+    a: "Export a transcript or fill structured show notes, pick one problem-solving keyword, generate a draft, then edit for your voice and publish on your own domain with a clear title tag, intent-based headings, and a short FAQ. The five steps below walk through the full podcast to blog post workflow.",
+  },
+  {
+    q: "Can I turn a podcast into a blog post without a full transcript?",
+    a: "Yes. A structured show-notes outline with a hook, takeaways, topic seeds, and one listener question is enough to generate a solid first draft. A full transcript gives richer detail, but do not skip publishing because the export is not perfect.",
   },
   {
     q: "Can podcast show notes replace a transcript for SEO?",
     a: "For many episodes, yes — if your notes include topic seeds and a searchable listener question, not just timestamps. Paste them into a growth pack or format them as HTML for your episode page; expand with transcript quotes when you have them.",
+  },
+  {
+    q: "How do I add a podcast to Blogger as a blog post?",
+    a: "Fill the show notes template or polish your article draft, then paste into AioCast's free show notes to HTML converter. In Blogger, switch the post editor to HTML view, paste the converted block, and add your audio embed or episode link above the notes.",
   },
   {
     q: "How do I publish show notes as HTML on WordPress or Ghost?",
@@ -37,15 +45,15 @@ function FaqJsonLd() {
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Podcast to Blog Post: 5-Step SEO Framework (+ Free Tools) | AioCast",
+    absolute: "How to Turn a Podcast into a Blog Post (Step-by-Step) | AioCast",
   },
   description:
-    "Turn a podcast episode into an SEO blog post — transcript or show notes in, article draft out. Free template, title ideas, and HTML converter. 5-step checklist with real examples.",
+    "Turn any podcast episode into an SEO blog post — with or without a full transcript. Free 5-step podcast to blog post workflow, show notes template, and draft tools.",
   alternates: { canonical: `${siteConfig.url}/guides/podcast-to-blog-post` },
   openGraph: {
-    title: "Podcast to Blog Post: 5-Step SEO Framework (+ Free Tools)",
+    title: "How to Turn a Podcast into a Blog Post (Step-by-Step)",
     description:
-      "Turn a podcast episode into an SEO blog post — transcript or show notes in, article draft out. Free template, title ideas, and HTML converter.",
+      "Turn any podcast episode into an SEO blog post — with or without a full transcript. Free 5-step workflow, show notes template, and draft tools.",
     url: `${siteConfig.url}/guides/podcast-to-blog-post`,
   },
 };
@@ -63,94 +71,76 @@ export default function PodcastToBlogGuidePage() {
     <>
     <FaqJsonLd />
     <GuideLayout
-      title="Podcast to Blog Post: 5-Step SEO Framework"
-      description="A practical workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
+      title="How to Turn a Podcast into a Blog Post"
+      description="A practical podcast to blog post workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
     >
       <h2>In short</h2>
       <div className={calloutBox}>
         <p className="m-0">
-          Spotify and Apple Podcasts are closed ecosystems—they rarely send sustainable organic traffic to your domain. To
-          get free search traffic and show up in AI-generated answers, you need structured text on your own site. On{" "}
+          Spotify and Apple Podcasts rarely send sustainable organic traffic to your domain. To get free search traffic
+          and show up in AI-generated answers, you need structured text on your own site. On{" "}
           <Link href="/" className="text-primary hover:underline">
             AioCast
           </Link>
-          , you can paste a full transcript and get a first draft in minutes; this 5-step checklist walks through
-          editing, on-page SEO, and promotion so you ship like a human—not a copy-paste bot.
+          , paste a transcript or show notes and get a first draft in minutes; the checklist below covers editing,
+          on-page SEO, and promotion so you ship like a human—not a copy-paste bot.
         </p>
       </div>
 
-      <h2>Does this actually work? Two real examples</h2>
+      <h2>How to turn a podcast into a blog post</h2>
       <p>
-        Before the steps, here is proof from creators who already run a text-first playbook alongside their audio. The
-        scale is bigger than most indie shows—but the workflow is identical.
+        Use this five-step podcast to blog post process every episode. Expand each step below when you need detail.
       </p>
+      <ol>
+        <li>
+          <strong>Export a raw transcript</strong> — or fill structured show notes if you do not have one yet.
+        </li>
+        <li>
+          <strong>Pick one problem-solving keyword</strong> — not an episode archive title.
+        </li>
+        <li>
+          <strong>Generate a draft pack, then edit like a human</strong> — verify claims, strip filler, match your voice.
+        </li>
+        <li>
+          <strong>Implement basic on-page SEO</strong> — title tag, intent-based headings, FAQ, internal links.
+        </li>
+        <li>
+          <strong>Promote with multi-channel scripts</strong> — publish the article first, then share.
+        </li>
+      </ol>
 
-      <h3>Case Study 1: Marketing School (Neil Patel &amp; Eric Siu)</h3>
+      <h2>Transcript vs show notes: which do you need?</h2>
       <p>
-        Neil Patel and Eric Siu publish{" "}
-        <a href="https://marketingschool.io/" className={externalLink} target="_blank" rel="noopener noreferrer">
-          Marketing School
-        </a>{" "}
-        daily—2,500+ episodes and counting. Every episode gets a dedicated, indexable URL on their site with an
-        SEO-friendly slug, summary, and show notes. They have publicly walked through the transcript-to-blog workflow
-        since{" "}
-        <a
-          href="https://marketingschool.io/how-to-write-a-detailed-blog-post-in-less-than-2-hours-ep-86/"
-          className={externalLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Episode #86
-        </a>{" "}
-        (record → transcribe → organize → publish).
+        You do not always need a perfect transcript to turn a podcast into a blog post. Choose the input that matches
+        how much time you have:
       </p>
+      <ul>
+        <li>
+          <strong>Full transcript</strong> — richer quotes and detail; best when the guest said something searchable
+          you want to keep verbatim.
+        </li>
+        <li>
+          <strong>Structured show notes</strong> — hook, takeaways, topic seeds, and one listener question; enough for
+          a solid SEO draft when the export is messy or missing.
+        </li>
+        <li>
+          <strong>Manual rewrite</strong> — highest control, slowest; use only for flagship episodes.
+        </li>
+        <li>
+          <strong>Growth pack draft</strong> — fastest path from notes or transcript to headings, FAQ, and social
+          scripts; still requires a human edit pass.
+        </li>
+      </ul>
       <p>
-        Neil&apos;s separate{" "}
-        <a
-          href="https://neilpatel.com/blog/podcast-seo/"
-          className={externalLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Podcast SEO guide
-        </a>{" "}
-        states the core idea plainly: search engines cannot rank audio alone—you need text on your domain, ideally with
-        transcripts and dedicated episode pages. His personal properties drive millions of organic visits per month
-        through long-form written content—a scale most indie hosts will not hit overnight. The lesson for smaller shows
-        is the same: <strong>one indexable page per episode compounds over years.</strong>
-      </p>
-
-      <h3>Case Study 2: Lenny&apos;s Podcast (Lenny Rachitsky)</h3>
-      <p>
-        Lenny Rachitsky built{" "}
-        <a
-          href="https://www.lennysnewsletter.com/"
-          className={externalLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Lenny&apos;s Newsletter
-        </a>{" "}
-        on deep written content first; the podcast came later as a growth layer—not the other way around. His playbook
-        shows the power of <strong>multi-modal publishing</strong>: every interview coexists with long-form text on
-        lennysnewsletter.com, and hundreds of{" "}
-        <a href="https://www.lennysdata.com/" className={externalLink} target="_blank" rel="noopener noreferrer">
-          podcast transcripts
-        </a>{" "}
-        are available as structured, indexable files.
-      </p>
-      <p>
-        That text layer is why AI tools can cite his work when users ask product-strategy questions—a Generative Engine
-        Optimization (GEO) outcome worth copying even if you start from audio. Lenny has also covered{" "}
-        <a
-          href="https://www.lennysnewsletter.com/p/the-ultimate-guide-to-aeo-ethan-smith"
-          className={externalLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Answer Engine Optimization
-        </a>{" "}
-        directly on the show, reflecting how seriously top creators now treat text alongside audio.
+        Start with the{" "}
+        <Link href="/guides/show-notes-template" className="text-primary hover:underline">
+          free podcast show notes template
+        </Link>{" "}
+        if you are short on time, then paste into the{" "}
+        <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
+          free SEO growth pack
+        </Link>{" "}
+        when you are ready to draft.
       </p>
 
       <h2>Step 1 — Export a raw transcript (good enough beats perfect)</h2>
@@ -317,6 +307,80 @@ export default function PodcastToBlogGuidePage() {
         correctly. Adapt scripts to what is trending in your niche—do not run on autopilot.
       </p>
 
+      <h2>Does this actually work? Two real examples</h2>
+      <p>
+        Creators who already run a text-first playbook alongside their audio prove the same workflow at larger scale.
+        The steps above are identical for indie shows.
+      </p>
+
+      <h3>Case Study 1: Marketing School (Neil Patel &amp; Eric Siu)</h3>
+      <p>
+        Neil Patel and Eric Siu publish{" "}
+        <a href="https://marketingschool.io/" className={externalLink} target="_blank" rel="noopener noreferrer">
+          Marketing School
+        </a>{" "}
+        daily—2,500+ episodes and counting. Every episode gets a dedicated, indexable URL on their site with an
+        SEO-friendly slug, summary, and show notes. They have publicly walked through the transcript-to-blog workflow
+        since{" "}
+        <a
+          href="https://marketingschool.io/how-to-write-a-detailed-blog-post-in-less-than-2-hours-ep-86/"
+          className={externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Episode #86
+        </a>{" "}
+        (record → transcribe → organize → publish).
+      </p>
+      <p>
+        Neil&apos;s separate{" "}
+        <a
+          href="https://neilpatel.com/blog/podcast-seo/"
+          className={externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Podcast SEO guide
+        </a>{" "}
+        states the core idea plainly: search engines cannot rank audio alone—you need text on your domain, ideally with
+        transcripts and dedicated episode pages. His personal properties drive millions of organic visits per month
+        through long-form written content—a scale most indie hosts will not hit overnight. The lesson for smaller shows
+        is the same: <strong>one indexable page per episode compounds over years.</strong>
+      </p>
+
+      <h3>Case Study 2: Lenny&apos;s Podcast (Lenny Rachitsky)</h3>
+      <p>
+        Lenny Rachitsky built{" "}
+        <a
+          href="https://www.lennysnewsletter.com/"
+          className={externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Lenny&apos;s Newsletter
+        </a>{" "}
+        on deep written content first; the podcast came later as a growth layer—not the other way around. His playbook
+        shows the power of <strong>multi-modal publishing</strong>: every interview coexists with long-form text on
+        lennysnewsletter.com, and hundreds of{" "}
+        <a href="https://www.lennysdata.com/" className={externalLink} target="_blank" rel="noopener noreferrer">
+          podcast transcripts
+        </a>{" "}
+        are available as structured, indexable files.
+      </p>
+      <p>
+        That text layer is why AI tools can cite his work when users ask product-strategy questions—a Generative Engine
+        Optimization (GEO) outcome worth copying even if you start from audio. Lenny has also covered{" "}
+        <a
+          href="https://www.lennysnewsletter.com/p/the-ultimate-guide-to-aeo-ethan-smith"
+          className={externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Answer Engine Optimization
+        </a>{" "}
+        directly on the show, reflecting how seriously top creators now treat text alongside audio.
+      </p>
+
       <h2>Common questions</h2>
       <dl className="space-y-4">
         {faq.map((item) => (
@@ -339,7 +403,7 @@ export default function PodcastToBlogGuidePage() {
 
       <h2>Run it on your episode today</h2>
       <p>
-        Stop leaving spoken knowledge trapped in audio players. Start on{" "}
+        Stop leaving spoken knowledge trapped in audio players. Run this podcast to blog post workflow on{" "}
         <Link href="/" className="text-primary hover:underline">
           AioCast
         </Link>
