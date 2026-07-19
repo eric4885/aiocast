@@ -30,33 +30,46 @@ export default function ProToolkitPage({
 }) {
   const checkout = searchParams?.checkout;
   const base = siteConfig.url.replace(/\/$/, "");
+  const proUrl = `${base}/pro-toolkit`;
 
   const offerJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Product",
+    "@type": "SoftwareApplication",
     name: "AioCast Pro",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
     description: "Unlimited podcast SEO growth pack generations with FAQ JSON-LD export.",
-    brand: { "@type": "Brand", name: siteConfig.name },
+    url: proUrl,
+    image: `${base}/opengraph-image`,
     offers: [
       {
         "@type": "Offer",
         name: "Monthly",
-        price: pricing.pro.monthlyUsd,
+        price: String(pricing.pro.monthlyUsd),
         priceCurrency: "USD",
-        url: `${base}/pro-toolkit`,
+        valueAddedTaxIncluded: false,
+        availability: "https://schema.org/InStock",
+        url: proUrl,
         priceValidUntil: "2027-12-31",
         description: `First month promotional price $${pricing.pro.firstMonthUsd}, then $${pricing.pro.monthlyUsd}/month.`,
       },
       {
         "@type": "Offer",
         name: "Annual",
-        price: pricing.pro.annualUsd,
+        price: String(pricing.pro.annualUsd),
         priceCurrency: "USD",
-        url: `${base}/pro-toolkit`,
+        valueAddedTaxIncluded: false,
+        availability: "https://schema.org/InStock",
+        url: proUrl,
         priceValidUntil: "2027-12-31",
         description: `Billed annually at $${pricing.pro.annualUsd}/year.`,
       },
     ],
+    provider: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: base,
+    },
   };
 
   return (
