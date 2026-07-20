@@ -38,14 +38,14 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Show Notes for Podcast — Free Template + HTML Converter",
+  title: "Podcast show notes template — free online copy-paste format",
   description:
-    "Free show notes for podcast — copy-paste template with hook, takeaways, and topic seeds. Format notes as HTML for WordPress or Ghost in one paste.",
+    "Free podcast show notes template online: hook, takeaways, topic seeds, and one listener question. Copy-paste format, then convert to HTML for WordPress or Ghost.",
   alternates: { canonical: `${siteConfig.url}/guides/show-notes-template` },
   openGraph: {
-    title: "Show notes for podcast — free template + HTML converter",
+    title: "Podcast show notes template (free online)",
     description:
-      "Structured show notes for podcast episodes — hook, takeaways, topic seeds, and one listener question. Paste into our HTML converter for your site.",
+      "Structured podcast show notes format — copy the template, paste into our HTML converter, publish on your site.",
     url: `${siteConfig.url}/guides/show-notes-template`,
   },
 };
