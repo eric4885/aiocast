@@ -12,6 +12,18 @@ export const metadata: Metadata = {
 
 const items = [
   {
+    title: "Pre-flight recording checklist",
+    href: "/resources/pre-flight-checklist",
+    description: "Printable guardrails for gain, noise, and backups before you hit record.",
+    icon: Mic,
+  },
+  {
+    title: "Sample growth pack output",
+    href: "/examples/sample-growth-pack",
+    description: "See a full SEO article, FAQ, and social scripts example.",
+    icon: ListChecks,
+  },
+  {
     title: "How to turn a podcast into a blog post",
     href: "/guides/podcast-to-blog-post",
     description: "Step-by-step podcast to blog post workflow — transcript or show notes to SEO article.",
@@ -34,18 +46,6 @@ const items = [
     href: "/tools/show-notes-to-html",
     description: "Turn outlines or Markdown show notes into paste-ready HTML for WordPress and Ghost.",
     icon: Code,
-  },
-  {
-    title: "Pre-flight recording checklist",
-    href: "/resources/pre-flight-checklist",
-    description: "Printable guardrails for gain, noise, and backups before you hit record.",
-    icon: Mic,
-  },
-  {
-    title: "Sample growth pack output",
-    href: "/examples/sample-growth-pack",
-    description: "See a full SEO article, FAQ, and social scripts example.",
-    icon: ListChecks,
   },
   {
     title: "7-day publish plan playbook",

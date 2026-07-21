@@ -121,9 +121,9 @@ export function Footer() {
 
             <li>
 
-              <Link className="hover:text-foreground" href="/tools/show-notes-to-html">
+              <Link className="hover:text-foreground" href="/resources/pre-flight-checklist">
 
-                Show notes to HTML converter
+                Preflight recording checklist
 
               </Link>
 
@@ -144,6 +144,16 @@ export function Footer() {
               <Link className="hover:text-foreground" href="/guides/podcast-to-blog-post">
 
                 Podcast to blog post
+
+              </Link>
+
+            </li>
+
+            <li>
+
+              <Link className="hover:text-foreground" href="/tools/show-notes-to-html">
+
+                Show notes to HTML converter
 
               </Link>
 

@@ -22,6 +22,11 @@ export function HomeLearnMore() {
             </Link>
           </li>
           <li>
+            <Link href="/resources/pre-flight-checklist" className="font-medium text-primary underline-offset-4 hover:underline">
+              Preflight recording checklist
+            </Link>
+          </li>
+          <li>
             <Link href="/guides/show-notes-template" className="font-medium text-primary underline-offset-4 hover:underline">
               Show notes template
             </Link>
@@ -29,11 +34,6 @@ export function HomeLearnMore() {
           <li>
             <Link href="/tools/show-notes-to-html" className="font-medium text-primary underline-offset-4 hover:underline">
               Show notes → HTML converter
-            </Link>
-          </li>
-          <li>
-            <Link href="/guides/podcast-faq-for-seo" className="font-medium text-primary underline-offset-4 hover:underline">
-              FAQ blocks for SEO
             </Link>
           </li>
           <li>

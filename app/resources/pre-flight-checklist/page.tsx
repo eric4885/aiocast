@@ -10,12 +10,12 @@ import { newsletterBlurb } from "@/lib/pricing-copy";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Preflight Checklist for Podcast Recording (Free Printable)",
+  title: "Podcast preflight checklist (printable) — free recording checklist",
   description:
-    "Free preflight checklist for podcast recording — room noise, gain staging, backups, and editing order. Print, download, or bookmark before every session.",
+    "Free printable podcast preflight checklist for solo and remote recording — room noise, gain staging, backups, and editing order. Download, print, or bookmark before every session.",
   alternates: { canonical: `${siteConfig.url}/resources/pre-flight-checklist` },
   openGraph: {
-    title: "Preflight checklist for podcast recording (printable)",
+    title: "Podcast preflight checklist (printable)",
     description:
       "Room noise, gain staging, backups, and editing order — a free preflight checklist for solo and remote podcast sessions.",
     url: `${siteConfig.url}/resources/pre-flight-checklist`,
@@ -91,6 +91,10 @@ const faq = [
     a: "A short run-through before you hit Record: room noise, mic levels, backups, and session habits so your files are edit-ready and transcript-friendly.",
   },
   {
+    q: "Is there a printable podcast recording checklist?",
+    a: "Yes — use Print / Save as PDF on this page, or download the .md file. The list covers before, during, and after recording so you can tape it near your desk or share with guests.",
+  },
+  {
     q: "How long does preflight take?",
     a: "Usually three to five minutes once your room and kit are familiar. Remote interviews take an extra minute to confirm separate tracks and guest headphones.",
   },
@@ -98,10 +102,31 @@ const faq = [
     q: "Do I need preflight for remote podcasts?",
     a: "Yes — especially for separate tracks, guest headphone bleed, and backup files before cloud sync finishes. Remote sessions fail more often on levels and sync than on content.",
   },
-];
+  {
+    q: "What should be on a remote podcast recording checklist?",
+    a: "Confirm one mic per speaker, closed-back headphones for guests, separate WAV or multitrack exports, gain staging around -12 to -6 dBFS, and a local backup before you rely on cloud sync alone.",
+  },
+] as const;
+
+function FaqJsonLd() {
+  const payload = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />
+  );
+}
 
 export default function PreFlightChecklistPage() {
   return (
+    <>
+      <FaqJsonLd />
     <div className="border-b border-border bg-background print:border-0">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:py-24 print:max-w-none print:py-8">
         <p className="text-sm font-semibold text-primary">Free resource</p>
@@ -132,6 +157,23 @@ export default function PreFlightChecklistPage() {
             </a>
           </Button>
         </div>
+
+        <section className="mt-10 space-y-3 print-hide">
+          <h2 className="text-lg font-semibold text-foreground">Why preflight matters for podcast SEO</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Search traffic from a podcast usually starts on <em>your</em> site — a blog post or structured show notes —
+            not inside Spotify or Apple Podcasts. Clean captures produce cleaner auto-transcripts, which means less time
+            fixing garbage before you draft an SEO article. Run this checklist first, then use our{" "}
+            <Link href="/guides/show-notes-template" className="text-primary underline-offset-4 hover:underline">
+              show notes template
+            </Link>{" "}
+            or{" "}
+            <Link href="/examples/sample-growth-pack" className="text-primary underline-offset-4 hover:underline">
+              sample growth pack output
+            </Link>{" "}
+            to see what a publish-ready draft looks like.
+          </p>
+        </section>
 
         <Card className="mt-10 border-border/80 print:border-0 print:shadow-none">
           <CardContent className="space-y-10 p-8">
@@ -200,5 +242,6 @@ export default function PreFlightChecklistPage() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
