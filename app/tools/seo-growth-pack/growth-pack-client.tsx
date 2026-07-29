@@ -209,7 +209,11 @@ export function GrowthPackClient({
         <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Generate my SEO growth pack</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Paste show notes or upload audio — get an SEO article draft, social scripts, and a 7-day publish plan. Edit
-          and publish on your own blog.
+          and publish on your own blog. New to the workflow? Read{" "}
+          <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
+            how to turn a podcast into a blog post
+          </Link>
+          .
         </p>
 
         <PackDeliveryCards className="mt-6" />

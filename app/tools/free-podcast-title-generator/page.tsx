@@ -101,7 +101,7 @@ export default function FreePodcastTitleGeneratorPage() {
           </Link>
           {" · "}
           <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
-            Podcast to blog guide
+            Turn a podcast into a blog post
           </Link>
         </p>
       </section>

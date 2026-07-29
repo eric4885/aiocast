@@ -70,8 +70,9 @@ export default function ShowNotesTemplateGuidePage() {
         Use this <strong>podcast show notes template</strong> before you record when you can. Better inputs mean cleaner
         blog drafts, FAQ blocks, and social hooks after you publish. Part of the full{" "}
         <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
-          podcast to blog post workflow
-        </Link>
+          podcast to blog
+        </Link>{" "}
+        workflow
         .
       </p>
       <pre className="overflow-x-auto rounded-lg border border-border bg-secondary/40 p-4 text-sm text-foreground/90">{`Episode title:

@@ -20,9 +20,9 @@ export function HomeSeoIntro() {
           </Link>{" "}
           or read the{" "}
           <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
-            how to turn a podcast into a blog post
-          </Link>
-          .
+            podcast to blog
+          </Link>{" "}
+          workflow.
         </p>
       </div>
     </section>

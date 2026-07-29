@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 
 const guides = [
   {
-    href: "/resources/pre-flight-checklist",
-    title: "Preflight recording checklist",
-    description: "Printable checklist — room noise, gain staging, and backups before you hit Record.",
+    href: "/guides/podcast-to-blog-post",
+    title: "Podcast to blog — step-by-step",
+    description: "Turn a podcast into a blog post: transcript or show notes, draft, on-page SEO, publish.",
   },
   {
     href: "/examples/sample-growth-pack",
@@ -16,14 +16,14 @@ const guides = [
     description: "Full podcast to blog example — article, FAQ, social scripts, and publish plan.",
   },
   {
-    href: "/guides/podcast-to-blog-post",
-    title: "How to turn a podcast into a blog post",
-    description: "Step-by-step podcast to blog post workflow — draft, on-page SEO, and publish.",
-  },
-  {
     href: "/guides/show-notes-template",
     title: "Show notes template",
     description: "Copy-paste outline when you do not have a full transcript yet.",
+  },
+  {
+    href: "/resources/pre-flight-checklist",
+    title: "Preflight recording checklist",
+    description: "Printable checklist — room noise, gain staging, and backups before you hit Record.",
   },
   {
     href: "/tools/show-notes-to-html",

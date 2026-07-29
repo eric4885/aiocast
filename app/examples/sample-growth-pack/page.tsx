@@ -114,7 +114,11 @@ export default function SampleGrowthPackExamplePage() {
               <Link href="/resources/pre-flight-checklist" className="text-primary underline-offset-4 hover:underline">
                 printable preflight checklist
               </Link>{" "}
-              so your audio is transcript-ready — cleaner captures mean less cleanup in the draft.
+              so your audio is transcript-ready — cleaner captures mean less cleanup in the draft. For the full{" "}
+              <Link href="/guides/podcast-to-blog-post" className="text-primary underline-offset-4 hover:underline">
+                podcast to blog
+              </Link>{" "}
+              workflow after you generate, follow the step-by-step guide.
             </p>
             <Button size="lg" asChild className="mt-2">
               <Link href="/tools/seo-growth-pack">Generate your own growth pack</Link>

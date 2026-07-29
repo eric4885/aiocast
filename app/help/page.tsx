@@ -66,7 +66,7 @@ export default function HelpPage() {
           </Link>
           {" · "}
           <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary hover:underline">
-            Workflow guide
+            Podcast to blog workflow
           </Link>
           {" · "}
           <Link href="/guides/podcast-faq-for-seo" className="font-medium text-primary hover:underline">

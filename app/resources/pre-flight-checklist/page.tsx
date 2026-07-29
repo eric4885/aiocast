@@ -164,10 +164,14 @@ export default function PreFlightChecklistPage() {
             Search traffic from a podcast usually starts on <em>your</em> site — a blog post or structured show notes —
             not inside Spotify or Apple Podcasts. Clean captures produce cleaner auto-transcripts, which means less time
             fixing garbage before you draft an SEO article. Run this checklist first, then use our{" "}
+            <Link href="/guides/podcast-to-blog-post" className="text-primary underline-offset-4 hover:underline">
+              how to turn a podcast into a blog post
+            </Link>{" "}
+            guide, the{" "}
             <Link href="/guides/show-notes-template" className="text-primary underline-offset-4 hover:underline">
               show notes template
-            </Link>{" "}
-            or{" "}
+            </Link>
+            , or the{" "}
             <Link href="/examples/sample-growth-pack" className="text-primary underline-offset-4 hover:underline">
               sample growth pack output
             </Link>{" "}

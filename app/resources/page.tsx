@@ -24,7 +24,7 @@ const items = [
     icon: ListChecks,
   },
   {
-    title: "How to turn a podcast into a blog post",
+    title: "Podcast to blog — how to turn an episode into a post",
     href: "/guides/podcast-to-blog-post",
     description: "Step-by-step podcast to blog post workflow — transcript or show notes to SEO article.",
     icon: FileText,
