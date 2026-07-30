@@ -40,8 +40,16 @@ function ExampleArticleJsonLd() {
     headline: "How Indie Podcasters Turn One Episode Into a Week of SEO Content",
     description:
       "Example SEO article draft from the AioCast growth pack — illustrative output for podcast-to-blog repurposing.",
+    datePublished: "2026-06-20",
+    dateModified: "2026-07-20",
     author: { "@type": "Organization", name: siteConfig.name },
-    publisher: { "@type": "Organization", name: siteConfig.name, url: base },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: base,
+      logo: { "@type": "ImageObject", url: `${base}/opengraph-image` },
+    },
+    image: [`${base}/opengraph-image`],
     mainEntityOfPage: `${base}/examples/sample-growth-pack`,
   };
   return (

@@ -41,7 +41,6 @@ export const metadata: Metadata = {
     "automatic podcast show notes generator",
     "podcast social media content ideas",
     "audio to blog",
-    "podcast content repurposing",
     "social script generator",
     "localized publishing schedule",
   ],
@@ -80,6 +79,28 @@ export const viewport: Viewport = {
 
 function SiteJsonLd() {
   const base = siteConfig.url.replace(/\/$/, "");
+  const sameAs = [siteConfig.social.x, siteConfig.social.linkedin, siteConfig.social.youtube].filter(
+    (url) => typeof url === "string" && /^https?:\/\//i.test(url.trim()),
+  );
+
+  const organization: Record<string, unknown> = {
+    "@type": "Organization",
+    "@id": `${base}/#organization`,
+    name: siteConfig.name,
+    url: base,
+    logo: {
+      "@type": "ImageObject",
+      url: `${base}/opengraph-image`,
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: siteConfig.contactEmail,
+      contactType: "customer support",
+      availableLanguage: ["English"],
+    },
+  };
+  if (sameAs.length > 0) organization.sameAs = sameAs;
+
   const payload = {
     "@context": "https://schema.org",
     "@graph": [
@@ -91,19 +112,9 @@ function SiteJsonLd() {
         description:
           "English-language tools to turn podcast episodes into SEO drafts, social scripts, and publishing schedules.",
         inLanguage: "en-US",
+        publisher: { "@id": `${base}/#organization` },
       },
-      {
-        "@type": "Organization",
-        "@id": `${base}/#organization`,
-        name: siteConfig.name,
-        url: base,
-        contactPoint: {
-          "@type": "ContactPoint",
-          email: siteConfig.contactEmail,
-          contactType: "customer support",
-          availableLanguage: ["English"],
-        },
-      },
+      organization,
     ],
   };
   return (

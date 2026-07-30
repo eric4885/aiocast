@@ -1,17 +1,7 @@
-"use client";
-
-
-
 import Link from "next/link";
-
-import { usePathname } from "next/navigation";
-
 import { SubscribeForm } from "@/components/shared/SubscribeForm";
-
 import { siteConfig } from "@/lib/data";
 import { newsletterBlurb, newsletterHeading } from "@/lib/pricing-copy";
-
-
 
 function XGlyph({ className }: { className?: string }) {
 
@@ -52,29 +42,14 @@ const socialLinks = [
 
 
 export function Footer() {
-
-  const pathname = usePathname();
-
-  if (pathname === "/") return null;
-
-
-
   return (
-
     <footer className="border-t border-border bg-card/40">
-
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-3 sm:px-6">
-
         <div className="space-y-4">
-
           <Link href="/" className="text-lg font-bold text-foreground">
-
             {siteConfig.name}
-
           </Link>
-
           <p className="max-w-xs text-sm text-muted-foreground">{siteConfig.tagline}</p>
-
           <div className="flex flex-wrap gap-2">
             {socialLinks.length > 0 ? (
               socialLinks.map((s) => {
@@ -108,107 +83,61 @@ export function Footer() {
           <p className="text-sm font-semibold text-foreground">Explore</p>
 
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-
             <li>
-
               <Link className="hover:text-foreground" href="/tools/seo-growth-pack">
-
-                Podcast SEO growth pack generator
-
+                Podcast SEO growth pack
               </Link>
-
             </li>
-
             <li>
-
-              <Link className="hover:text-foreground" href="/resources/pre-flight-checklist">
-
-                Preflight recording checklist
-
-              </Link>
-
-            </li>
-
-            <li>
-
-              <Link className="hover:text-foreground" href="/examples/sample-growth-pack">
-
-                Sample growth pack output
-
-              </Link>
-
-            </li>
-
-            <li>
-
               <Link className="hover:text-foreground" href="/guides/podcast-to-blog-post">
-
-                Podcast to blog post
-
+                How to turn a podcast into a blog post
               </Link>
-
             </li>
-
             <li>
-
+              <Link className="hover:text-foreground" href="/guides/show-notes-template">
+                Show notes template
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-foreground" href="/tools/free-podcast-title-generator">
+                Podcast title generator
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-foreground" href="/guides/podcast-faq-for-seo">
+                Podcast FAQ for SEO
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-foreground" href="/examples/sample-growth-pack">
+                Sample growth pack output
+              </Link>
+            </li>
+            <li>
               <Link className="hover:text-foreground" href="/tools/show-notes-to-html">
-
                 Show notes to HTML converter
-
               </Link>
-
             </li>
-
             <li>
-
-              <Link className="hover:text-foreground" href="/ai-podcast-editing-stack">
-
-                Podcast to SEO article workflow
-
+              <Link className="hover:text-foreground" href="/resources/pre-flight-checklist">
+                Preflight recording checklist
               </Link>
-
             </li>
-
             <li>
-
-              <Link className="hover:text-foreground" href="/remote-recording-setup">
-
-                7-day publish plan guide
-
+              <Link className="hover:text-foreground" href="/resources">
+                All resources
               </Link>
-
             </li>
-
             <li>
-
-              <Link className="hover:text-foreground" href="/podcast-to-short-video">
-
-                Podcast social scripts (in pack)
-
-              </Link>
-
-            </li>
-
-            <li>
-
-              <Link className="hover:text-foreground" href="/my-packs">
-
-                Find my SEO growth packs
-
-              </Link>
-
-            </li>
-
-            <li>
-
               <Link className="hover:text-foreground" href="/pro-toolkit">
-
                 Pro pricing
-
               </Link>
-
             </li>
-
+            <li>
+              <Link className="hover:text-foreground" href="/my-packs">
+                Find my SEO growth packs
+              </Link>
+            </li>
           </ul>
 
         </div>

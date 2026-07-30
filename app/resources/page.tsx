@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "Resources — guides & checklists",
   description: "Podcast SEO guides, show notes templates, and recording checklists from AioCast.",
   alternates: { canonical: `${siteConfig.url}/resources` },
+  openGraph: {
+    title: "AioCast resources — guides & checklists",
+    description: "Podcast to blog workflow, show notes template, FAQ for SEO, and preflight checklist.",
+    url: `${siteConfig.url}/resources`,
+  },
 };
 
 const items = [

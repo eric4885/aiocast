@@ -57,6 +57,9 @@ export default function ShowNotesTemplateGuidePage() {
     <GuideLayout
       title="Show notes for podcast — free SEO-ready template"
       description="Good show notes for podcast episodes are more than timestamp dumps. This copy-paste outline gives Google and skimmers something searchable — then paste into our HTML converter for your site."
+      path="/guides/show-notes-template"
+      datePublished="2026-06-18"
+      dateModified="2026-07-20"
     >
       <h2>What are show notes for podcast episodes?</h2>
       <p>

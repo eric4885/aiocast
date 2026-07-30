@@ -7,9 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/results/"],
+      disallow: ["/results/", "/my-packs", "/unsubscribe", "/tools/highlight-extractor"],
     },
     sitemap: `${base}/sitemap.xml`,
-    host: base.replace(/^https?:\/\//, ""),
   };
 }

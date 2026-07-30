@@ -118,6 +118,9 @@ export default function PodcastToBlogGuidePage() {
     <GuideLayout
       title="How to Turn a Podcast into a Blog Post"
       description="A practical podcast to blog post workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
+      path="/guides/podcast-to-blog-post"
+      datePublished="2026-06-15"
+      dateModified="2026-07-29"
       showTopCta
     >
       <h2>How to turn a podcast into a blog post (direct answer)</h2>
