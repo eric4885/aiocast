@@ -12,6 +12,11 @@ export function HomeLearnMore() {
         </p>
         <ul className="mx-auto mt-6 flex max-w-lg flex-col gap-2 text-left text-sm text-muted-foreground sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2">
           <li>
+            <Link href="/resources/podcast-to-blog-seo-checklist" className="font-medium text-primary underline-offset-4 hover:underline">
+              Podcast to blog SEO checklist
+            </Link>
+          </li>
+          <li>
             <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
               How to turn a podcast into a blog post
             </Link>
@@ -38,7 +43,7 @@ export function HomeLearnMore() {
           </li>
           <li>
             <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
-              Example growth pack
+              Podcast to blog example
             </Link>
           </li>
         </ul>

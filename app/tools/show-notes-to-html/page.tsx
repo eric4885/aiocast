@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/data";
 import { ShowNotesToHtmlClient } from "./show-notes-to-html-client";
 
@@ -53,17 +54,41 @@ export default function ShowNotesToHtmlPage() {
     <div className="border-b border-border bg-background bg-grid-subtle">
       <FaqJsonLd />
       <div className="mx-auto max-w-3xl px-4 pb-4 pt-10 text-center sm:px-6 sm:pt-12">
-        <p className="text-sm font-semibold text-primary">Free tool</p>
+        <p className="text-sm font-semibold text-primary">Free tool · No signup</p>
         <h1 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           Show notes to HTML converter
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-          Paste your episode outline or show notes — get a clean HTML block for your website. Supports simple Markdown
-          headings and bullet lists.
+          Paste your episode outline or show notes — get a clean HTML block for WordPress, Ghost, or Blogger. Runs in
+          your browser. Need the outline first? Use the{" "}
+          <Link href="/guides/show-notes-template" className="font-medium text-primary underline-offset-4 hover:underline">
+            show notes template
+          </Link>
+          .
         </p>
       </div>
 
       <ShowNotesToHtmlClient />
+
+      <section className="mx-auto max-w-2xl space-y-4 px-4 pb-8 text-sm leading-relaxed text-muted-foreground sm:px-6">
+        <h2 className="text-lg font-semibold text-foreground">How to convert podcast show notes to HTML</h2>
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>Fill the show notes template (hook, takeaways, topic seeds, one listener question).</li>
+          <li>Paste the outline into the converter above — Markdown headings and bullets work.</li>
+          <li>Copy the HTML into your CMS (Blogger: switch to HTML view).</li>
+          <li>
+            For a full SEO article + FAQ + social scripts, paste the same notes into the{" "}
+            <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary underline-offset-4 hover:underline">
+              free growth pack
+            </Link>
+            , then finish with the{" "}
+            <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary underline-offset-4 hover:underline">
+              podcast to blog SEO checklist
+            </Link>
+            .
+          </li>
+        </ol>
+      </section>
 
       <section className="mx-auto max-w-2xl px-4 pb-16 sm:px-6">
         <h2 className="text-lg font-semibold text-foreground">Common questions</h2>
@@ -75,14 +100,19 @@ export default function ShowNotesToHtmlPage() {
             </div>
           ))}
         </dl>
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          Want the full workflow?{" "}
+        <div className="mt-10 rounded-2xl border border-primary/30 bg-primary/5 p-5 text-center">
+          <p className="text-sm font-semibold text-foreground">Want SEO draft + FAQ, not just HTML?</p>
+          <Button size="lg" asChild className="mt-4">
+            <Link href="/tools/seo-growth-pack#pack-transcript-only">Open free SEO growth pack</Link>
+          </Button>
+        </div>
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           <Link href="/guides/show-notes-template" className="text-primary underline-offset-4 hover:underline">
             Show notes template
           </Link>
           {" · "}
-          <Link href="/" className="text-primary underline-offset-4 hover:underline">
-            AioCast home
+          <Link href="/guides/podcast-to-blog-post" className="text-primary underline-offset-4 hover:underline">
+            Podcast to blog guide
           </Link>
         </p>
       </section>

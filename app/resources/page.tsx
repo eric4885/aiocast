@@ -10,12 +10,18 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteConfig.url}/resources` },
   openGraph: {
     title: "AioCast resources — guides & checklists",
-    description: "Podcast to blog workflow, show notes template, FAQ for SEO, and preflight checklist.",
+    description: "Podcast to blog SEO checklist, show notes template, FAQ for SEO, and preflight checklist.",
     url: `${siteConfig.url}/resources`,
   },
 };
 
 const items = [
+  {
+    title: "Podcast to blog SEO checklist",
+    href: "/resources/podcast-to-blog-seo-checklist",
+    description: "Interactive publish checklist — keyword, on-page SEO, FAQ, promotion. No signup.",
+    icon: ListChecks,
+  },
   {
     title: "Pre-flight recording checklist",
     href: "/resources/pre-flight-checklist",
@@ -23,9 +29,9 @@ const items = [
     icon: Mic,
   },
   {
-    title: "Sample growth pack output",
+    title: "Podcast to blog example — sample structure",
     href: "/examples/sample-growth-pack",
-    description: "See a full SEO article, FAQ, and social scripts example.",
+    description: "See a full SEO article skeleton, FAQ, and social scripts example.",
     icon: ListChecks,
   },
   {

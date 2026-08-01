@@ -442,7 +442,12 @@ export default function PodcastToBlogGuidePage() {
 
       <h2 id="step-4">Step 4 — Implement basic on-page SEO</h2>
       <p>
-        Package your polished text in WordPress, Ghost, Webflow, or Framer using tags search engines understand.
+        Package your polished text in WordPress, Ghost, Webflow, or Framer using tags search engines understand. Tick
+        each item on the free{" "}
+        <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary hover:underline">
+          podcast to blog SEO checklist
+        </Link>{" "}
+        before you publish.
       </p>
       <ol>
         <li>

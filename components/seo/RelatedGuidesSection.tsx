@@ -6,14 +6,19 @@ import { cn } from "@/lib/utils";
 
 const guides = [
   {
+    href: "/resources/podcast-to-blog-seo-checklist",
+    title: "Podcast to blog SEO checklist",
+    description: "Interactive publish checklist — keyword, on-page SEO, FAQ, promotion. No signup.",
+  },
+  {
     href: "/guides/podcast-to-blog-post",
     title: "Podcast to blog — step-by-step",
     description: "Turn a podcast into a blog post: transcript or show notes, draft, on-page SEO, publish.",
   },
   {
     href: "/examples/sample-growth-pack",
-    title: "Sample growth pack output",
-    description: "Full podcast to blog example — article, FAQ, social scripts, and publish plan.",
+    title: "Podcast to blog example structure",
+    description: "Full podcast to blog example — article skeleton, FAQ, social scripts, and publish plan.",
   },
   {
     href: "/guides/show-notes-template",

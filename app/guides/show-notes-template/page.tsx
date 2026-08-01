@@ -59,7 +59,7 @@ export default function ShowNotesTemplateGuidePage() {
       description="Good show notes for podcast episodes are more than timestamp dumps. This copy-paste outline gives Google and skimmers something searchable — then paste into our HTML converter for your site."
       path="/guides/show-notes-template"
       datePublished="2026-06-18"
-      dateModified="2026-07-20"
+      dateModified="2026-08-01"
     >
       <h2>What are show notes for podcast episodes?</h2>
       <p>
@@ -221,6 +221,11 @@ One listener question this episode answers: What is the cheapest way to get sepa
       <h2>Related guides</h2>
       <ul>
         <li>
+          <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary hover:underline">
+            Podcast to blog SEO checklist
+          </Link>
+        </li>
+        <li>
           <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
             How to turn a podcast into a blog post
           </Link>
@@ -232,7 +237,7 @@ One listener question this episode answers: What is the cheapest way to get sepa
         </li>
         <li>
           <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
-            Example growth pack output
+            Podcast to blog example structure
           </Link>
         </li>
         <li>

@@ -89,6 +89,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link className="hover:text-foreground" href="/resources/podcast-to-blog-seo-checklist">
+                Podcast to blog SEO checklist
+              </Link>
+            </li>
+            <li>
               <Link className="hover:text-foreground" href="/guides/podcast-to-blog-post">
                 How to turn a podcast into a blog post
               </Link>

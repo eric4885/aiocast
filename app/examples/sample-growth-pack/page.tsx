@@ -6,13 +6,13 @@ import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Sample SEO growth pack output — podcast to blog example",
+  title: "Podcast to blog example — sample SEO post structure & growth pack",
   description:
-    "See a full podcast to blog example: SEO article draft, FAQ blocks, social scripts, and 7-day publish plan from one episode — before you generate your own.",
+    "See a podcast to blog example: SEO article structure, FAQ blocks, social scripts, and a 7-day publish plan from one episode — before you generate your own.",
   alternates: { canonical: `${siteConfig.url}/examples/sample-growth-pack` },
   openGraph: {
-    title: "Sample podcast SEO growth pack",
-    description: "Example article, FAQ, social scripts, and publish schedule from AioCast.com.",
+    title: "Podcast to blog example — sample growth pack",
+    description: "Example blog structure, FAQ, social scripts, and publish schedule from one podcast episode.",
     url: `${siteConfig.url}/examples/sample-growth-pack`,
   },
 };
@@ -20,7 +20,11 @@ export const metadata: Metadata = {
 const faq = [
   {
     q: "What is a podcast to blog example?",
-    a: "A sample of what one episode can become on your website: a long-form SEO article draft, FAQ pairs, channel-native social scripts, and a simple publish schedule — not a live RSS feed or guaranteed rankings.",
+    a: "A sample of what one episode can become on your website: a long-form SEO article draft with clear H2 structure, FAQ pairs, channel-native social scripts, and a simple publish schedule — not a live RSS feed or guaranteed rankings.",
+  },
+  {
+    q: "What does a good podcast blog post structure look like?",
+    a: "Problem-solving title, short intro, intent-based H2s, takeaways, FAQ, and a clear next step. Archive titles like Episode 47 rarely match search intent — see the skeleton below before you write.",
   },
   {
     q: "Who is this sample growth pack for?",
@@ -29,6 +33,10 @@ const faq = [
   {
     q: "Do I need a full transcript to get results like this?",
     a: "A full transcript helps, but structured show notes with a hook, takeaways, and one listener question are enough for a solid first draft. Run the preflight checklist before recording so your capture is transcript-ready.",
+  },
+  {
+    q: "What should I do after studying this example?",
+    a: "Run the podcast to blog SEO checklist when you publish, then paste your own notes into the free growth pack to generate a draft in the same structure.",
   },
 ] as const;
 
@@ -41,7 +49,7 @@ function ExampleArticleJsonLd() {
     description:
       "Example SEO article draft from the AioCast growth pack — illustrative output for podcast-to-blog repurposing.",
     datePublished: "2026-06-20",
-    dateModified: "2026-07-20",
+    dateModified: "2026-08-01",
     author: { "@type": "Organization", name: siteConfig.name },
     publisher: {
       "@type": "Organization",
@@ -88,12 +96,45 @@ export default function SampleGrowthPackExamplePage() {
               Generate SEO pack
             </Link>
           </p>
-          <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-primary">Public example</p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Sample SEO growth pack output</h1>
+          <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-primary">Podcast to blog example</p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+            Podcast to blog example — SEO post structure
+          </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            This is a static demo of what the free tool delivers — not a live user pack. Generate your own from your
-            transcript or show notes; always edit before publishing.
+            A static demo of blog structure, FAQ, and social scripts from one episode — not a live user pack. Study the
+            skeleton, then generate your own from show notes or a transcript.
           </p>
+
+          <section className="mt-8 max-w-2xl rounded-2xl border border-border bg-secondary/30 p-5 sm:p-6">
+            <h2 className="text-base font-semibold text-foreground">Example blog post skeleton</h2>
+            <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
+              <li>
+                <strong className="text-foreground">H1 / title tag</strong> — problem-solving keyword + benefit
+              </li>
+              <li>
+                <strong className="text-foreground">Intro (2–3 sentences)</strong> — who it is for + outcome
+              </li>
+              <li>
+                <strong className="text-foreground">H2 sections</strong> — search questions, not joke chapter names
+              </li>
+              <li>
+                <strong className="text-foreground">Takeaways list</strong> — 3–5 bullets a skimmer can act on
+              </li>
+              <li>
+                <strong className="text-foreground">FAQ block</strong> — 3 honest Q&amp;A pairs from the episode
+              </li>
+              <li>
+                <strong className="text-foreground">CTA</strong> — next episode, newsletter, or related guide
+              </li>
+            </ol>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Full rendered sample below. When you publish for real, run the{" "}
+              <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary underline-offset-4 hover:underline">
+                podcast to blog SEO checklist
+              </Link>
+              .
+            </p>
+          </section>
 
           <section className="mt-10 max-w-2xl space-y-4 text-sm leading-relaxed text-muted-foreground">
             <h2 className="text-lg font-semibold text-foreground">What&apos;s in this podcast to blog example</h2>
@@ -122,15 +163,20 @@ export default function SampleGrowthPackExamplePage() {
               <Link href="/resources/pre-flight-checklist" className="text-primary underline-offset-4 hover:underline">
                 printable preflight checklist
               </Link>{" "}
-              so your audio is transcript-ready — cleaner captures mean less cleanup in the draft. For the full{" "}
+              so your audio is transcript-ready. For the full{" "}
               <Link href="/guides/podcast-to-blog-post" className="text-primary underline-offset-4 hover:underline">
                 podcast to blog
               </Link>{" "}
-              workflow after you generate, follow the step-by-step guide.
+              workflow, follow the step-by-step guide.
             </p>
-            <Button size="lg" asChild className="mt-2">
-              <Link href="/tools/seo-growth-pack">Generate your own growth pack</Link>
-            </Button>
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row">
+              <Button size="lg" asChild>
+                <Link href="/tools/seo-growth-pack">Generate your own growth pack</Link>
+              </Button>
+              <Button size="lg" variant="secondary" asChild>
+                <Link href="/resources/podcast-to-blog-seo-checklist">Open SEO checklist</Link>
+              </Button>
+            </div>
           </section>
 
           <PublicPackPreview />
@@ -144,6 +190,15 @@ export default function SampleGrowthPackExamplePage() {
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
               </div>
             ))}
+            <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5 text-center">
+              <p className="text-sm font-semibold text-foreground">Turn your episode into this structure</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Paste show notes or a transcript — free growth pack, then finish with the SEO checklist.
+              </p>
+              <Button size="lg" asChild className="mt-4">
+                <Link href="/tools/seo-growth-pack#pack-transcript-only">Generate SEO growth pack</Link>
+              </Button>
+            </div>
           </section>
         </div>
       </div>
