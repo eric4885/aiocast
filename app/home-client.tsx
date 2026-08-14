@@ -7,6 +7,7 @@ import { Check, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { freeHeroTagline, homePricingAnchor } from "@/lib/pricing-copy";
+import { productPromise } from "@/lib/product-copy";
 import { saveTranscriptPrefill } from "@/lib/transcript-prefill";
 
 export function HomePageClient() {
@@ -34,21 +35,21 @@ export function HomePageClient() {
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
                 rows={4}
-                placeholder="Paste your transcript or show notes here — even a rough outline works…"
+                placeholder="Paste show notes or a transcript — even a rough outline works…"
                 className="w-full resize-y rounded-xl border border-border bg-background px-4 py-3 text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-sm:max-h-40 max-sm:overscroll-y-contain md:min-h-[180px]"
                 style={{ touchAction: "manipulation" }}
               />
               <p className="mt-2 text-xs text-muted-foreground">
-                Full transcripts welcome — paste everything, no need to trim.
+                Input: show notes or transcript → Output: editable SEO blog draft for your site.
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                No transcript yet?{" "}
+                No notes yet?{" "}
                 <Link href="/guides/show-notes-template" className="font-medium text-primary underline-offset-4 hover:underline">
                   Show notes template
                 </Link>
-                {" → "}
-                <Link href="/tools/seo-growth-pack#pack-transcript-only" className="font-medium text-primary underline-offset-4 hover:underline">
-                  Generate
+                {" · "}
+                <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
+                  Example blog structure
                 </Link>
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
@@ -58,7 +59,7 @@ export function HomePageClient() {
                   className="min-h-[52px] w-full touch-manipulation px-8 text-base font-semibold sm:w-auto"
                 >
                   <Rocket className="mr-2 h-4 w-4" />
-                  Generate Draft Pack
+                  {productPromise.cta}
                 </Button>
                 <Button
                   type="button"
@@ -67,7 +68,7 @@ export function HomePageClient() {
                   className="min-h-[52px] w-full sm:w-auto"
                   asChild
                 >
-                  <Link href="/examples/sample-growth-pack">See example output</Link>
+                  <Link href="/examples/sample-growth-pack">See example draft</Link>
                 </Button>
               </div>
               <p className="mt-4 text-center text-sm font-medium text-foreground">
@@ -85,36 +86,31 @@ export function HomePageClient() {
 
         <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
           <h2 className="text-balance text-2xl font-bold leading-tight tracking-tight sm:text-[2rem] sm:leading-snug md:text-3xl">
-            What you get in one run
+            Input → blog draft (that&apos;s the point)
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-            Skip the blank page. Paste once, edit like a human, and ship on your domain — rankings take weeks and are
-            never guaranteed.
+            {productPromise.support}
           </p>
           <ul className="mx-auto mt-8 max-w-lg space-y-3 text-left text-[15px] leading-relaxed text-muted-foreground">
             <li className="flex gap-2">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
               <span>
-                <strong className="text-foreground">SEO article draft</strong> — intent-based headings, meta
-                description, and keywords
+                <strong className="text-foreground">{productPromise.primaryOutput}</strong> — title, meta, and
+                intent-based headings you can paste into your CMS
               </span>
             </li>
             <li className="flex gap-2">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
               <span>
-                <strong className="text-foreground">FAQ blocks</strong> — structured Q&amp;A for Google and AI search
+                <strong className="text-foreground">Plus in the same pack</strong> — FAQ blocks, social scripts, and a
+                simple publish rhythm
               </span>
             </li>
             <li className="flex gap-2">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
               <span>
-                <strong className="text-foreground">Social scripts</strong> — LinkedIn, X, and newsletter copy
-              </span>
-            </li>
-            <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-              <span>
-                <strong className="text-foreground">7-day publish plan</strong> — a rhythm to ship every week
+                <strong className="text-foreground">You stay the editor</strong> — review facts and voice, then publish
+                on your domain (rankings are never guaranteed)
               </span>
             </li>
           </ul>
@@ -125,7 +121,7 @@ export function HomePageClient() {
           >
             <Link href="/tools/seo-growth-pack#pack-transcript-only">
               <Rocket className="mr-2 h-4 w-4" />
-              Generate Draft Pack
+              {productPromise.cta}
             </Link>
           </Button>
           <p className="mx-auto mt-6 text-sm text-muted-foreground">

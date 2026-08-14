@@ -13,13 +13,13 @@ import { consumeTranscriptPrefill } from "@/lib/transcript-prefill";
 import { cn } from "@/lib/utils";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
 import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
-import { PackDeliveryCards } from "@/components/tools/PackDeliveryCards";
 import {
   contentPrivacyNote,
   freeLimitsInline,
   freeLimitsToolLine,
   rankingDisclaimer,
 } from "@/lib/pricing-copy";
+import { productPromise } from "@/lib/product-copy";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 const MAX_SECONDS = 300;
@@ -190,10 +190,12 @@ export function GrowthPackClient({
     { id: "audio", label: "Upload audio", hint: "We transcribe your clip, then generate your pack" },
   ];
 
-  const progressLabel = willTranscribe ? "Transcribing audio and building your pack..." : "Generating your growth pack...";
+  const progressLabel = willTranscribe
+    ? "Transcribing audio and writing your blog draft..."
+    : "Writing your SEO blog draft...";
   const progressDetail = willTranscribe
-    ? "Usually 30–90 seconds for a 5-minute clip. Keep this tab open — you'll land on your result page automatically."
-    : "Packaging your assets now — you'll be redirected when ready.";
+    ? "Usually 30–90 seconds for a 5-minute clip. Keep this tab open — you'll land on your draft automatically."
+    : "Packaging your blog draft now — you'll be redirected when ready.";
 
   return (
     <div className="border-b border-border bg-gradient-hero bg-grid-subtle">
@@ -205,39 +207,55 @@ export function GrowthPackClient({
           </div>
         )}
 
-        <p className="text-sm font-semibold text-primary">Free tool</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Generate my SEO growth pack</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          Paste show notes or upload audio — get an SEO article draft, social scripts, and a 7-day publish plan. Edit
-          and publish on your own blog. New to the workflow? Read{" "}
+        <p className="text-sm font-semibold text-primary">Free for solo podcasters</p>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
+          {productPromise.headlineLead}{" "}
+          <span className="text-primary">{productPromise.headlineAccent}</span>
+        </h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{productPromise.oneLiner}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {productPromise.support}{" "}
+          <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
+            See example draft
+          </Link>
+          {" · "}
           <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
-            how to turn a podcast into a blog post
+            Full workflow
           </Link>
           .
         </p>
 
-        <PackDeliveryCards className="mt-6" />
+        <div className="mt-6 rounded-2xl border border-border/80 bg-background/50 p-4 sm:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Result preview (example)</p>
+          <p className="mt-2 text-base font-semibold text-foreground">{samplePack.seoArticle.title}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{samplePack.seoArticle.metaDescription}</p>
+          <p className="mt-3 line-clamp-4 whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
+            {samplePack.seoArticle.body}
+          </p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Your pack leads with this {productPromise.primaryOutput} — FAQ and social scripts are extras in the same run.
+          </p>
+        </div>
 
-        <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-muted-foreground">
-          <p className="font-semibold text-primary">Free plan limits</p>
-          <ul className="mt-2 space-y-1">
-            <li>Paste transcript/show notes, or upload audio for automatic transcription</li>
-            <li>Audio: up to 5 minutes · 10 MB max · MP3, M4A, or WAV recommended</li>
+        <details className="mt-4 rounded-xl border border-border/70 bg-secondary/40 px-4 py-3 text-sm text-muted-foreground">
+          <summary className="cursor-pointer font-semibold text-foreground">Free plan limits &amp; what else is included</summary>
+          <ul className="mt-3 list-disc space-y-1 pl-5">
+            <li>Main output: editable SEO blog draft (title, meta, body)</li>
+            <li>Also included: FAQ blocks, social scripts, 7-day publish rhythm</li>
+            <li>Paste transcript/show notes, or upload audio (up to 5 min · 10 MB)</li>
             <li>{freeLimitsToolLine}</li>
+            <li>Please wait 1 minute between submissions from the same IP</li>
             <li>
               <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
                 Pro
               </Link>
-              : unlimited runs · FAQ JSON-LD · full pack history (use the same email at checkout)
+              : unlimited runs · FAQ JSON-LD · pack history
             </li>
-            <li>Please wait 1 minute between submissions from the same IP</li>
             {rateLimitsDisabled && (
-              <li className="text-muted-foreground/90">
-                Launch preview — limits above are temporarily relaxed while we tune the free tier.
-              </li>
+              <li className="text-muted-foreground/90">Launch preview — limits may be temporarily relaxed.</li>
             )}
           </ul>
-        </div>
+        </details>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <Card className="border-border/80 bg-secondary/50">
@@ -425,7 +443,7 @@ export function GrowthPackClient({
                     className="mt-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-100"
                     role="status"
                   >
-                    ✓ Pack ready — opening your result page now
+                    ✓ Blog draft ready — opening your result page now
                     {email.trim()
                       ? ". Backup link incoming — same email works on Find my packs."
                       : ". Bookmark the page or add your email there for recovery."}
@@ -452,7 +470,7 @@ export function GrowthPackClient({
                     ) : (
                       <>
                         <Sparkles className="mr-2 h-4 w-4" />
-                        Generate pack
+                        {productPromise.cta}
                       </>
                     )}
                   </Button>

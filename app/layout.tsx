@@ -22,11 +22,11 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — Paste show notes, get podcast SEO pack`,
+    default: `${siteConfig.name} — Paste show notes, get an SEO blog draft`,
     template: `%s · ${siteConfig.name}`,
   },
   description:
-    "Paste podcast show notes or upload audio — get an SEO blog draft, FAQ blocks, social scripts, and a 7-day publish plan. Edit and publish on your site; no ranking guarantees.",
+    "For solo podcasters without an editor: paste show notes or a transcript, get a free SEO blog draft for your own site. Edit before publishing; no ranking guarantees.",
   keywords: [
     "podcast content repurposing",
     "podcast SEO article generator",
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — Paste show notes, get podcast SEO pack`,
+    title: `${siteConfig.name} — Paste show notes, get an SEO blog draft`,
     description:
-      "Paste show notes or upload audio — SEO article draft, social scripts, and a 7-day publish plan. Edit on your site before expecting search traffic.",
+      "For solo podcasters: paste show notes or a transcript, get a free SEO blog draft for your own site.",
     images: [
       {
         url: "/opengraph-image",
@@ -63,9 +63,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — Paste show notes, get podcast SEO pack`,
+    title: `${siteConfig.name} — Paste show notes, get an SEO blog draft`,
     description:
-      "Generate SEO-ready articles, social scripts, and publish plans from podcast show notes or audio.",
+      "For solo podcasters: paste show notes or a transcript, get a free SEO blog draft for your own site.",
     images: ["/opengraph-image"],
   },
 };

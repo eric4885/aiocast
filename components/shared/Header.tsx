@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const generateLinks = [
-  { href: "/tools/seo-growth-pack", label: "SEO growth pack" },
+  { href: "/tools/seo-growth-pack", label: "Blog draft tool" },
   { href: "/tools/free-podcast-title-generator", label: "Title generator" },
   { href: "/tools/show-notes-to-html", label: "Show notes → HTML" },
 ] as const;
@@ -85,7 +85,7 @@ export function Header() {
             <Link href="/pro-toolkit">Pricing</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="/tools/seo-growth-pack">Generate pack</Link>
+            <Link href="/tools/seo-growth-pack">Generate blog draft</Link>
           </Button>
         </div>
 

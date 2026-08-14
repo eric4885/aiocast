@@ -26,6 +26,7 @@ import { PublishWorkflowCard } from "@/components/results/PublishWorkflowCard";
 import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
 import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
+import { productPromise } from "@/lib/product-copy";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -222,7 +223,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
   const [job, setJob] = useState<JobPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [copyToast, setCopyToast] = useState<string | null>(null);
-  const [articleExpanded, setArticleExpanded] = useState(false);
+  const [articleExpanded, setArticleExpanded] = useState(true);
   const [transcriptExpanded, setTranscriptExpanded] = useState(false);
   const [backupEmail, setBackupEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
@@ -329,8 +330,10 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
             <p className="text-3xl" aria-hidden>
               🎁
             </p>
-            <p className="mt-2 font-semibold">Opening your growth pack...</p>
-            <p className="mt-1 text-sm text-muted-foreground">Generating article, FAQ, scripts, and SRT.</p>
+            <p className="mt-2 font-semibold">Writing your SEO blog draft...</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Primary output: {productPromise.primaryOutput}. FAQ and scripts come with it.
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -396,7 +399,8 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       )}
 
       <p className="text-center text-xs text-muted-foreground">
-        Private link — review and edit before publishing. Do not share this URL publicly.
+        Private link — your {productPromise.primaryOutput} is below. Review before publishing. Do not share this URL
+        publicly.
       </p>
 
       {isTemplate && (
@@ -418,9 +422,93 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       {isAi && (
         <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
-          AI-generated draft — review facts and tone, then publish on your own site.
+          AI-generated {productPromise.primaryOutput} — review facts and tone, then publish on your own site.
         </div>
       )}
+
+      <Card className="border-primary/30 ring-1 ring-primary/20">
+        <CardContent className="space-y-4 p-6">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">Primary result</p>
+              <p className="mt-1 text-lg font-semibold text-foreground">Your {productPromise.primaryOutput}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                AI-rewritten blog post for search — not your raw show notes. ~{wordCount.toLocaleString()} words · aim
+                for 800–1,500 for a solid SEO post. Copy/Download use Markdown or HTML.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => void copy(articleForClipboard(pack.seoArticle), "Article")}
+              >
+                <Copy className="mr-2 h-4 w-4" /> Copy full article
+              </Button>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() =>
+                  downloadTextFile(
+                    articleToMarkdown(pack.seoArticle, pack.faq),
+                    articleExportFilename(id, "md"),
+                  )
+                }
+              >
+                <Download className="mr-2 h-4 w-4" /> Download Markdown
+              </Button>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() =>
+                  downloadTextFile(
+                    articleToHtml(pack.seoArticle, pack.faq),
+                    articleExportFilename(id, "html"),
+                    "text/html;charset=utf-8",
+                  )
+                }
+              >
+                <Download className="mr-2 h-4 w-4" /> Download HTML
+              </Button>
+            </div>
+          </div>
+          {echoesSource && (
+            <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+              This draft still looks close to your transcript outline. We tried an automatic rewrite — please edit
+              section titles and add search-specific detail before publishing.
+            </p>
+          )}
+          <p className="text-base font-semibold text-foreground sm:text-lg">{pack.seoArticle.title}</p>
+          <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
+          {pack.seoArticle.keywords.length > 0 && (
+            <p className="text-xs text-muted-foreground">Keywords: {pack.seoArticle.keywords.join(", ")}</p>
+          )}
+          <div
+            className={cn(
+              "rounded-lg border border-border bg-background/40 p-4 text-sm text-muted-foreground",
+              !articleExpanded && articleTruncated && "max-h-48 overflow-hidden",
+            )}
+          >
+            <p className="whitespace-pre-wrap">{articleExpanded ? pack.seoArticle.body : articlePreview}</p>
+          </div>
+          {articleTruncated && (
+            <button
+              type="button"
+              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+              onClick={() => setArticleExpanded((v) => !v)}
+            >
+              {articleExpanded ? "Show less" : "Show full article"}
+            </button>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Next: run the{" "}
+            <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary underline-offset-4 hover:underline">
+              podcast to blog SEO checklist
+            </Link>{" "}
+            before you publish.
+          </p>
+        </CardContent>
+      </Card>
 
       <PublishWorkflowCard />
 
@@ -473,82 +561,9 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       <ProUpsellCard email={backupEmail} variant="compact" />
 
-      <Card>
-        <CardContent className="space-y-4 p-6">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="font-semibold">SEO article draft</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                AI-rewritten blog post for search — not your raw show notes. ~{wordCount.toLocaleString()}{" "}
-                words · aim for 800–1,500 for a solid SEO post. Copy/Download use Markdown or HTML (includes optional
-                AioCast attribution — remove before publishing if you prefer).
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => void copy(articleForClipboard(pack.seoArticle), "Article")}
-              >
-                <Copy className="mr-2 h-4 w-4" /> Copy full article
-              </Button>
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() =>
-                  downloadTextFile(
-                    articleToMarkdown(pack.seoArticle, pack.faq),
-                    articleExportFilename(id, "md"),
-                  )
-                }
-              >
-                <Download className="mr-2 h-4 w-4" /> Download Markdown
-              </Button>
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() =>
-                  downloadTextFile(
-                    articleToHtml(pack.seoArticle, pack.faq),
-                    articleExportFilename(id, "html"),
-                    "text/html;charset=utf-8",
-                  )
-                }
-              >
-                <Download className="mr-2 h-4 w-4" /> Download HTML
-              </Button>
-            </div>
-          </div>
-          {echoesSource && (
-            <p className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
-              This draft still looks close to your transcript outline. We tried an automatic rewrite — please edit
-              section titles and add search-specific detail before publishing.
-            </p>
-          )}
-          <p className="text-sm font-medium">{pack.seoArticle.title}</p>
-          <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
-          {pack.seoArticle.keywords.length > 0 && (
-            <p className="text-xs text-muted-foreground">Keywords: {pack.seoArticle.keywords.join(", ")}</p>
-          )}
-          <div
-            className={cn(
-              "rounded-lg border border-border bg-background/40 p-4 text-sm text-muted-foreground",
-              !articleExpanded && articleTruncated && "max-h-48 overflow-hidden",
-            )}
-          >
-            <p className="whitespace-pre-wrap">{articleExpanded ? pack.seoArticle.body : articlePreview}</p>
-          </div>
-          {articleTruncated && (
-            <button
-              type="button"
-              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-              onClick={() => setArticleExpanded((v) => !v)}
-            >
-              {articleExpanded ? "Show less" : "Show full article"}
-            </button>
-          )}
-        </CardContent>
-      </Card>
+      <p className="pt-2 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        More in this pack
+      </p>
 
       {pack.transcript && (
         <Card>

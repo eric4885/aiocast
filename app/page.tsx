@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
-  title: "Turn podcast into SEO blog posts in minutes — free draft pack",
+  title: "Paste show notes, get an SEO blog draft — free for solo podcasters",
   description:
-    "Paste transcript or show notes — get an SEO article draft, FAQ blocks, and social scripts in minutes. Free tier, no credit card.",
+    "For solo podcasters without an editor: paste show notes or a transcript, get a free SEO blog draft for your own site. FAQ and social scripts included.",
   openGraph: {
     url: siteConfig.url,
-    title: "Turn your podcast into SEO blog posts in minutes",
+    title: "Paste show notes. Get an SEO blog draft.",
     description:
-      "Stop wasting traffic in podcast apps. Paste notes or transcript for an SEO draft, FAQ blocks, and social scripts.",
+      "Free SEO blog draft from one episode’s notes — built for indie hosts. Edit and publish on your domain.",
   },
 };
 

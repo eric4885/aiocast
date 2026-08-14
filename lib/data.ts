@@ -1,6 +1,6 @@
 ﻿export const siteConfig = {
   name: "AioCast.com",
-  tagline: "Turn podcast episodes into publish-ready SEO drafts.",
+  tagline: "Paste show notes. Get an SEO blog draft for your own site.",
   url: "https://aiocast.com",
   contactEmail: "hello@aiocast.com",
   /** Legal name shown in Privacy, Terms, and email footers (CAN-SPAM). */
