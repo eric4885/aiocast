@@ -85,12 +85,17 @@ export function Footer() {
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li>
               <Link className="hover:text-foreground" href="/tools/seo-growth-pack">
-                Podcast SEO growth pack
+                Free SEO blog draft tool
               </Link>
             </li>
             <li>
               <Link className="hover:text-foreground" href="/resources/podcast-to-blog-seo-checklist">
                 Podcast to blog SEO checklist
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-foreground" href="/examples/sample-growth-pack">
+                Podcast to blog example draft
               </Link>
             </li>
             <li>
@@ -111,11 +116,6 @@ export function Footer() {
             <li>
               <Link className="hover:text-foreground" href="/guides/podcast-faq-for-seo">
                 Podcast FAQ for SEO
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-foreground" href="/examples/sample-growth-pack">
-                Sample growth pack output
               </Link>
             </li>
             <li>
@@ -140,7 +140,7 @@ export function Footer() {
             </li>
             <li>
               <Link className="hover:text-foreground" href="/my-packs">
-                Find my SEO growth packs
+                Find my packs
               </Link>
             </li>
           </ul>

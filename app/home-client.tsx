@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { Check, Rocket } from "lucide-react";
+import { ArrowRight, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { freeHeroTagline, homePricingAnchor } from "@/lib/pricing-copy";
-import { productPromise } from "@/lib/product-copy";
+import { homeScenes, productPromise } from "@/lib/product-copy";
 import { saveTranscriptPrefill } from "@/lib/transcript-prefill";
+import { cn } from "@/lib/utils";
 
 export function HomePageClient() {
   const router = useRouter();
@@ -42,16 +43,6 @@ export function HomePageClient() {
               <p className="mt-2 text-xs text-muted-foreground">
                 Input: show notes or transcript → Output: editable SEO blog draft for your site.
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                No notes yet?{" "}
-                <Link href="/guides/show-notes-template" className="font-medium text-primary underline-offset-4 hover:underline">
-                  Show notes template
-                </Link>
-                {" · "}
-                <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
-                  Example blog structure
-                </Link>
-              </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <Button
                   type="submit"
@@ -61,19 +52,11 @@ export function HomePageClient() {
                   <Rocket className="mr-2 h-4 w-4" />
                   {productPromise.cta}
                 </Button>
-                <Button
-                  type="button"
-                  size="lg"
-                  variant="secondary"
-                  className="min-h-[52px] w-full sm:w-auto"
-                  asChild
-                >
+                <Button type="button" size="lg" variant="secondary" className="min-h-[52px] w-full sm:w-auto" asChild>
                   <Link href="/examples/sample-growth-pack">See example draft</Link>
                 </Button>
               </div>
-              <p className="mt-4 text-center text-sm font-medium text-foreground">
-                {freeHeroTagline}
-              </p>
+              <p className="mt-4 text-center text-sm font-medium text-foreground">{freeHeroTagline}</p>
               <p className="mt-2 text-center text-sm text-muted-foreground">
                 {homePricingAnchor()} —{" "}
                 <Link href="/pro-toolkit" className="font-medium text-primary underline-offset-4 hover:underline">
@@ -84,84 +67,61 @@ export function HomePageClient() {
           </form>
         </div>
 
-        <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
-          <h2 className="text-balance text-2xl font-bold leading-tight tracking-tight sm:text-[2rem] sm:leading-snug md:text-3xl">
-            Input → blog draft (that&apos;s the point)
+        <div className="mx-auto mt-14 max-w-3xl border-t border-border pt-10 sm:mt-16 sm:pt-12">
+          <h2 className="text-center text-balance text-2xl font-bold leading-tight tracking-tight sm:text-[2rem]">
+            Where are you right now?
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-            {productPromise.support}
+          <p className="mx-auto mt-3 max-w-xl text-center text-[15px] leading-relaxed text-muted-foreground">
+            Pick the situation that matches your week — not a menu of tools.
           </p>
-          <ul className="mx-auto mt-8 max-w-lg space-y-3 text-left text-[15px] leading-relaxed text-muted-foreground">
-            <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-              <span>
-                <strong className="text-foreground">{productPromise.primaryOutput}</strong> — title, meta, and
-                intent-based headings you can paste into your CMS
-              </span>
-            </li>
-            <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-              <span>
-                <strong className="text-foreground">Plus in the same pack</strong> — FAQ blocks, social scripts, and a
-                simple publish rhythm
-              </span>
-            </li>
-            <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
-              <span>
-                <strong className="text-foreground">You stay the editor</strong> — review facts and voice, then publish
-                on your domain (rankings are never guaranteed)
-              </span>
-            </li>
+
+          <ul className="mt-8 space-y-4">
+            {homeScenes.map((scene) => (
+              <li key={scene.id}>
+                <Link
+                  href={scene.href}
+                  onClick={() =>
+                    trackEvent(AnalyticsEvents.ctaClick, {
+                      location: "home_scene",
+                      target: scene.id,
+                    })
+                  }
+                  className={cn(
+                    "group block rounded-2xl border p-5 transition-colors sm:p-6",
+                    scene.primary
+                      ? "border-primary/40 bg-primary/5 hover:border-primary/60 hover:bg-primary/10"
+                      : "border-border bg-card/60 hover:border-primary/35 hover:bg-card/90",
+                  )}
+                >
+                  <p className="text-base font-semibold text-foreground sm:text-lg">{scene.title}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{scene.description}</p>
+                  <p className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                    {scene.cta}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                  </p>
+                </Link>
+              </li>
+            ))}
           </ul>
-          <Button
-            size="lg"
-            className="mx-auto mt-8 flex min-h-[52px] w-full max-w-md touch-manipulation px-8 text-base font-semibold sm:min-h-12 sm:px-10"
-            asChild
-          >
-            <Link href="/tools/seo-growth-pack#pack-transcript-only">
-              <Rocket className="mr-2 h-4 w-4" />
-              {productPromise.cta}
+
+          <p className="mx-auto mt-8 max-w-lg text-center text-sm text-muted-foreground">
+            No notes yet? Start with the{" "}
+            <Link href="/guides/show-notes-template" className="font-medium text-primary underline-offset-4 hover:underline">
+              show notes template
             </Link>
-          </Button>
-          <p className="mx-auto mt-6 text-sm text-muted-foreground">
-            Need episode title ideas only?{" "}
-            <Link href="/tools/free-podcast-title-generator" className="font-medium text-primary underline-offset-4 hover:underline">
-              Try the free title generator
-            </Link>
-            . Formatting notes for your site?{" "}
-            <Link href="/tools/show-notes-to-html" className="font-medium text-primary underline-offset-4 hover:underline">
-              Show notes → HTML
+            , then come back to generate a draft. Need titles only?{" "}
+            <Link
+              href="/tools/free-podcast-title-generator"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Title generator
             </Link>
             .
           </p>
         </div>
 
         <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
-          <p className="text-sm font-semibold text-foreground">Explore tools &amp; guides</p>
-          <ul className="mx-auto mt-3 flex max-w-lg flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-            <li>
-              <Link href="/guides/podcast-to-blog-post" className="text-primary underline-offset-4 hover:underline">
-                Podcast to blog post guide
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/free-podcast-title-generator" className="text-primary underline-offset-4 hover:underline">
-                Title generator
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/show-notes-to-html" className="text-primary underline-offset-4 hover:underline">
-                Show notes → HTML
-              </Link>
-            </li>
-            <li>
-              <Link href="/examples/sample-growth-pack" className="text-primary underline-offset-4 hover:underline">
-                Example output
-              </Link>
-            </li>
-          </ul>
-          <p className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-foreground sm:gap-x-3">
+          <p className="mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-foreground sm:gap-x-3">
             <span className="inline-flex min-h-[44px] items-center">© {new Date().getFullYear()} AioCast.com</span>
             <span aria-hidden className="hidden text-border sm:inline">
               ·
