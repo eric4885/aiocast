@@ -1,23 +1,32 @@
 import type { Metadata } from "next";
 import { AnalysisErrorBoundary } from "@/components/AnalysisErrorBoundary";
 import { siteConfig } from "@/lib/data";
+import { HomeHowItWorks } from "@/components/seo/HomeHowItWorks";
 import { HomeLearnMore } from "@/components/seo/HomeLearnMore";
 import { HomeSeoIntro } from "@/components/seo/HomeSeoIntro";
 import { homePageJsonLd } from "@/lib/home-page-schema";
+import { productPromise } from "@/lib/product-copy";
 import { HomePageClient } from "./home-client";
 
 export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
-  title: "Paste show notes, get an SEO blog draft — free for solo podcasters",
-  description:
-    "For solo podcasters without an editor: paste show notes or a transcript, get a free SEO blog draft for your own site. FAQ and social scripts included.",
+  title: {
+    absolute: productPromise.seoTitle,
+  },
+  description: productPromise.seoDescription,
   openGraph: {
     url: siteConfig.url,
-    title: "Paste show notes. Get an SEO blog draft.",
-    description:
-      "Free SEO blog draft from one episode’s notes — built for indie hosts. Edit and publish on your domain.",
+    title: productPromise.seoTitle,
+    description: productPromise.seoDescription,
+    images: [{ url: `${siteConfig.url}/opengraph-image` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: productPromise.seoTitle,
+    description: productPromise.seoDescription,
+    images: [`${siteConfig.url}/opengraph-image`],
   },
 };
 
@@ -34,6 +43,7 @@ export default function HomePage() {
       <HomePageJsonLd />
       <HomeSeoIntro />
       <HomePageClient />
+      <HomeHowItWorks />
       <HomeLearnMore />
     </AnalysisErrorBoundary>
   );

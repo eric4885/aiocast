@@ -6,6 +6,10 @@ export const productPromise = {
   /** Short hero H1 */
   headlineLead: "Paste show notes.",
   headlineAccent: "Get an SEO blog draft.",
+  /** Document title — action keyword + product result (home SEO, keep H1 conversion-focused). */
+  seoTitle: "Turn a podcast into a blog post — free SEO draft from show notes",
+  seoDescription:
+    "Turn a podcast into a blog post: paste show notes or a transcript, get a free SEO blog draft for your own site. FAQ and social scripts included.",
   /** Supporting line under H1 */
   support:
     "Built for indie hosts — edit the draft, publish on your domain. FAQ and social scripts come with the pack.",

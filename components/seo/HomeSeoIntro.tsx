@@ -15,6 +15,10 @@ export function HomeSeoIntro() {
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed sm:leading-loose text-muted-foreground">
           {productPromise.oneLiner}{" "}
+          <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">
+            Full podcast to blog guide
+          </Link>
+          {" · "}
           <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
             See an example
           </Link>

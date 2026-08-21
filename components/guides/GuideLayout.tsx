@@ -106,7 +106,7 @@ export function GuideLayout({
         </article>
         <div className="mt-12 flex flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:items-center">
           <Button size="lg" asChild>
-            <Link href="/tools/seo-growth-pack">Generate SEO pack</Link>
+            <Link href="/tools/seo-growth-pack#pack-transcript-only">Generate free blog draft</Link>
           </Button>
           <Button size="lg" variant="secondary" asChild>
             <Link href="/examples/sample-growth-pack">See example output</Link>

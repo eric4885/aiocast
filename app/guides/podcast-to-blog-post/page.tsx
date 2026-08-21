@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GuideDraftPrefill } from "@/components/guides/GuideDraftPrefill";
 import { GuideLayout } from "@/components/guides/GuideLayout";
 import { siteConfig } from "@/lib/data";
 import { pricing } from "@/lib/pricing";
@@ -89,16 +90,24 @@ function HowToJsonLd() {
 
 export const metadata: Metadata = {
   title: {
-    absolute: "How to Turn a Podcast into a Blog Post (Step-by-Step) | AioCast",
+    absolute: "How to Turn a Podcast into a Blog Post | AioCast",
   },
   description:
-    "Turn any podcast episode into an SEO blog post — with or without a full transcript. Free 5-step podcast to blog post workflow, show notes template, and draft tools.",
+    "Turn a podcast into a blog post with or without a transcript. Free 5-step workflow, show notes template, and paste-to-draft tool.",
   alternates: { canonical: `${siteConfig.url}/guides/podcast-to-blog-post` },
   openGraph: {
-    title: "How to Turn a Podcast into a Blog Post (Step-by-Step)",
+    title: "How to Turn a Podcast into a Blog Post",
     description:
-      "Turn any podcast episode into an SEO blog post — with or without a full transcript. Free 5-step workflow, show notes template, and draft tools.",
+      "Free 5-step podcast to blog post workflow — paste show notes, get an SEO draft. Template and checklist included.",
     url: `${siteConfig.url}/guides/podcast-to-blog-post`,
+    images: [{ url: `${siteConfig.url}/opengraph-image` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "How to Turn a Podcast into a Blog Post",
+    description:
+      "Free 5-step podcast to blog post workflow — paste show notes, get an SEO draft.",
+    images: [`${siteConfig.url}/opengraph-image`],
   },
 };
 
@@ -120,7 +129,7 @@ export default function PodcastToBlogGuidePage() {
       description="A practical podcast to blog post workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
       path="/guides/podcast-to-blog-post"
       datePublished="2026-06-15"
-      dateModified="2026-07-29"
+      dateModified="2026-08-21"
       showTopCta
     >
       <h2>How to turn a podcast into a blog post (direct answer)</h2>
@@ -399,17 +408,11 @@ export default function PodcastToBlogGuidePage() {
       <h2 id="step-3">Step 3 — Generate a draft pack, then edit like a human</h2>
       <p>
         Manually turning a 45-minute transcript into a clean 1,500-word article can take half a day. That is the
-        operational bottleneck—and exactly where automation helps.
+        operational bottleneck—and exactly where automation helps. Paste below to continue on the free generator (daily
+        free limit; no signup required for the free tier).
       </p>
-      <p>
-        Paste your raw text into the{" "}
-        <strong>
-          <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
-            AIOCAST Free SEO Growth Pack
-          </Link>
-        </strong>{" "}
-        and get, in one pass:
-      </p>
+      <GuideDraftPrefill />
+      <p>In one pass you get:</p>
       <ul>
         <li>A structured article draft with intent-based subheadings</li>
         <li>Context-aware FAQ blocks formatted for search features</li>
@@ -585,31 +588,24 @@ export default function PodcastToBlogGuidePage() {
 
       <h2>Run it on your episode today</h2>
       <p>
-        Stop leaving spoken knowledge trapped in audio players. Run this podcast to blog post workflow on{" "}
-        <Link href="/" className="text-primary hover:underline">
-          AioCast
-        </Link>
-        —paste a transcript or bullet notes into the{" "}
+        Use the paste box in Step 3 above, or open the{" "}
         <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
           free SEO growth pack
         </Link>{" "}
-        and get a long-form draft, FAQ blocks, and platform-specific scripts in one dashboard.
-      </p>
-      <p>
-        Want to see what the output looks like first? Browse our{" "}
+        directly. Prefer a finished example first? See the{" "}
         <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
-          live sample outputs
+          sample podcast to blog draft
         </Link>
         .
       </p>
       <div className={proCalloutBox}>
         <p className="m-0">
-          <strong className="text-foreground">Go further:</strong>{" "}
+          <strong className="text-foreground">Shipping every week?</strong>{" "}
           <Link href="/pro-toolkit" className="font-semibold text-primary hover:underline">
             Start Pro for $1.90 your first month
           </Link>{" "}
-          — unlimited packs so you can ship every week (${pricing.pro.monthlyUsd}/mo after). {freeTierProMention()} if you
-          want to test before upgrading.
+          — unlimited packs (${pricing.pro.monthlyUsd}/mo after). {freeTierProMention()} if you want to stay on the free
+          daily limit first.
         </p>
       </div>
     </GuideLayout>
