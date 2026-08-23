@@ -6,14 +6,15 @@ import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Podcast to blog example — sample SEO post structure & growth pack",
+  title: "Podcast show notes examples — sample blog & SEO pack",
   description:
-    "See a podcast to blog example: SEO article structure, FAQ blocks, social scripts, and a 7-day publish plan from one episode — before you generate your own.",
+    "Podcast show notes examples and a full podcast-to-blog sample: SEO article structure, FAQ blocks, social scripts, and publish plan from one episode.",
   alternates: { canonical: `${siteConfig.url}/examples/sample-growth-pack` },
   openGraph: {
-    title: "Podcast to blog example — sample growth pack",
-    description: "Example blog structure, FAQ, social scripts, and publish schedule from one podcast episode.",
+    title: "Podcast show notes examples — sample growth pack",
+    description: "Example show notes → blog structure, FAQ, social scripts, and publish schedule.",
     url: `${siteConfig.url}/examples/sample-growth-pack`,
+    images: [{ url: `${siteConfig.url}/opengraph-image` }],
   },
 };
 
@@ -36,7 +37,7 @@ const faq = [
   },
   {
     q: "What should I do after studying this example?",
-    a: "Run the podcast to blog SEO checklist when you publish, then paste your own notes into the free growth pack to generate a draft in the same structure.",
+    a: "Run the podcast to blog SEO checklist when you publish, then paste your own notes into the free show notes generator or growth pack to generate a draft in the same structure.",
   },
 ] as const;
 
@@ -96,13 +97,15 @@ export default function SampleGrowthPackExamplePage() {
               Generate SEO pack
             </Link>
           </p>
-          <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-primary">Podcast to blog example</p>
+          <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-primary">
+            Podcast show notes examples
+          </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Podcast to blog example — SEO post structure
+            Podcast show notes examples — blog &amp; SEO pack
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            A static demo of blog structure, FAQ, and social scripts from one episode — not a live user pack. Study the
-            skeleton, then generate your own from show notes or a transcript.
+            A static demo of how structured show notes become a blog post: SEO article skeleton, FAQ, and social scripts
+            from one episode. Study the format, then generate your own — no login for the free daily limit.
           </p>
 
           <section className="mt-8 max-w-2xl rounded-2xl border border-border bg-secondary/30 p-5 sm:p-6">
@@ -137,6 +140,20 @@ export default function SampleGrowthPackExamplePage() {
           </section>
 
           <section className="mt-10 max-w-2xl space-y-4 text-sm leading-relaxed text-muted-foreground">
+            <h2 className="text-lg font-semibold text-foreground">From show notes to this blog example</h2>
+            <p>
+              Strong <strong className="text-foreground">podcast show notes examples</strong> include a hook, takeaways,
+              topic seeds, and one listener question — not timestamp dumps. That outline feeds the SEO article, FAQ
+              block, and social scripts in the preview below. Start from the{" "}
+              <Link href="/guides/show-notes-template" className="text-primary underline-offset-4 hover:underline">
+                podcast show notes template
+              </Link>{" "}
+              or paste directly into the{" "}
+              <Link href="/tools/free-show-notes-generator" className="text-primary underline-offset-4 hover:underline">
+                free AI show notes generator
+              </Link>
+              .
+            </p>
             <h2 className="text-lg font-semibold text-foreground">What&apos;s in this podcast to blog example</h2>
             <p>
               One episode becomes a <strong className="text-foreground">publish workflow</strong>, not a magic ranking
@@ -171,10 +188,10 @@ export default function SampleGrowthPackExamplePage() {
             </p>
             <div className="flex flex-col gap-3 pt-1 sm:flex-row">
               <Button size="lg" asChild>
-                <Link href="/tools/seo-growth-pack">Generate your own growth pack</Link>
+                <Link href="/tools/free-show-notes-generator">Free show notes generator</Link>
               </Button>
               <Button size="lg" variant="secondary" asChild>
-                <Link href="/resources/podcast-to-blog-seo-checklist">Open SEO checklist</Link>
+                <Link href="/tools/seo-growth-pack#pack-transcript-only">SEO growth pack</Link>
               </Button>
             </div>
           </section>

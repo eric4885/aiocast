@@ -94,10 +94,10 @@ export function GuideLayout({
         {showTopCta ? (
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button size="lg" asChild>
-              <Link href="/tools/seo-growth-pack#pack-transcript-only">Paste transcript → get blog draft</Link>
+              <Link href="/tools/free-show-notes-generator">Free show notes generator</Link>
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link href="/examples/sample-growth-pack">See example output</Link>
+              <Link href="/tools/seo-growth-pack#pack-transcript-only">Paste transcript → blog draft</Link>
             </Button>
           </div>
         ) : null}

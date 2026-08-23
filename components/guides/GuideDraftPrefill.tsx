@@ -9,7 +9,19 @@ import { productPromise } from "@/lib/product-copy";
 import { saveTranscriptPrefill } from "@/lib/transcript-prefill";
 
 /** Mini paste → growth pack handoff for guide pages (keeps generate flow on the tool page). */
-export function GuideDraftPrefill({ location = "guide_podcast_to_blog" }: { location?: string }) {
+export function GuideDraftPrefill({
+  location = "guide_podcast_to_blog",
+  heading = "Try it on this page",
+  description = "Paste show notes or a transcript below. We'll open the free generator with your text ready — no signup for the free daily limit.",
+  fieldId = "guide-draft-prefill",
+  className,
+}: {
+  location?: string;
+  heading?: string;
+  description?: string;
+  fieldId?: string;
+  className?: string;
+}) {
   const router = useRouter();
   const [transcript, setTranscript] = useState("");
 
@@ -23,18 +35,18 @@ export function GuideDraftPrefill({ location = "guide_podcast_to_blog" }: { loca
   return (
     <form
       onSubmit={handleSubmit}
-      className="not-prose my-6 rounded-xl border border-primary/35 bg-card/80 p-5 shadow-sm ring-1 ring-primary/15 sm:p-6"
+      className={
+        className ??
+        "not-prose my-6 rounded-xl border border-primary/35 bg-card/80 p-5 shadow-sm ring-1 ring-primary/15 sm:p-6"
+      }
     >
-      <p className="text-base font-semibold text-foreground">Try it on this page</p>
-      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-        Paste show notes or a transcript below. We&apos;ll open the free generator with your text ready — no signup for
-        the free daily limit.
-      </p>
-      <label htmlFor="guide-draft-prefill" className="sr-only">
+      <p className="text-base font-semibold text-foreground">{heading}</p>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{description}</p>
+      <label htmlFor={fieldId} className="sr-only">
         Show notes or transcript
       </label>
       <textarea
-        id="guide-draft-prefill"
+        id={fieldId}
         value={transcript}
         onChange={(e) => setTranscript(e.target.value)}
         rows={5}

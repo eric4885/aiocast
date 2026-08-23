@@ -19,6 +19,10 @@ export function HomeSeoIntro() {
             Full podcast to blog guide
           </Link>
           {" · "}
+          <Link href="/tools/free-show-notes-generator" className="font-medium text-primary underline-offset-4 hover:underline">
+            Free show notes generator
+          </Link>
+          {" · "}
           <Link href="/examples/sample-growth-pack" className="font-medium text-primary underline-offset-4 hover:underline">
             See an example
           </Link>
@@ -31,6 +35,7 @@ export function HomeSeoIntro() {
           </Link>
           .
         </p>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">{productPromise.geoLine}</p>
       </div>
     </section>
   );

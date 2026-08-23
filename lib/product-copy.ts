@@ -10,6 +10,9 @@ export const productPromise = {
   seoTitle: "Turn a podcast into a blog post — free SEO draft from show notes",
   seoDescription:
     "Turn a podcast into a blog post: paste show notes or a transcript, get a free SEO blog draft for your own site. FAQ and social scripts included.",
+  /** GEO / AI citation line — use on tool pages, not as a ranking guarantee */
+  geoLine:
+    "Structured drafts with clear FAQ blocks help Google — and AI answer engines — surface and cite your podcast content on your domain.",
   /** Supporting line under H1 */
   support:
     "Built for indie hosts — edit the draft, publish on your domain. FAQ and social scripts come with the pack.",

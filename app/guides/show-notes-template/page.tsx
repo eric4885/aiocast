@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GuideDraftPrefill } from "@/components/guides/GuideDraftPrefill";
 import { GuideLayout } from "@/components/guides/GuideLayout";
 import { siteConfig } from "@/lib/data";
+import { productPromise } from "@/lib/product-copy";
 
 const faq = [
   {
@@ -19,6 +21,10 @@ const faq = [
   {
     q: "What's the difference between show notes and an episode description?",
     a: "Episode descriptions in Apple or Spotify are short discovery blurbs. Show notes on your website are the full written summary — hook, takeaways, links, and the question the episode answers — that Google can index and you can expand into a blog post.",
+  },
+  {
+    q: "Is there a free podcast show notes generator?",
+    a: "Yes. Paste your filled template into AioCast's free AI show notes generator — no login for the daily free limit — to get an SEO blog draft, FAQ blocks, and social scripts.",
   },
 ] as const;
 
@@ -38,47 +44,90 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Podcast show notes template — free online copy-paste format",
+  title: "Podcast Show Notes — Free Template & AI Generator",
   description:
-    "Free podcast show notes template online: hook, takeaways, topic seeds, and one listener question. Copy-paste format, then convert to HTML for WordPress or Ghost.",
+    "Free podcast show notes template: hook, takeaways, and listener question. Learn how to write podcast show notes, then paste into our free AI generator — no login.",
   alternates: { canonical: `${siteConfig.url}/guides/show-notes-template` },
   openGraph: {
-    title: "Podcast show notes template (free online)",
+    title: "Podcast Show Notes — Free Template",
     description:
-      "Structured podcast show notes format — copy the template, paste into our HTML converter, publish on your site.",
+      "Copy-paste podcast show notes template + free AI draft generator. Structured format for SEO and your own site.",
     url: `${siteConfig.url}/guides/show-notes-template`,
+    images: [{ url: `${siteConfig.url}/opengraph-image` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Podcast Show Notes — Free Template",
+    images: [`${siteConfig.url}/opengraph-image`],
   },
 };
 
 export default function ShowNotesTemplateGuidePage() {
   return (
     <>
-    <FaqJsonLd />
-    <GuideLayout
-      title="Show notes for podcast — free SEO-ready template"
-      description="Good show notes for podcast episodes are more than timestamp dumps. This copy-paste outline gives Google and skimmers something searchable — then paste into our HTML converter for your site."
-      path="/guides/show-notes-template"
-      datePublished="2026-06-18"
-      dateModified="2026-08-01"
-    >
-      <h2>What are show notes for podcast episodes?</h2>
-      <p>
-        <strong>Show notes for podcast</strong> episodes are the written summary on your website or in your RSS feed —
-        hook, takeaways, links, and the one question this episode answers. Apple and Spotify show a thin blurb; your
-        domain should carry the full, indexable version. This template is that starting point.
-      </p>
+      <FaqJsonLd />
+      <GuideLayout
+        title="Podcast show notes — free template & format"
+        description="Learn how to write podcast show notes that Google and skimmers can use — then turn them into an SEO blog draft with our free generator. Includes a copy-paste podcast show notes template."
+        path="/guides/show-notes-template"
+        datePublished="2026-06-18"
+        dateModified="2026-08-23"
+        showTopCta
+      >
+        <h2>What are podcast show notes?</h2>
+        <p>
+          <strong>Podcast show notes</strong> are the written summary on your website — hook, takeaways, links, and the
+          one question this episode answers. Apple and Spotify only show a thin blurb; your domain should carry the
+          full, indexable version. This page gives you a <strong>podcast show notes template</strong> plus a path to an
+          SEO blog draft.
+        </p>
+        <p className="text-sm text-muted-foreground">{productPromise.geoLine}</p>
 
-      <h2>Copy-paste outline</h2>
-      <p>
-        Use this <strong>podcast show notes template</strong> before you record when you can. Better inputs mean cleaner
-        blog drafts, FAQ blocks, and social hooks after you publish. Part of the full{" "}
-        <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
-          podcast to blog
-        </Link>{" "}
-        workflow
-        .
-      </p>
-      <pre className="overflow-x-auto rounded-lg border border-border bg-secondary/40 p-4 text-sm text-foreground/90">{`Episode title:
+        <h2>How to write podcast show notes</h2>
+        <p>
+          Start with one searchable listener question, not an inside-joke episode title. Then fill four fields: hook,
+          takeaways, topic seeds (future H2s), and resources. Skip timestamp walls — they do not help Google understand
+          intent. Need a filled walkthrough? See{" "}
+          <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
+            podcast show notes examples
+          </Link>{" "}
+          in our sample pack.
+        </p>
+        <ol>
+          <li>
+            <strong>Pick one angle</strong> — the problem this episode solves in plain language.
+          </li>
+          <li>
+            <strong>Write the hook</strong> — who it is for + outcome in one or two sentences.
+          </li>
+          <li>
+            <strong>List 3–5 takeaways</strong> — these become FAQ and social hooks later.
+          </li>
+          <li>
+            <strong>Add topic seeds</strong> — draft H2 headings before you record when you can.
+          </li>
+        </ol>
+
+        <GuideDraftPrefill
+          location="guide_show_notes_template"
+          heading="Turn your show notes into a blog draft"
+          fieldId="show-notes-template-prefill"
+        />
+
+        <h2>Free podcast show notes template (copy-paste)</h2>
+        <p>
+          Use this outline before you record when you can. Better inputs mean cleaner blog drafts, FAQ blocks, and social
+          hooks after you publish. Part of the full{" "}
+          <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
+            podcast to blog
+          </Link>{" "}
+          workflow — or jump straight to the{" "}
+          <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
+            free AI show notes generator
+          </Link>{" "}
+          (no login).
+        </p>
+        <pre className="overflow-x-auto rounded-lg border border-border bg-secondary/40 p-4 text-sm text-foreground/90">{`Episode title:
 One-sentence hook (who this is for + outcome):
 
 3–5 bullet takeaways:
@@ -95,9 +144,9 @@ Guest / links mentioned:
 
 One listener question this episode answers:`}</pre>
 
-      <h2>Filled example</h2>
-      <p>Here is what the template looks like with real content — not a timestamp dump:</p>
-      <pre className="overflow-x-auto rounded-lg border border-border bg-secondary/40 p-4 text-sm text-foreground/90">{`Episode title: How to Set Up a Remote Podcast Studio on a Budget
+        <h2>Podcast show notes example (filled)</h2>
+        <p>Here is what the template looks like with real content — not a timestamp dump:</p>
+        <pre className="overflow-x-auto rounded-lg border border-border bg-secondary/40 p-4 text-sm text-foreground/90">{`Episode title: How to Set Up a Remote Podcast Studio on a Budget
 
 One-sentence hook: Indie hosts can record interview-quality audio for under $200 if you prioritize the room and gain staging over fancy mics.
 
@@ -116,137 +165,126 @@ Guest / links mentioned: Riverside FAQ on multitrack, Descript export guide
 
 One listener question this episode answers: What is the cheapest way to get separate tracks for remote guests?`}</pre>
 
-      <h2>Why each field matters</h2>
-      <ul>
-        <li>
-          <strong>Hook</strong> — becomes meta description fodder; keep under ~155 characters when you adapt it for
-          your blog post.
-        </li>
-        <li>
-          <strong>Takeaways</strong> — map directly to FAQ questions and social hooks in your growth pack output.
-        </li>
-        <li>
-          <strong>Topics covered</strong> — seed H2 headings for the article (rename before publish so they match search
-          intent, not transcript chapter titles).
-        </li>
-        <li>
-          <strong>Listener question</strong> — pick one for your primary keyword angle; one episode, one searchable
-          promise.
-        </li>
-      </ul>
+        <h2>Why each field matters</h2>
+        <ul>
+          <li>
+            <strong>Hook</strong> — becomes meta description fodder; keep under ~155 characters when you adapt it for
+            your blog post.
+          </li>
+          <li>
+            <strong>Takeaways</strong> — map directly to FAQ questions and social hooks in your growth pack output.
+          </li>
+          <li>
+            <strong>Topics covered</strong> — seed H2 headings for the article (rename before publish so they match search
+            intent, not transcript chapter titles).
+          </li>
+          <li>
+            <strong>Listener question</strong> — pick one for your primary keyword angle; one episode, one searchable
+            promise.
+          </li>
+        </ul>
 
-      <h2>Common show notes mistakes</h2>
-      <ul>
-        <li>
-          <strong>Episode title only</strong> — no searchable angle for Google or skimmers.
-        </li>
-        <li>
-          <strong>Timestamp walls</strong> — fine for superfans, useless as SEO input.
-        </li>
-        <li>
-          <strong>Generic blurbs</strong> — &quot;Great episode!&quot; with no takeaway or listener question.
-        </li>
-        <li>
-          <strong>Duplicate thin copy</strong> — pasting the same two sentences on Apple, Spotify, and your blog without
-          expanding on your domain.
-        </li>
-      </ul>
+        <h2>Common show notes mistakes</h2>
+        <ul>
+          <li>
+            <strong>Episode title only</strong> — no searchable angle for Google or skimmers.
+          </li>
+          <li>
+            <strong>Timestamp walls</strong> — fine for superfans, useless as SEO input.
+          </li>
+          <li>
+            <strong>Generic blurbs</strong> — &quot;Great episode!&quot; with no takeaway or listener question.
+          </li>
+          <li>
+            <strong>Duplicate thin copy</strong> — pasting the same two sentences on Apple, Spotify, and your blog without
+            expanding on your domain.
+          </li>
+        </ul>
 
-      <h2>How long should podcast show notes be?</h2>
-      <p>
-        On your own domain, aim for <strong>150–400 words</strong> — not a timestamp wall, not a two-sentence blurb.
-        That range fits a hook, three to five takeaways, topic seeds, and one listener question without overwhelming
-        skimmers. Apple and Spotify can keep shorter discovery copy; your website should carry the full version Google
-        can index.
-      </p>
-      <p>
-        If you only have five minutes after recording, fill the template fields first and expand later. A structured
-        outline beats waiting for a perfect transcript export.
-      </p>
+        <h2>How long should podcast show notes be?</h2>
+        <p>
+          On your own domain, aim for <strong>150–400 words</strong> — not a timestamp wall, not a two-sentence blurb.
+          That range fits a hook, three to five takeaways, topic seeds, and one listener question without overwhelming
+          skimmers. Apple and Spotify can keep shorter discovery copy; your website should carry the full version Google
+          can index.
+        </p>
 
-      <h2>Podcast show notes vs transcript — which is better for SEO?</h2>
-      <p>
-        A full transcript gives richer quotes and subheadings, but <strong>structured show notes often ship faster</strong>{" "}
-        and still feed SEO drafts when they include topic seeds and a searchable listener question. Timestamps alone do
-        not help Google understand intent — semantic fields do.
-      </p>
-      <p>
-        Practical rule: use show notes when you want to publish this week; add transcript quotes when you have them.
-        Either path works with the{" "}
-        <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
-          podcast to blog post framework
-        </Link>{" "}
-        — paste notes or transcript into the growth pack and edit the draft before publish.
-      </p>
-
-      <h2>How show notes feed SEO</h2>
-      <p>
-        The hook feeds your meta description. Takeaways become FAQ pairs and social scripts. Topic seeds become H2
-        headings after you edit for search intent. The listener question anchors one long-tail keyword per episode.
-      </p>
-      <p>
-        Ready to publish on your site? Paste the filled outline into the{" "}
-        <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
-          show notes to HTML converter
-        </Link>{" "}
-        — get heading and list tags for WordPress, Ghost, or Webflow without writing markup by hand.
-      </p>
-      <p>
-        Want a full SEO article draft instead of formatted notes? Paste the template — or a full transcript — into the{" "}
-        <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
-          Generate SEO pack
-        </Link>{" "}
-        tool. Pasted text is the fastest path; short audio samples work when you do not have notes yet.
-      </p>
-
-      <h2>Before you record</h2>
-      <p>
-        Clean audio means cleaner transcripts. Run through our{" "}
-        <Link href="/resources/pre-flight-checklist" className="text-primary hover:underline">
-          preflight checklist for podcast recording
-        </Link>{" "}
-        for gain staging, backups, and room noise — especially if you plan to upload audio for auto-transcription.
-      </p>
-
-      <h2>Common questions</h2>
-      <dl className="space-y-4">
-        {faq.map((item) => (
-          <div key={item.q}>
-            <dt className="font-semibold text-foreground">{item.q}</dt>
-            <dd className="mt-1 text-muted-foreground">{item.a}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <h2>Related guides</h2>
-      <ul>
-        <li>
-          <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary hover:underline">
-            Podcast to blog SEO checklist
-          </Link>
-        </li>
-        <li>
+        <h2>Podcast show notes vs transcript — which is better for SEO?</h2>
+        <p>
+          A full transcript gives richer quotes and subheadings, but <strong>structured show notes often ship faster</strong>{" "}
+          and still feed SEO drafts when they include topic seeds and a searchable listener question. Either path works
+          with the{" "}
           <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
-            How to turn a podcast into a blog post
+            podcast to blog post framework
           </Link>
-        </li>
-        <li>
-          <Link href="/guides/podcast-faq-for-seo" className="text-primary hover:underline">
-            FAQ blocks for SEO
-          </Link>
-        </li>
-        <li>
-          <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
-            Podcast to blog example structure
-          </Link>
-        </li>
-        <li>
+          .
+        </p>
+
+        <h2>Publish show notes on your site</h2>
+        <p>
+          Paste the filled outline into the{" "}
           <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
-            Show notes → HTML converter
+            show notes to HTML converter
+          </Link>{" "}
+          for WordPress, Ghost, or Webflow. For a full SEO article draft, use the{" "}
+          <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
+            free show notes generator
+          </Link>{" "}
+          or{" "}
+          <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
+            SEO growth pack
           </Link>
-        </li>
-      </ul>
-    </GuideLayout>
+          .
+        </p>
+
+        <h2>Before you record</h2>
+        <p>
+          Clean audio means cleaner transcripts. Run through our{" "}
+          <Link href="/resources/pre-flight-checklist" className="text-primary hover:underline">
+            preflight checklist for podcast recording
+          </Link>{" "}
+          for gain staging, backups, and room noise.
+        </p>
+
+        <h2>Common questions</h2>
+        <dl className="space-y-4">
+          {faq.map((item) => (
+            <div key={item.q}>
+              <dt className="font-semibold text-foreground">{item.q}</dt>
+              <dd className="mt-1 text-muted-foreground">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <h2>Related guides</h2>
+        <ul>
+          <li>
+            <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
+              Free AI show notes generator (no login)
+            </Link>
+          </li>
+          <li>
+            <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary hover:underline">
+              Podcast to blog SEO checklist
+            </Link>
+          </li>
+          <li>
+            <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
+              How to turn a podcast into a blog post
+            </Link>
+          </li>
+          <li>
+            <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
+              Podcast show notes examples
+            </Link>
+          </li>
+          <li>
+            <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
+              Show notes → HTML converter
+            </Link>
+          </li>
+        </ul>
+      </GuideLayout>
     </>
   );
 }

@@ -84,6 +84,11 @@ export function Footer() {
 
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li>
+              <Link className="hover:text-foreground" href="/tools/free-show-notes-generator">
+                Free AI show notes generator (no login)
+              </Link>
+            </li>
+            <li>
               <Link className="hover:text-foreground" href="/tools/seo-growth-pack">
                 Free SEO blog draft tool
               </Link>
@@ -105,7 +110,7 @@ export function Footer() {
             </li>
             <li>
               <Link className="hover:text-foreground" href="/guides/show-notes-template">
-                Show notes template
+                Podcast show notes template
               </Link>
             </li>
             <li>

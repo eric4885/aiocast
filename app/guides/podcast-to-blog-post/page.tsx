@@ -143,8 +143,12 @@ export default function PodcastToBlogGuidePage() {
             AioCast
           </Link>
           , paste notes or a transcript into the{" "}
+          <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
+            free show notes generator
+          </Link>{" "}
+          or the{" "}
           <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
-            free SEO growth pack
+            SEO growth pack
           </Link>{" "}
           to get that draft in minutes, then follow the checklist below.
         </p>

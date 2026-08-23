@@ -1,0 +1,27 @@
+# AioCast
+
+> Free tools for solo podcasters: paste show notes or a transcript, get an SEO blog draft, FAQ blocks, and social scripts for your own website. No login required for the free daily limit.
+
+AioCast helps indie podcast hosts turn one episode into indexable, structured text — for Google search and for AI answer engines that cite clear FAQ-style content.
+
+## Core tools
+
+- [Free AI show notes generator (no login)](https://aiocast.com/tools/free-show-notes-generator): Paste show notes or transcript text → structured SEO blog draft + FAQ + social scripts.
+- [SEO growth pack](https://aiocast.com/tools/seo-growth-pack): Main generator — paste notes or upload a short audio clip.
+- [Show notes to HTML](https://aiocast.com/tools/show-notes-to-html): Convert a show notes outline to paste-ready HTML.
+- [Podcast title generator](https://aiocast.com/tools/free-podcast-title-generator): Search-friendly episode title ideas.
+
+## Guides & resources
+
+- [Podcast show notes template](https://aiocast.com/guides/show-notes-template): Free copy-paste format for podcast show notes.
+- [How to turn a podcast into a blog post](https://aiocast.com/guides/podcast-to-blog-post): Step-by-step workflow with embedded generator.
+- [Podcast to blog SEO checklist](https://aiocast.com/resources/podcast-to-blog-seo-checklist): Pre-publish checklist.
+- [Sample growth pack output](https://aiocast.com/examples/sample-growth-pack): Example blog structure, FAQ, and social scripts.
+
+## Who it is for
+
+Solo podcasters and small teams without a dedicated editor who want to publish searchable text on their own domain — not inside Spotify or Apple Podcasts only.
+
+## Pricing
+
+Free: 3 pack generations per day per IP (no account required). Pro optional for unlimited runs.

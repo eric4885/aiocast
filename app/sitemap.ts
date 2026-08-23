@@ -11,13 +11,14 @@ type SitemapEntry = {
 
 /** Indexable URLs only. Keep in sync with page-level robots metadata. */
 const entries: SitemapEntry[] = [
-  { path: "/", priority: 1, changeFrequency: "weekly", lastModified: "2026-07-29" },
-  { path: "/tools/seo-growth-pack", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-07-29" },
-  { path: "/guides/podcast-to-blog-post", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-07-29" },
+  { path: "/", priority: 1, changeFrequency: "weekly", lastModified: "2026-08-23" },
+  { path: "/tools/free-show-notes-generator", priority: 0.96, changeFrequency: "weekly", lastModified: "2026-08-23" },
+  { path: "/tools/seo-growth-pack", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-08-23" },
+  { path: "/guides/show-notes-template", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-08-23" },
+  { path: "/guides/podcast-to-blog-post", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-08-21" },
   { path: "/resources/podcast-to-blog-seo-checklist", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-08-01" },
   { path: "/tools/free-podcast-title-generator", priority: 0.85, changeFrequency: "monthly", lastModified: "2026-07-20" },
-  { path: "/guides/show-notes-template", priority: 0.85, changeFrequency: "monthly", lastModified: "2026-08-01" },
-  { path: "/examples/sample-growth-pack", priority: 0.85, changeFrequency: "monthly", lastModified: "2026-08-01" },
+  { path: "/examples/sample-growth-pack", priority: 0.88, changeFrequency: "monthly", lastModified: "2026-08-23" },
   { path: "/tools/show-notes-to-html", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-01" },
   { path: "/guides/podcast-faq-for-seo", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-07-30" },
   { path: "/resources", priority: 0.75, changeFrequency: "monthly", lastModified: "2026-08-01" },

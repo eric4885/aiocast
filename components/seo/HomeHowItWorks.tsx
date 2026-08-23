@@ -26,7 +26,11 @@ const faq = [
   },
   {
     q: "Are show notes enough for an SEO blog draft?",
-    a: "Yes — if they solve a searchable problem instead of dumping timestamps. Paste them into the growth pack, or start from the free show notes template, then expand with audio quotes when available.",
+    a: "Yes — if they solve a searchable problem instead of dumping timestamps. Paste them into the free show notes generator or growth pack, or start from the podcast show notes template.",
+  },
+  {
+    q: "Can AI answer engines cite my podcast?",
+    a: "Publishing structured text with clear headings and honest FAQ pairs on your domain gives AI systems extractable content to reference. Citations are never guaranteed.",
   },
 ] as const;
 
@@ -55,14 +59,27 @@ export function HomeHowItWorks() {
           How to turn a podcast into a blog post here
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
-          Three steps — paste, generate, publish. Full walkthrough in the{" "}
+          Three steps — paste, generate, publish.{" "}
+          <Link
+            href="/tools/free-show-notes-generator"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Free show notes generator
+          </Link>
+          {" · "}
           <Link
             href="/guides/podcast-to-blog-post"
             className="font-medium text-primary underline-offset-4 hover:underline"
           >
-            podcast to blog post guide
+            Full guide
           </Link>
-          .
+          {" · "}
+          <Link
+            href="/guides/show-notes-template"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Show notes template
+          </Link>
         </p>
 
         <ol className="mt-8 space-y-5">
