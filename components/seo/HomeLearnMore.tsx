@@ -28,6 +28,14 @@ export function HomeLearnMore() {
           </li>
           <li>
             <Link
+              href="/tools/free-show-notes-generator"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Free show notes generator
+            </Link>
+          </li>
+          <li>
+            <Link
               href="/tools/show-notes-to-html"
               className="font-medium text-primary underline-offset-4 hover:underline"
             >

@@ -16,6 +16,7 @@ import {
 
 const generateLinks = [
   { href: "/tools/seo-growth-pack", label: "Blog draft tool" },
+  { href: "/tools/free-show-notes-generator", label: "Show notes generator" },
   { href: "/tools/free-podcast-title-generator", label: "Title generator" },
   { href: "/tools/show-notes-to-html", label: "Show notes → HTML" },
 ] as const;

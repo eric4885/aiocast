@@ -59,27 +59,14 @@ export function HomeHowItWorks() {
           How to turn a podcast into a blog post here
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
-          Three steps — paste, generate, publish.{" "}
-          <Link
-            href="/tools/free-show-notes-generator"
-            className="font-medium text-primary underline-offset-4 hover:underline"
-          >
-            Free show notes generator
-          </Link>
-          {" · "}
+          Three steps — paste, generate, publish. Full walkthrough in the{" "}
           <Link
             href="/guides/podcast-to-blog-post"
             className="font-medium text-primary underline-offset-4 hover:underline"
           >
-            Full guide
+            podcast to blog post guide
           </Link>
-          {" · "}
-          <Link
-            href="/guides/show-notes-template"
-            className="font-medium text-primary underline-offset-4 hover:underline"
-          >
-            Show notes template
-          </Link>
+          .
         </p>
 
         <ol className="mt-8 space-y-5">
