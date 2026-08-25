@@ -119,42 +119,6 @@ export function HomePageClient() {
             .
           </p>
         </div>
-
-        <div className="mx-auto mt-12 max-w-3xl border-t border-border pt-8 text-center sm:mt-14 sm:pt-10">
-          <p className="mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-foreground sm:gap-x-3">
-            <span className="inline-flex min-h-[44px] items-center">© {new Date().getFullYear()} AioCast.com</span>
-            <span aria-hidden className="hidden text-border sm:inline">
-              ·
-            </span>
-            <Link
-              href="/privacy"
-              className="inline-flex min-h-[44px] items-center px-2 hover:text-foreground hover:underline"
-            >
-              Privacy
-            </Link>
-            <span aria-hidden className="hidden text-border sm:inline">
-              ·
-            </span>
-            <Link href="/terms" className="inline-flex min-h-[44px] items-center px-2 hover:text-foreground hover:underline">
-              Terms
-            </Link>
-            <span aria-hidden className="hidden text-border sm:inline">
-              ·
-            </span>
-            <Link href="/help" className="inline-flex min-h-[44px] items-center px-2 hover:text-foreground hover:underline">
-              Help
-            </Link>
-            <span aria-hidden className="hidden text-border sm:inline">
-              ·
-            </span>
-            <Link
-              href="/contact"
-              className="inline-flex min-h-[44px] items-center px-2 hover:text-foreground hover:underline"
-            >
-              Contact
-            </Link>
-          </p>
-        </div>
       </div>
     </section>
   );
