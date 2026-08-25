@@ -84,13 +84,18 @@ export function Footer() {
 
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li>
-              <Link className="hover:text-foreground" href="/tools/free-show-notes-generator">
-                Free AI show notes generator (no login)
+              <Link className="hover:text-foreground" href="/tools/seo-growth-pack">
+                Free SEO blog draft tool
               </Link>
             </li>
             <li>
-              <Link className="hover:text-foreground" href="/tools/seo-growth-pack">
-                Free SEO blog draft tool
+              <Link className="hover:text-foreground" href="/tools/free-show-notes-generator">
+                Paste notes → blog draft
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-foreground" href="/guides/show-notes-template">
+                Podcast show notes template
               </Link>
             </li>
             <li>
@@ -100,7 +105,7 @@ export function Footer() {
             </li>
             <li>
               <Link className="hover:text-foreground" href="/examples/sample-growth-pack">
-                Podcast to blog example draft
+                Sample blog draft example
               </Link>
             </li>
             <li>
@@ -109,23 +114,18 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link className="hover:text-foreground" href="/guides/show-notes-template">
-                Podcast show notes template
-              </Link>
-            </li>
-            <li>
               <Link className="hover:text-foreground" href="/tools/free-podcast-title-generator">
                 Podcast title generator
               </Link>
             </li>
             <li>
-              <Link className="hover:text-foreground" href="/guides/podcast-faq-for-seo">
-                Podcast FAQ for SEO
+              <Link className="hover:text-foreground" href="/tools/show-notes-to-html">
+                Show notes to HTML converter
               </Link>
             </li>
             <li>
-              <Link className="hover:text-foreground" href="/tools/show-notes-to-html">
-                Show notes to HTML converter
+              <Link className="hover:text-foreground" href="/guides/podcast-faq-for-seo">
+                Podcast FAQ for SEO
               </Link>
             </li>
             <li>

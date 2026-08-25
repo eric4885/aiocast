@@ -37,7 +37,7 @@ const faq = [
   },
   {
     q: "What should I do after studying this example?",
-    a: "Run the podcast to blog SEO checklist when you publish, then paste your own notes into the free show notes generator or growth pack to generate a draft in the same structure.",
+    a: "Run the podcast to blog SEO checklist when you publish, then paste your own notes into the free paste-notes → draft tool or growth pack to generate a draft in the same structure.",
   },
 ] as const;
 
@@ -150,7 +150,7 @@ export default function SampleGrowthPackExamplePage() {
               </Link>{" "}
               or paste directly into the{" "}
               <Link href="/tools/free-show-notes-generator" className="text-primary underline-offset-4 hover:underline">
-                free AI show notes generator
+                paste-notes → draft tool
               </Link>
               .
             </p>
@@ -188,7 +188,7 @@ export default function SampleGrowthPackExamplePage() {
             </p>
             <div className="flex flex-col gap-3 pt-1 sm:flex-row">
               <Button size="lg" asChild>
-                <Link href="/tools/free-show-notes-generator">Free show notes generator</Link>
+                <Link href="/tools/free-show-notes-generator">Paste notes → blog draft</Link>
               </Button>
               <Button size="lg" variant="secondary" asChild>
                 <Link href="/tools/seo-growth-pack#pack-transcript-only">SEO growth pack</Link>

@@ -24,7 +24,7 @@ const faq = [
   },
   {
     q: "Is there a free podcast show notes generator?",
-    a: "Yes. Paste your filled template into AioCast's free AI show notes generator — no login for the daily free limit — to get an SEO blog draft, FAQ blocks, and social scripts.",
+    a: "Yes. Paste your filled template into AioCast's free paste-notes → draft tool — no login for the daily free limit — to get an SEO blog draft, FAQ blocks, and social scripts.",
   },
 ] as const;
 
@@ -123,7 +123,7 @@ export default function ShowNotesTemplateGuidePage() {
           </Link>{" "}
           workflow — or jump straight to the{" "}
           <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
-            free AI show notes generator
+            free paste-notes → draft tool
           </Link>{" "}
           (no login).
         </p>
@@ -228,7 +228,7 @@ One listener question this episode answers: What is the cheapest way to get sepa
           </Link>{" "}
           for WordPress, Ghost, or Webflow. For a full SEO article draft, use the{" "}
           <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
-            free show notes generator
+            paste-notes → draft tool
           </Link>{" "}
           or{" "}
           <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
@@ -260,7 +260,7 @@ One listener question this episode answers: What is the cheapest way to get sepa
         <ul>
           <li>
             <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
-              Free AI show notes generator (no login)
+              Paste notes → blog draft
             </Link>
           </li>
           <li>

@@ -19,8 +19,8 @@ const faq = [
     a: "No. Structured show notes with a hook, takeaways, topic seeds, and one listener question are enough for a solid first draft. A full transcript adds detail when you have it.",
   },
   {
-    q: "What do I get besides show notes?",
-    a: "An SEO blog article draft with title and meta suggestions, FAQ blocks, and social scripts for LinkedIn and X — all editable before you publish on your own site.",
+    q: "What do I get from this tool?",
+    a: "An SEO blog article draft with title and meta suggestions, FAQ blocks, and social scripts for LinkedIn and X — all editable before you publish on your own site. You paste show notes or a transcript as input; the output is a publishable draft pack, not a replacement for your episode audio.",
   },
   {
     q: "How is this different from uploading audio?",
@@ -58,8 +58,7 @@ function FaqJsonLd() {
 
 export const metadata: Metadata = {
   title: "Free AI Show Notes Generator from Podcast Transcript (No Login)",
-  description:
-    "Free AI show notes generator for solo podcasters: paste notes or a transcript, get an SEO blog draft, FAQ blocks, and social scripts. No login — 3 free runs per day.",
+  description: `Free AI tool for solo podcasters: paste show notes or a transcript, get an SEO blog draft, FAQ blocks, and social scripts. No login — ${pricing.free.ipDailyLimit} free runs per day.`,
   alternates: { canonical },
   openGraph: {
     title: "Free AI Show Notes Generator (No Login)",
@@ -86,9 +85,13 @@ export default function FreeShowNotesGeneratorPage() {
         <h1 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           Free AI show notes generator from podcast transcript
         </h1>
-        <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground sm:text-lg">
+        <p className="mt-2 text-base font-medium text-foreground sm:text-lg">
+          Paste notes in → get an SEO blog draft out
+        </p>
+        <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground sm:text-base">
           For <strong className="text-foreground">solo podcasters without an editor</strong>: paste show notes or
           transcript text, get a structured SEO blog draft, FAQ blocks, and social scripts — publish on your own site.
+          This is not an audio-to-show-notes uploader; it turns text you already have into a publishable draft pack.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{productPromise.geoLine}</p>
 

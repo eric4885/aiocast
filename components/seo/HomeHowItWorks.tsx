@@ -26,7 +26,7 @@ const faq = [
   },
   {
     q: "Are show notes enough for an SEO blog draft?",
-    a: "Yes — if they solve a searchable problem instead of dumping timestamps. Paste them into the free show notes generator or growth pack, or start from the podcast show notes template.",
+    a: "Yes — if they solve a searchable problem instead of dumping timestamps. Paste them into the free generator above, or start from the podcast show notes template.",
   },
   {
     q: "Can AI answer engines cite my podcast?",

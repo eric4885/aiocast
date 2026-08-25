@@ -224,7 +224,7 @@ export function GrowthPackClient({
             href="/tools/free-show-notes-generator"
             className="font-medium text-primary underline-offset-4 hover:underline"
           >
-            Free show notes generator
+            Paste notes → draft
           </Link>
           {" · "}
           <Link href="/guides/podcast-to-blog-post" className="font-medium text-primary underline-offset-4 hover:underline">

@@ -23,6 +23,12 @@ const items = [
     icon: ListChecks,
   },
   {
+    title: "Paste notes → SEO blog draft",
+    href: "/tools/free-show-notes-generator",
+    description: "Free text paste tool — show notes or transcript in, editable blog draft + FAQ out. No login for the daily free limit.",
+    icon: FileText,
+  },
+  {
     title: "Pre-flight recording checklist",
     href: "/resources/pre-flight-checklist",
     description: "Printable guardrails for gain, noise, and backups before you hit record.",
@@ -75,8 +81,12 @@ export default function ResourcesPage() {
         Free playbooks that feed into the{" "}
         <Link href="/tools/seo-growth-pack" className="text-primary underline-offset-4 hover:underline">
           SEO growth pack
-        </Link>
-        . Record with the checklist, generate with the tool, publish with the schedule.
+        </Link>{" "}
+        or the{" "}
+        <Link href="/tools/free-show-notes-generator" className="text-primary underline-offset-4 hover:underline">
+          paste-notes → draft
+        </Link>{" "}
+        tool. Record with the checklist, generate with the tool, publish with the schedule.
       </p>
 
       <ul className="mt-10 space-y-4">

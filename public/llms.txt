@@ -6,7 +6,7 @@ AioCast helps indie podcast hosts turn one episode into indexable, structured te
 
 ## Core tools
 
-- [Free AI show notes generator (no login)](https://aiocast.com/tools/free-show-notes-generator): Paste show notes or transcript text → structured SEO blog draft + FAQ + social scripts.
+- [Paste notes → blog draft (no login)](https://aiocast.com/tools/free-show-notes-generator): Paste show notes or transcript text → structured SEO blog draft + FAQ + social scripts. SEO landing page title: Free AI Show Notes Generator.
 - [SEO growth pack](https://aiocast.com/tools/seo-growth-pack): Main generator — paste notes or upload a short audio clip.
 - [Show notes to HTML](https://aiocast.com/tools/show-notes-to-html): Convert a show notes outline to paste-ready HTML.
 - [Podcast title generator](https://aiocast.com/tools/free-podcast-title-generator): Search-friendly episode title ideas.
