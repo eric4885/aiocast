@@ -21,16 +21,8 @@ const faq = [
     a: "Paste show notes or a transcript into the free generator above, pick one listener question as your angle, edit the draft for your voice, then publish on your own domain with a clear title tag and a short FAQ.",
   },
   {
-    q: "Do I need a full transcript?",
-    a: "No. Structured show notes with a hook, takeaways, topic seeds, and one listener question are enough for a solid first draft. Add transcript quotes later when you have them.",
-  },
-  {
     q: "Are show notes enough for an SEO blog draft?",
     a: "Yes — if they solve a searchable problem instead of dumping timestamps. Paste them into the free generator above, or start from the podcast show notes template.",
-  },
-  {
-    q: "Can AI answer engines cite my podcast?",
-    a: "Publishing structured text with clear headings and honest FAQ pairs on your domain gives AI systems extractable content to reference. Citations are never guaranteed.",
   },
 ] as const;
 
@@ -95,6 +87,13 @@ export function HomeHowItWorks() {
             </div>
           ))}
         </dl>
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Transcripts, AI citations, and no-login limits — see the{" "}
+          <Link href="/tools/free-show-notes-generator" className="text-primary underline-offset-4 hover:underline">
+            free show notes generator FAQ
+          </Link>
+          .
+        </p>
       </div>
     </section>
   );

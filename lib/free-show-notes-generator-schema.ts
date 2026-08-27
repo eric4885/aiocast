@@ -17,7 +17,7 @@ export function freeShowNotesGeneratorPageJsonLd() {
         operatingSystem: "Web",
         url: pageUrl,
         description:
-          "Free AI show notes generator for podcasters: paste show notes or a transcript, get an SEO blog draft, FAQ blocks, and social scripts. No login required for the free daily limit.",
+          "Input: paste podcast show notes or transcript text. Output: an SEO blog article draft, FAQ blocks, and social scripts for your own website — not traditional timestamped show notes from audio upload. No login required for the free daily limit.",
         offers: {
           "@type": "Offer",
           name: "Free tier",

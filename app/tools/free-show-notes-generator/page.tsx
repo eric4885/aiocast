@@ -30,6 +30,10 @@ const faq = [
     q: "Does this help AI cite my podcast?",
     a: "Publishing structured text with clear headings and honest FAQ pairs on your domain gives AI answer engines extractable content to reference. Rankings and AI citations are never guaranteed.",
   },
+  {
+    q: "Is there an AI that can summarize a podcast?",
+    a: "Yes — if you already have show notes or a transcript. Paste that text here and this free AI show notes generator returns a structured summary-style blog draft with FAQ blocks you can publish on your site. It does not upload or transcribe audio files; for a short clip, use the SEO growth pack upload tab.",
+  },
 ] as const;
 
 function PageJsonLd() {
@@ -57,7 +61,7 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Free AI Show Notes Generator from Podcast Transcript (No Login)",
+  title: { absolute: "Free AI Show Notes Generator (No Login)" },
   description: `Free AI tool for solo podcasters: paste show notes or a transcript, get an SEO blog draft, FAQ blocks, and social scripts. No login — ${pricing.free.ipDailyLimit} free runs per day.`,
   alternates: { canonical },
   openGraph: {
@@ -136,10 +140,10 @@ export default function FreeShowNotesGeneratorPage() {
 
           <h2 className="pt-4 text-xl font-semibold text-foreground">SEO and GEO: why structured show notes matter</h2>
           <p>
-            Google indexes text on your domain — not audio trapped in a podcast app. Clear headings, takeaways, and
-            honest FAQ blocks also give AI answer engines (ChatGPT, Perplexity, Google AI Overviews){" "}
-            <strong className="text-foreground">extractable answers</strong> to cite when listeners search in plain
-            language. {rankingDisclaimer}
+            Google indexes text on your domain — not audio trapped in a podcast app. A free AI show notes generator that
+            outputs clear headings, takeaways, and honest FAQ blocks also gives AI answer engines (ChatGPT, Perplexity,
+            Google AI Overviews) <strong className="text-foreground">extractable answers</strong> to cite when listeners
+            search in plain language. {rankingDisclaimer}
           </p>
           <p>
             Need a filled example first? See our{" "}
@@ -147,6 +151,48 @@ export default function FreeShowNotesGeneratorPage() {
               podcast show notes examples
             </Link>{" "}
             and sample blog structure.
+          </p>
+
+          <h2 className="pt-4 text-xl font-semibold text-foreground">Which podcast formats work best</h2>
+          <p>
+            This free show notes generator is built for text you already have — not for replacing a full audio
+            workflow. Different episode types need slightly different inputs:
+          </p>
+          <h3 className="pt-2 text-lg font-semibold text-foreground">Interview episodes</h3>
+          <p>
+            Paste your guest intro, three to five bullet takeaways, and one listener question from the episode. The
+            generator turns that into an SEO blog draft with subheadings and FAQ pairs — a faster path than writing from
+            scratch when the conversation was wide-ranging.
+          </p>
+          <h3 className="pt-2 text-lg font-semibold text-foreground">Solo / monologue shows</h3>
+          <p>
+            A short outline with your hook, main argument, and one actionable takeaway is enough. The AI show notes tool
+            expands that into a publishable article draft with meta suggestions and social scripts for LinkedIn and X.
+          </p>
+          <h3 className="pt-2 text-lg font-semibold text-foreground">Multi-host or panel discussions</h3>
+          <p>
+            Include who said what in your bullet notes, or paste a partial transcript of the key segment. The draft pack
+            groups ideas by topic instead of by speaker, so you can edit for clarity before publishing on your domain.
+          </p>
+
+          <h2 className="pt-4 text-xl font-semibold text-foreground">Before and after: what you get</h2>
+          <p>
+            Here is a realistic input → output flow for a solo episode about podcast SEO:
+          </p>
+          <p>
+            <strong className="text-foreground">Before (what you paste):</strong> Hook — &ldquo;Most indie hosts skip
+            blog posts because show notes feel like busywork.&rdquo; Takeaways — one listener question per episode,
+            paste-ready FAQ, title tag under 60 characters. Topic seeds — podcast show notes template, podcast to blog
+            post, free AI show notes.
+          </p>
+          <p>
+            <strong className="text-foreground">After (what the generator returns):</strong> A titled SEO article draft
+            with intent-based H2s, a short meta description, three FAQ pairs formatted for search features, and two
+            social scripts you can edit in minutes. See the full structure in our{" "}
+            <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
+              sample growth pack
+            </Link>
+            .
           </p>
         </section>
 
