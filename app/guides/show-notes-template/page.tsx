@@ -23,6 +23,14 @@ const faq = [
     a: "Episode descriptions in Apple or Spotify are short discovery blurbs. Show notes on your website are the full written summary — hook, takeaways, links, and the question the episode answers — that Google can index and you can expand into a blog post.",
   },
   {
+    q: "Can I reuse my Spotify show notes on my own site?",
+    a: "Yes. Copy the episode description or show notes you already wrote for Spotify, paste them into AioCast's free paste-notes → draft tool, and get an SEO blog draft plus FAQ for your own domain. Spotify stays your listening surface; your website becomes the indexable page. This is not a Spotify transcription tool — you paste text you already have.",
+  },
+  {
+    q: "Is there an AI that can summarize a podcast?",
+    a: "Yes — if you already have show notes, episode notes, or a transcript. Paste that text into AioCast to get a structured summary-style SEO draft with FAQ blocks. We do not upload or transcribe full episode audio here; for a short clip, use the SEO growth pack upload tab. No login for the daily free limit.",
+  },
+  {
     q: "Is there a free podcast show notes generator?",
     a: "Yes. Paste your filled template into AioCast's free paste-notes → draft tool — no login for the daily free limit — to get an SEO blog draft, FAQ blocks, and social scripts.",
   },
@@ -46,12 +54,12 @@ function FaqJsonLd() {
 export const metadata: Metadata = {
   title: "Podcast Show Notes — Free Template & AI Generator",
   description:
-    "Free podcast show notes template: hook, takeaways, and listener question. Learn how to write podcast show notes, then paste into our free AI generator — no login.",
+    "Free podcast show notes template (also called episode notes): hook, takeaways, listener question. Reuse Spotify show notes on your site, then paste into our free AI generator — no login.",
   alternates: { canonical: `${siteConfig.url}/guides/show-notes-template` },
   openGraph: {
     title: "Podcast Show Notes — Free Template",
     description:
-      "Copy-paste podcast show notes template + free AI draft generator. Structured format for SEO and your own site.",
+      "Copy-paste podcast show notes template + free AI draft generator. Reuse Spotify notes as a publish-ready SEO pack.",
     url: `${siteConfig.url}/guides/show-notes-template`,
     images: [{ url: `${siteConfig.url}/opengraph-image` }],
   },
@@ -68,18 +76,18 @@ export default function ShowNotesTemplateGuidePage() {
       <FaqJsonLd />
       <GuideLayout
         title="Podcast show notes — free template & format"
-        description="Learn how to write podcast show notes that Google and skimmers can use — then turn them into an SEO blog draft with our free generator. Includes a copy-paste podcast show notes template."
+        description="Learn how to write podcast show notes (episode notes) that Google and skimmers can use — then turn them into an SEO blog draft with our free generator. Includes a copy-paste podcast show notes template."
         path="/guides/show-notes-template"
         datePublished="2026-06-18"
-        dateModified="2026-08-23"
+        dateModified="2026-08-28"
         showTopCta
       >
         <h2>What are podcast show notes?</h2>
         <p>
-          <strong>Podcast show notes</strong> are the written summary on your website — hook, takeaways, links, and the
-          one question this episode answers. Apple and Spotify only show a thin blurb; your domain should carry the
-          full, indexable version. This page gives you a <strong>podcast show notes template</strong> plus a path to an
-          SEO blog draft.
+          <strong>Podcast show notes</strong> — also called <strong>podcast episode notes</strong> — are the written
+          summary on your website: hook, takeaways, links, and the one question this episode answers. Apple and Spotify
+          only show a thin blurb; your domain should carry the full, indexable version. This page gives you a{" "}
+          <strong>podcast show notes template</strong> plus a path to an SEO blog draft.
         </p>
         <p className="text-sm text-muted-foreground">{productPromise.geoLine}</p>
 
@@ -220,17 +228,37 @@ One listener question this episode answers: What is the cheapest way to get sepa
           .
         </p>
 
+        <h2>Published on Spotify? Reuse those show notes on your own site</h2>
+        <p>
+          If you already write <strong>Spotify show notes</strong> (the episode description in Spotify for Creators or
+          your host), you do not need to start from a blank page. Copy that text, then paste it into our{" "}
+          <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
+            free paste-notes → draft tool
+          </Link>{" "}
+          to turn it into a publish-ready SEO pack for <strong>your own domain</strong> — title suggestions, article
+          draft, FAQ blocks, and social scripts.
+        </p>
+        <p>
+          Spotify remains where people listen; Google and AI answer engines mainly read text on a website you control.
+          AioCast is not a Spotify transcription or chapter tool — it takes show notes or episode notes you already
+          have and expands them into indexable content. After you publish, run the{" "}
+          <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary hover:underline">
+            podcast to blog SEO checklist
+          </Link>
+          .
+        </p>
+
         <h2>Publish show notes on your site</h2>
         <p>
           Paste the filled outline into the{" "}
           <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
             show notes to HTML converter
           </Link>{" "}
-          for WordPress, Ghost, or Webflow. For a full SEO article draft, use the{" "}
+          for WordPress, Ghost, or Webflow. For a full SEO article draft from the same notes, use the{" "}
           <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
-            paste-notes → draft tool
+            free paste-notes → draft tool
           </Link>{" "}
-          or{" "}
+          or the{" "}
           <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
             SEO growth pack
           </Link>
