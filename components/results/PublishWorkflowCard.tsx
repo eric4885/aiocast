@@ -10,7 +10,8 @@ export function PublishWorkflowCard() {
           <p className="mt-1 text-lg font-semibold text-foreground">Your publish workflow</p>
           <p className="mt-2 text-sm text-muted-foreground">
             This pack saves drafting time. Search traffic comes after you publish on <strong className="text-foreground">your own site</strong>{" "}
-            and promote the article — rankings usually take weeks, not days. No tool guarantees Google traffic.
+            and promote the article — rankings usually take weeks, not days. No tool guarantees Google traffic. Use the{" "}
+            <strong className="text-foreground">publish checklist</strong> below before you hit publish.
           </p>
         </div>
         <ol className="list-decimal space-y-3 pl-5 text-sm text-muted-foreground">

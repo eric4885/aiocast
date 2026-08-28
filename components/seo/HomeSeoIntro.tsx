@@ -27,6 +27,9 @@ export function HomeSeoIntro() {
           </Link>
           .
         </p>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          {productPromise.vsGenericAi}
+        </p>
       </div>
     </section>
   );

@@ -2,20 +2,26 @@
 export const productPromise = {
   /** Who + what in one sentence */
   oneLiner:
-    "For solo podcasters without an editor: paste one episode's show notes or transcript, get a free SEO blog draft you can publish on your own site.",
+    "For solo podcasters without an editor: paste one episode's show notes or transcript, get a publish-ready SEO pack for your own site — title, article draft, FAQ, and social scripts.",
   /** Short hero H1 */
   headlineLead: "Paste show notes.",
-  headlineAccent: "Get an SEO blog draft.",
+  headlineAccent: "Get a publish-ready SEO pack.",
   /** Document title — action keyword + product result (home SEO, keep H1 conversion-focused). */
   seoTitle: "Turn a podcast into a blog post — free SEO draft from show notes",
   seoDescription:
-    "Turn a podcast into a blog post: paste show notes or a transcript, get a free SEO blog draft for your own site. FAQ and social scripts included.",
+    "Paste show notes or a transcript → publish-ready SEO pack for your own site: title, article draft, FAQ, and social scripts. Not just a ChatGPT rewrite.",
   /** GEO / AI citation line — use on tool pages, not as a ranking guarantee */
   geoLine:
     "Structured drafts with clear FAQ blocks help Google — and AI answer engines — surface and cite your podcast content on your domain.",
+  /**
+   * Differentiation vs generic AI writing (ChatGPT / Jasper).
+   * Sell podcast-specific structure + publishability — not “AI rewrite skill.”
+   */
+  vsGenericAi:
+    "You can rewrite a transcript in ChatGPT. AioCast is different: a podcast-specific pack (title, SEO draft, FAQ, social scripts) plus a publish checklist so it actually goes live on your domain — we sell the output format, not the model.",
   /** Supporting line under H1 */
   support:
-    "Built for indie hosts — edit the draft, publish on your domain. FAQ and social scripts come with the pack.",
+    "Built for indie hosts — edit the pack, run the publish checklist, ship on your domain. Rankings are never guaranteed.",
   /** Primary CTA */
   cta: "Generate free blog draft",
   /** What the main output is called */

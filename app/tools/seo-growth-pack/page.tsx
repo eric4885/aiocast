@@ -8,14 +8,14 @@ import { siteConfig } from "@/lib/data";
 const canonical = `${siteConfig.url}/tools/seo-growth-pack`;
 
 export const metadata: Metadata = {
-  title: "Paste show notes, get an SEO blog draft — free, no login",
+  title: "Paste show notes, get a publish-ready SEO pack — free, no login",
   description:
-    "For solo podcasters: paste show notes or upload audio, get a free SEO blog draft for your site. No login for the daily free limit. FAQ and social scripts included.",
+    "For solo podcasters: paste show notes or upload audio, get a publish-ready SEO pack for your site — title, article draft, FAQ, social scripts. Not just a ChatGPT rewrite.",
   alternates: { canonical },
   openGraph: {
-    title: "Paste show notes. Get an SEO blog draft.",
+    title: "Paste show notes. Get a publish-ready SEO pack.",
     description:
-      "Free SEO blog draft from one episode — no login for daily free runs. Built for indie hosts.",
+      "Free podcast SEO pack from one episode — structure + publish checklist, not a generic AI rewrite.",
     url: canonical,
     images: [{ url: `${siteConfig.url}/opengraph-image` }],
   },

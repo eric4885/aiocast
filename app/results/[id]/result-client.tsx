@@ -22,6 +22,7 @@ import {
 } from "@/lib/article-export";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { FaqSchemaSection } from "@/components/results/FaqSchemaSection";
+import { PublishChecklist } from "@/components/results/PublishChecklist";
 import { PublishWorkflowCard } from "@/components/results/PublishWorkflowCard";
 import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
@@ -154,11 +155,11 @@ function downloadTextFile(content: string, filename: string, mime = "text/plain;
   window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
 
-function PublishChecklist() {
+function PublishDestinationTips() {
   return (
     <Card>
       <CardContent className="space-y-4 p-6">
-        <p className="font-semibold">Publish checklist</p>
+        <p className="font-semibold">Where to paste this pack</p>
         <p className="text-sm text-muted-foreground">
           Review and edit every draft before going live. Use the copy and download buttons above for each asset.
         </p>
@@ -511,6 +512,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
       </Card>
 
       <PublishWorkflowCard />
+      <PublishChecklist packId={id} />
 
       {!emailSent && token && (
         <Card className="border-primary/25 bg-primary/5">
@@ -695,7 +697,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         </CardContent>
       </Card>
 
-      <PublishChecklist />
+      <PublishDestinationTips />
 
       <RelatedGuidesSection />
 

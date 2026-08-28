@@ -21,6 +21,10 @@ const faq = [
     a: "Paste show notes or a transcript into the free generator above, pick one listener question as your angle, edit the draft for your voice, then publish on your own domain with a clear title tag and a short FAQ.",
   },
   {
+    q: "Why not just use ChatGPT to rewrite my transcript?",
+    a: "You can — ChatGPT rewrites text fine. AioCast is built for the publish step: a fixed podcast SEO pack (title, article draft, FAQ, social scripts) plus a publish checklist (canonical, FAQ schema, sitemap, keyword title). We sell the structure and go-live checks, not “AI that writes.”",
+  },
+  {
     q: "Are show notes enough for an SEO blog draft?",
     a: "Yes — if they solve a searchable problem instead of dumping timestamps. Paste them into the free generator above, or start from the podcast show notes template.",
   },

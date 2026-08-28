@@ -27,6 +27,10 @@ const faq = [
     a: "This page is optimized for pasting text — the fastest path when you already have notes or a transcript. For a short audio clip, use the SEO growth pack upload tab instead.",
   },
   {
+    q: "Why not just use ChatGPT to rewrite my transcript?",
+    a: "You can rewrite text in any AI chat. This free show notes generator is for the publish path: a fixed pack (SEO title, article draft, FAQ, social scripts) shaped for podcast episodes, plus guidance so you ship on your own domain — not a one-off chat reply. Rankings are never guaranteed.",
+  },
+  {
     q: "Does this help AI cite my podcast?",
     a: "Publishing structured text with clear headings and honest FAQ pairs on your domain gives AI answer engines extractable content to reference. Rankings and AI citations are never guaranteed.",
   },
@@ -97,6 +101,7 @@ export default function FreeShowNotesGeneratorPage() {
           transcript text, get a structured SEO blog draft, FAQ blocks, and social scripts — publish on your own site.
           This is not an audio-to-show-notes uploader; it turns text you already have into a publishable draft pack.
         </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{productPromise.vsGenericAi}</p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{productPromise.geoLine}</p>
 
         <GuideDraftPrefill
