@@ -81,6 +81,50 @@ export default function FreePodcastTitleGeneratorPage() {
         <TitleGeneratorClient />
       </Suspense>
 
+      <section className="mx-auto max-w-2xl px-4 pb-10 sm:px-6">
+        <h2 className="text-lg font-semibold text-foreground">How to write SEO podcast titles</h2>
+        <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+          <p>
+            A strong podcast episode title names <strong className="text-foreground">who it is for</strong> and{" "}
+            <strong className="text-foreground">what problem it solves</strong> — not &quot;Ep.47 with Jane.&quot; Lead
+            with the outcome or question listeners type into Google or Apple Podcasts search. Keep the title under
+            roughly 60 characters when you can, put the keyword near the front, and save inside jokes for the cold open.
+          </p>
+          <p>
+            Use this free podcast title generator after you have a topic phrase or rough working title. Enter the angle,
+            review the suggested headlines and clarity checks, then pick one searchable promise for the episode. That
+            same angle should later become your blog post H1 and title tag so the audio episode and the written SEO pack
+            stay aligned.
+          </p>
+          <p>
+            Titles alone do not create indexable pages. When the episode notes or transcript are ready, paste them into
+            the{" "}
+            <Link
+              href="/tools/seo-growth-pack#pack-transcript-only"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              publish-ready SEO pack
+            </Link>{" "}
+            (or the{" "}
+            <Link
+              href="/tools/free-show-notes-generator"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              free paste-notes → draft tool
+            </Link>
+            ) to get an article draft, FAQ blocks, and social scripts for your own domain. Rankings are never guaranteed —
+            publish on your site, then run the{" "}
+            <Link
+              href="/resources/podcast-to-blog-seo-checklist"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              podcast to blog SEO checklist
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-2xl px-4 pb-16 sm:px-6">
         <h2 className="text-lg font-semibold text-foreground">Common questions</h2>
         <dl className="mt-4 space-y-4">

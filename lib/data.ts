@@ -1,5 +1,5 @@
 ﻿export const siteConfig = {
-  name: "AioCast.com",
+  name: "AioCast",
   tagline: "Paste show notes. Get a publish-ready SEO pack for your own site.",
   url: "https://aiocast.com",
   contactEmail: "hello@aiocast.com",
@@ -74,7 +74,7 @@ export const featuredTools = [
 export const faqItems = [
   {
     q: "Do I need to change my current recording stack?",
-    a: "No. Keep your current recorder/host. AioCast.com sits on top to convert finished audio into SEO and distribution assets.",
+    a: "No. Keep your current recorder/host. AioCast sits on top to convert finished audio into SEO and distribution assets.",
   },
   {
     q: "I am a complete beginner - can I follow along?",

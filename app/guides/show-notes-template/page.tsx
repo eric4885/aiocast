@@ -79,7 +79,7 @@ export default function ShowNotesTemplateGuidePage() {
         description="Learn how to write podcast show notes (episode notes) that Google and skimmers can use — then turn them into an SEO blog draft with our free generator. Includes a copy-paste podcast show notes template."
         path="/guides/show-notes-template"
         datePublished="2026-06-18"
-        dateModified="2026-08-28"
+        dateModified="2026-08-29"
         showTopCta
       >
         <h2>What are podcast show notes?</h2>
@@ -93,9 +93,12 @@ export default function ShowNotesTemplateGuidePage() {
 
         <h2>How to write podcast show notes</h2>
         <p>
-          Start with one searchable listener question, not an inside-joke episode title. Then fill four fields: hook,
-          takeaways, topic seeds (future H2s), and resources. Skip timestamp walls — they do not help Google understand
-          intent. Need a filled walkthrough? See{" "}
+          Start with one searchable listener question, not an inside-joke episode title. Stuck on the headline? Try the{" "}
+          <Link href="/tools/free-podcast-title-generator" className="text-primary hover:underline">
+            free podcast title generator
+          </Link>{" "}
+          before you fill the template. Then complete four fields: hook, takeaways, topic seeds (future H2s), and
+          resources. Skip timestamp walls — they do not help Google understand intent. Need a filled walkthrough? See{" "}
           <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
             podcast show notes examples
           </Link>{" "}
@@ -289,6 +292,11 @@ One listener question this episode answers: What is the cheapest way to get sepa
           <li>
             <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
               Paste notes → blog draft
+            </Link>
+          </li>
+          <li>
+            <Link href="/tools/free-podcast-title-generator" className="text-primary hover:underline">
+              Free podcast title generator
             </Link>
           </li>
           <li>
