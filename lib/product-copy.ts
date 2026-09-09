@@ -7,9 +7,9 @@ export const productPromise = {
   headlineLead: "Paste show notes.",
   headlineAccent: "Get a publish-ready SEO pack.",
   /** Document title — action keyword + product result (home SEO, keep H1 conversion-focused). */
-  seoTitle: "Turn a podcast into a blog post — free SEO draft from show notes",
+  seoTitle: "Turn a podcast into a blog post — free SEO draft",
   seoDescription:
-    "Paste show notes or a transcript → publish-ready SEO pack for your own site: title, article draft, FAQ, and social scripts. Not just a ChatGPT rewrite.",
+    "Paste show notes or a transcript → publish-ready SEO pack for your site: title, article draft, FAQ, and social scripts.",
   /** GEO / AI citation line — use on tool pages, not as a ranking guarantee */
   geoLine:
     "Structured drafts with clear FAQ blocks help Google — and AI answer engines — surface and cite your podcast content on your domain.",

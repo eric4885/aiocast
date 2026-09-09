@@ -10,14 +10,14 @@ import { newsletterBlurb } from "@/lib/pricing-copy";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Podcast preflight checklist (printable) — free recording checklist",
+  title: { absolute: "Podcast Preflight Checklist — Free Printable" },
   description:
-    "Free printable podcast preflight checklist for solo and remote recording — room noise, gain staging, backups, and editing order. Download, print, or bookmark before every session.",
+    "Free printable podcast preflight checklist: room noise, gain staging, backups, and editing order before every session.",
   alternates: { canonical: `${siteConfig.url}/resources/pre-flight-checklist` },
   openGraph: {
     title: "Podcast preflight checklist (printable)",
     description:
-      "Room noise, gain staging, backups, and editing order — a free preflight checklist for solo and remote podcast sessions.",
+      "Room noise, gain staging, backups, and editing order — free preflight checklist for solo and remote sessions.",
     url: `${siteConfig.url}/resources/pre-flight-checklist`,
   },
 };

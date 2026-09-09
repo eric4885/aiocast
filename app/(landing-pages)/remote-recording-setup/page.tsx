@@ -3,9 +3,9 @@ import { RemoteRecordingView } from "./remote-recording-view";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "7-day publish plan guide — podcast rollout by region",
+  title: { absolute: "7-Day Podcast Publish Plan Guide" },
   description:
-    "Cadence template for lining up SEO articles and social posts. The free growth pack includes a 7-day plan you adapt to your regions.",
+    "Cadence template for SEO articles and social posts. The free growth pack includes a 7-day plan you adapt to your regions.",
   alternates: { canonical: `${siteConfig.url}/remote-recording-setup` },
   openGraph: {
     title: "Podcast publish schedule guide",

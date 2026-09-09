@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Reach the AioCast team.",
+  description: "Contact the AioCast team about tools, billing, privacy requests, or partnership questions.",
   alternates: { canonical: `${siteConfig.url}/contact` },
   openGraph: {
     title: "Contact — AioCast",

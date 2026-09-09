@@ -38,9 +38,9 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Show notes to HTML converter — free paste tool for podcasters",
+  title: { absolute: "Show Notes to HTML Converter — Free Tool" },
   description:
-    "Convert podcast show notes or Markdown outlines to paste-ready HTML for WordPress and Ghost. Free, runs in your browser.",
+    "Convert podcast show notes or Markdown to paste-ready HTML for WordPress and Ghost. Free, runs in your browser.",
   alternates: { canonical },
   openGraph: {
     title: "Show notes to HTML converter",

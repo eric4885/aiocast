@@ -66,7 +66,7 @@ function FaqJsonLd() {
 
 export const metadata: Metadata = {
   title: { absolute: "Free AI Show Notes Generator (No Login)" },
-  description: `Free AI tool for solo podcasters: paste show notes or a transcript, get an SEO blog draft, FAQ blocks, and social scripts. No login — ${pricing.free.ipDailyLimit} free runs per day.`,
+  description: `Free AI show notes tool: paste notes or a transcript, get an SEO blog draft, FAQ, and social scripts. No login — ${pricing.free.ipDailyLimit} free runs per day.`,
   alternates: { canonical },
   openGraph: {
     title: "Free AI Show Notes Generator (No Login)",

@@ -46,14 +46,14 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Free podcast title generator online — episode title ideas & checker",
+  title: { absolute: "Free Podcast Title Generator (No Login)" },
   description:
-    "Free episode title generator online: enter your topic, get searchable podcast title ideas, keyword angles, and a rules-based clarity check. No credit card — then draft your SEO article with the growth pack.",
+    "Free podcast title generator: enter a topic, get SEO episode title ideas and a clarity check. Then draft your article with the growth pack.",
   alternates: { canonical },
   openGraph: {
-    title: "Free podcast title generator online",
+    title: "Free Podcast Title Generator (No Login)",
     description:
-      "Episode title generator with searchable angles and a quick wording check — free in your browser.",
+      "Episode title ideas with searchable angles and a quick wording check — free, no credit card.",
     url: canonical,
   },
 };

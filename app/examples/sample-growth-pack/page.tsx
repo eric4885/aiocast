@@ -6,9 +6,9 @@ import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Podcast show notes examples — sample blog & SEO pack",
+  title: { absolute: "Podcast Show Notes Examples — Sample SEO Pack" },
   description:
-    "Podcast show notes examples and a full podcast-to-blog sample: SEO article structure, FAQ blocks, social scripts, and publish plan from one episode.",
+    "Podcast show notes examples plus a sample SEO pack: article structure, FAQ blocks, social scripts, and a publish plan.",
   alternates: { canonical: `${siteConfig.url}/examples/sample-growth-pack` },
   openGraph: {
     title: "Podcast show notes examples — sample growth pack",

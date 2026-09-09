@@ -3,9 +3,9 @@ import { EditingStackView } from "./editing-stack-view";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Podcast to SEO article — one episode, full growth pack",
+  title: { absolute: "Podcast to SEO Article — Full Growth Pack" },
   description:
-    "Paste show notes or upload audio — get an SEO article draft, FAQ blocks, social scripts, SRT, and a 7-day publish plan from one episode.",
+    "Paste show notes or upload audio — get an SEO article draft, FAQ blocks, social scripts, and a 7-day publish plan.",
   alternates: { canonical: `${siteConfig.url}/ai-podcast-editing-stack` },
   keywords: [
     "podcast to SEO article",

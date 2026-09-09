@@ -52,14 +52,14 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Podcast Show Notes — Free Template & AI Generator",
+  title: { absolute: "Podcast Show Notes — Free Template & AI Generator" },
   description:
-    "Free podcast show notes template (also called episode notes): hook, takeaways, listener question. Reuse Spotify show notes on your site, then paste into our free AI generator — no login.",
+    "Free podcast show notes template (also episode notes): hook, takeaways, listener question. Reuse Spotify notes, then generate an SEO draft — no login.",
   alternates: { canonical: `${siteConfig.url}/guides/show-notes-template` },
   openGraph: {
     title: "Podcast Show Notes — Free Template",
     description:
-      "Copy-paste podcast show notes template + free AI draft generator. Reuse Spotify notes as a publish-ready SEO pack.",
+      "Copy-paste show notes template plus free AI draft generator. Reuse Spotify notes on your own site.",
     url: `${siteConfig.url}/guides/show-notes-template`,
     images: [{ url: `${siteConfig.url}/opengraph-image` }],
   },

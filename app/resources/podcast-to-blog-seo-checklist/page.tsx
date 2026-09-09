@@ -196,14 +196,14 @@ function BreadcrumbJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Podcast to blog SEO checklist (free, interactive) — 2026",
+  title: { absolute: "Podcast to Blog SEO Checklist — Free Interactive" },
   description:
-    "Free podcast to blog SEO checklist: keyword, show notes, on-page SEO, FAQ, and promotion. Interactive checkboxes + Markdown export. No signup.",
+    "Free podcast to blog SEO checklist: keyword, show notes, on-page SEO, FAQ, and promotion. Interactive checkboxes — no signup.",
   alternates: { canonical },
   openGraph: {
     title: "Podcast to blog SEO checklist (free)",
     description:
-      "Interactive SEO checklist for turning a podcast episode into a publish-ready blog post — no signup.",
+      "Interactive SEO checklist for turning an episode into a publish-ready blog post — no signup.",
     url: canonical,
   },
 };
