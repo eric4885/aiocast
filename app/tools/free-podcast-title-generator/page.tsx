@@ -125,6 +125,63 @@ export default function FreePodcastTitleGeneratorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-2xl px-4 pb-10 sm:px-6">
+        <h2 className="text-lg font-semibold text-foreground">Podcast title ideas (by episode type)</h2>
+        <div className="mt-4 space-y-4 text-sm leading-relaxed text-muted-foreground">
+          <p>
+            Stuck on <strong className="text-foreground">podcast title ideas</strong>? Use a formula, then swap in your
+            niche. A solid <strong className="text-foreground">podcast episode title generator</strong> workflow is:
+            pick the formula → draft 3 variants → run the tool above for clarity and keyword angles → lock one promise
+            before you record.
+          </p>
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-foreground">How-to:</strong> &quot;How Solo Podcasters Write Show Notes in 20
+              Minutes&quot;
+            </li>
+            <li>
+              <strong className="text-foreground">Mistake / myth:</strong> &quot;Why Episode Numbers Kill Your Podcast
+              SEO&quot;
+            </li>
+            <li>
+              <strong className="text-foreground">Numbered list:</strong> &quot;7 Podcast Title Ideas That Actually Get
+              Clicked&quot;
+            </li>
+            <li>
+              <strong className="text-foreground">Audience + outcome:</strong> &quot;For Indie Hosts: Turn Notes Into a
+              Blog Draft&quot;
+            </li>
+            <li>
+              <strong className="text-foreground">Question:</strong> &quot;Do You Need a Transcript to Rank Podcast
+              Episodes?&quot;
+            </li>
+            <li>
+              <strong className="text-foreground">Interview:</strong> &quot;Guest Name on [Specific Result Listeners
+              Want]&quot;
+            </li>
+            <li>
+              <strong className="text-foreground">Case study:</strong> &quot;How We Grew Episode Pages Without Buying
+              Ads&quot;
+            </li>
+            <li>
+              <strong className="text-foreground">Checklist:</strong> &quot;Pre-Publish SEO Checklist for Podcast Blog
+              Posts&quot;
+            </li>
+          </ul>
+          <p>
+            Prefer more ideas for your exact topic? Enter it in the generator at the top of this page — free, no login —
+            then paste your show notes into the{" "}
+            <Link
+              href="/tools/seo-growth-pack#pack-transcript-only"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              SEO growth pack
+            </Link>{" "}
+            when you are ready to publish on your domain.
+          </p>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-2xl px-4 pb-16 sm:px-6">
         <h2 className="text-lg font-semibold text-foreground">Common questions</h2>
         <dl className="mt-4 space-y-4">
