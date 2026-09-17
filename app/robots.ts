@@ -1,7 +1,13 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/data";
 
-const DISALLOW = ["/results/", "/my-packs", "/unsubscribe", "/tools/highlight-extractor"];
+const DISALLOW = [
+  "/results/",
+  "/my-packs",
+  "/unsubscribe",
+  "/tools/highlight-extractor",
+  "/podcast-to-short-video",
+];
 
 /** AI retrieval / answer bots — allow public tools and guides (GEO + search visibility). */
 const AI_RETRIEVAL_AGENTS = [

@@ -659,7 +659,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         </Card>
       )}
 
-      {pack.faq.length > 0 && (
+      {pack.faq.length > 0 ? (
         <Card>
           <CardContent className="space-y-3 p-6">
             <p className="font-semibold">FAQ blocks</p>
@@ -669,7 +669,25 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
                 <p className="mt-1 text-sm text-muted-foreground">{f.a}</p>
               </div>
             ))}
-            <FaqSchemaSection articleTitle={pack.seoArticle.title} faq={pack.faq} defaultEmail={backupEmail} />
+            <FaqSchemaSection articleTitle={pack.seoArticle.title} faq={pack.faq} />
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent className="space-y-3 p-6">
+            <p className="font-semibold">FAQ blocks</p>
+            <p className="text-sm text-muted-foreground">
+              No grounded FAQ pairs this run — we did not invent Q&amp;A from thin air. Use the suggested questions in{" "}
+              <strong className="text-foreground">Show notes clean</strong> (if any), answer them on your episode page,
+              then add FAQ schema from the publish schema section when ready.
+            </p>
+            {pack.showNotesClean?.suggestedQuestions && pack.showNotesClean.suggestedQuestions.length > 0 && (
+              <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
+                {pack.showNotesClean.suggestedQuestions.map((q) => (
+                  <li key={q}>{q}</li>
+                ))}
+              </ul>
+            )}
           </CardContent>
         </Card>
       )}

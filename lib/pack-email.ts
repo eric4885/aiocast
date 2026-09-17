@@ -16,7 +16,7 @@ export async function sendPackResultEmail(email: string, pack: GeneratedPack, ac
     html: `
       <p>Your SEO growth pack is ready.</p>
       <p><a href="${resultUrl}"><strong>Open your pack</strong></a></p>
-      <p>Includes: SEO article, FAQ blocks, social scripts, SRT, highlights, and 7-day publish plan.</p>
+      <p>Includes: structured show notes, SEO article, FAQ (when grounded), schema JSON-LD, social scripts, SRT, highlights, and 7-day publish plan.</p>
       <p style="color:#64748b;font-size:12px;">This link is private — do not share it publicly. Lost the link? Use <a href="${baseUrl}/my-packs">Find my packs</a> with this email.</p>
       ${emailFooterHtml()}
     `,

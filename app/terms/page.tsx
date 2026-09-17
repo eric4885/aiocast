@@ -3,7 +3,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Terms of Service",
+  title: { absolute: "Terms of Service · AioCast" },
   description: "Terms for using AioCast tools, AI-assisted outputs, and related content.",
   alternates: { canonical: `${siteConfig.url}/terms` },
   openGraph: {

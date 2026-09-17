@@ -3,7 +3,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: { absolute: "Privacy Policy · AioCast" },
   description: "How AioCast collects, uses, and protects information — including audio and text you submit.",
   alternates: { canonical: `${siteConfig.url}/privacy` },
   openGraph: {

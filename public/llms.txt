@@ -16,8 +16,11 @@ AioCast helps indie podcast hosts turn one episode into indexable, structured te
 - [Podcast show notes for SEO](https://aiocast.com/guides/podcast-show-notes-for-seo): Timestamps only when real, FAQ, schema on your domain.
 - [Podcast show notes template](https://aiocast.com/guides/show-notes-template): Free copy-paste format for podcast show notes.
 - [How to turn a podcast into a blog post](https://aiocast.com/guides/podcast-to-blog-post): Step-by-step workflow with embedded generator.
+- [Podcast FAQ for SEO](https://aiocast.com/guides/podcast-faq-for-seo): Grounded FAQ blocks and schema tips.
 - [Podcast to blog SEO checklist](https://aiocast.com/resources/podcast-to-blog-seo-checklist): Pre-publish checklist.
-- [Sample growth pack output](https://aiocast.com/examples/sample-growth-pack): Example blog structure, FAQ, and social scripts.
+- [Pre-flight recording checklist](https://aiocast.com/resources/pre-flight-checklist): Room noise, gain, backups before you hit Record.
+- [Resources hub](https://aiocast.com/resources): Guides and checklists index.
+- [Sample growth pack output](https://aiocast.com/examples/sample-growth-pack): Example blog structure, FAQ, show notes, and social scripts.
 
 ## Who it is for
 
@@ -25,4 +28,4 @@ Solo podcasters and small teams without a dedicated editor who want to publish s
 
 ## Pricing
 
-Free: 3 pack generations per day per IP (no account required). Pro optional for unlimited runs.
+Free: 3 pack generations per day per IP (no account required). Schema JSON-LD copy is included on free results. Pro optional for unlimited runs and full pack history.

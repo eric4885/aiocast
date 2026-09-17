@@ -42,17 +42,44 @@ The bottleneck is rarely ideas — it is packaging. A repeatable transcript → 
   faq: [
     {
       q: "Do I need a full transcript before using a growth pack?",
-      a: "No. Polished show notes or a detailed outline work. Audio upload auto-transcribes up to 5 minutes on the free plan.",
+      a: "No. Polished show notes or a detailed outline work. AioCast is downstream: paste text you already have. For a short clip only, the growth pack upload tab can help — full-episode transcription belongs in tools like Otter or Descript.",
     },
     {
       q: "How long does generation take?",
-      a: "Pasted text usually completes in under a minute. A 5-minute audio clip typically takes 30–90 seconds to transcribe and package.",
+      a: "Pasted text usually completes in under a minute. A short audio clip typically takes 30–90 seconds to package when transcription is enabled.",
     },
     {
       q: "Will Google rank the AI draft automatically?",
       a: "No tool guarantees rankings. Edit the draft, publish on your own site, add internal links, and promote it — the pack saves drafting time, not distribution magic.",
     },
   ],
+  showNotesClean: {
+    summary:
+      "Indie hosts often stop at audio. This episode walks through picking one keyword, turning a rough transcript into a search-ready article, and shipping FAQ plus social follow-ups in the same week — without hiring a content team.",
+    chapters: [
+      { title: "Why audio-only episodes underperform in search", timestamp: null, summary: "Spotify is not an indexable page; Google needs text on your domain." },
+      { title: "Start from notes or a rough transcript", timestamp: null, summary: "Outline or export is enough — do not invent timestamps." },
+      { title: "Publish the article first, then social", timestamp: null, summary: "Give crawlers a canonical URL before you drive social clicks." },
+    ],
+    resources: [
+      { name: "AioCast SEO growth pack", kind: "tool", url: "https://aiocast.com/tools/seo-growth-pack", note: "" },
+    ],
+    quotes: [
+      {
+        text: "The bottleneck was never ideas — it was packaging.",
+        speaker: "Host",
+        timestamp: null,
+      },
+    ],
+    platformBlurbs: {
+      apple: "How indie hosts turn one episode into a week of SEO content — without a writer.",
+      spotify:
+        "A practical loop: transcript or show notes → article + FAQ → social scripts, so your episode can show up beyond the podcast apps.",
+      website:
+        "Most indie podcasters publish an episode and move on. This walkthrough shows how to turn one conversation into a searchable article, FAQ blocks, and a timed social plan — then publish on your own domain.",
+    },
+    suggestedQuestions: [],
+  },
   socialPack: {
     x: "One episode → one SEO article + FAQ blocks + a week of social posts. Stop letting great conversations disappear after publish day.",
     linkedIn:

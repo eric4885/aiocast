@@ -257,7 +257,7 @@ export function GrowthPackClient({
               <Link href="/pro-toolkit" className="text-primary underline-offset-4 hover:underline">
                 Pro
               </Link>
-              : unlimited runs · FAQ JSON-LD · pack history
+              : unlimited runs · full pack history
             </li>
             {rateLimitsDisabled && (
               <li className="text-muted-foreground/90">Launch preview — limits may be temporarily relaxed.</li>

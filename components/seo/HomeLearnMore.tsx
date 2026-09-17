@@ -28,6 +28,14 @@ export function HomeLearnMore() {
           </li>
           <li>
             <Link
+              href="/guides/podcast-show-notes-for-seo"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Show notes for SEO
+            </Link>
+          </li>
+          <li>
+            <Link
               href="/tools/free-show-notes-generator"
               className="font-medium text-primary underline-offset-4 hover:underline"
             >

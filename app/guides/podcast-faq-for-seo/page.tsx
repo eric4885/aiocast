@@ -18,7 +18,7 @@ const faq = [
   },
   {
     q: "How do I generate FAQ drafts from a podcast?",
-    a: "Paste a transcript or structured show notes into the AioCast SEO growth pack. Each run includes three Q&A pairs — edit them for voice and accuracy before publishing.",
+    a: "Paste a transcript or structured show notes into the AioCast SEO growth pack. When the source has real Q&A, you get grounded FAQ pairs — edit them for voice before publishing. If there is no Q&A signal, we suggest questions for you to answer instead of inventing answers.",
   },
 ] as const;
 
@@ -38,7 +38,7 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: "Podcast FAQ blocks for SEO — how to use them",
+  title: { absolute: "Podcast FAQ for SEO — How to Use FAQ Blocks" },
   description:
     "How to add FAQ sections from podcast episodes to your site for clearer structure and snippet-friendly content.",
   alternates: { canonical: `${siteConfig.url}/guides/podcast-faq-for-seo` },
@@ -59,12 +59,13 @@ export default function PodcastFaqSeoGuidePage() {
         description="FAQ sections answer the questions listeners type into search. Here is how to use them honestly — without keyword stuffing."
         path="/guides/podcast-faq-for-seo"
         datePublished="2026-06-20"
-        dateModified="2026-07-30"
+        dateModified="2026-09-17"
       >
         <h2>What FAQ blocks are for</h2>
         <p>
-          Each episode naturally answers how/what/why questions. Pulling three of those into a FAQ section gives search
-          engines a clear Q&amp;A structure and gives skimmers a fast on-ramp before they commit to the full article.
+          Each episode naturally answers how/what/why questions. Pulling a few grounded ones into a FAQ section gives
+          search engines a clear Q&amp;A structure and gives skimmers a fast on-ramp before they commit to the full
+          article. Skip inventing answers the episode never covered.
         </p>
 
         <h2>Where to put them</h2>
@@ -123,7 +124,8 @@ export default function PodcastFaqSeoGuidePage() {
           <Link href="/tools/seo-growth-pack" className="text-primary hover:underline">
             SEO growth pack
           </Link>{" "}
-          includes three Q&amp;A pairs per run. Edit them before publish. See how they look in our{" "}
+          returns FAQ pairs only when they can be grounded in your paste — otherwise it suggests questions for you to
+          answer. Edit before publish. See the{" "}
           <Link href="/examples/sample-growth-pack" className="text-primary hover:underline">
             public example pack
           </Link>
@@ -131,7 +133,7 @@ export default function PodcastFaqSeoGuidePage() {
           <Link href="/guides/podcast-to-blog-post" className="text-primary hover:underline">
             podcast to blog
           </Link>{" "}
-          workflow.
+          workflow. Schema copy (including FAQ) is free on the results page.
         </p>
       </GuideLayout>
     </>

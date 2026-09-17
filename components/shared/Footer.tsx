@@ -67,11 +67,7 @@ export function Footer() {
                   </a>
                 );
               })
-            ) : (
-              <p className="text-xs text-muted-foreground">
-                Social profile links coming soon — follow the newsletter below for updates.
-              </p>
-            )}
+            ) : null}
           </div>
 
         </div>
@@ -96,6 +92,11 @@ export function Footer() {
             <li>
               <Link className="hover:text-foreground" href="/guides/show-notes-template">
                 Podcast show notes template
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-foreground" href="/guides/podcast-show-notes-for-seo">
+                Show notes for SEO
               </Link>
             </li>
             <li>

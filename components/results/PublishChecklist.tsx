@@ -30,7 +30,7 @@ const ITEMS = [
     id: "faq-schema",
     label: "FAQ pasted on the page (+ Episode/FAQ JSON-LD)",
     detail:
-      "Add FAQ to the article body. Copy BlogPosting + PodcastEpisode + FAQ JSON-LD from this results page — only fill duration/URL fields you know are true.",
+      "Add grounded FAQ to the article body when you have answers. Copy BlogPosting + PodcastEpisode + FAQ JSON-LD from this results page (free) — only fill duration/URL fields you know are true.",
   },
   {
     id: "sitemap",

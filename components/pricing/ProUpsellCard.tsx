@@ -17,7 +17,7 @@ export function ProUpsellCard({ email = "", variant = "full" }: Props) {
       <Card className="border-primary/35 bg-gradient-to-br from-primary/10 via-background to-accent/5">
         <CardContent className="space-y-3 p-5">
           <p className="text-sm font-semibold text-foreground">
-            Hit the free limit? Pro unlocks unlimited packs + FAQ JSON-LD.
+            Hit the free limit? Pro unlocks unlimited packs and full history.
           </p>
           <CheckoutButtons defaultEmail={email} compact />
           <p className="text-xs text-muted-foreground">

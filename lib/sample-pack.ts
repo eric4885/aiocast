@@ -15,13 +15,29 @@ Key takeaway: you do not need perfect show notes on day one. A rough transcript 
   faq: [
     {
       q: "Do I need a full transcript before using a growth pack?",
-      a: "No. Polished show notes or a detailed outline work. Audio upload auto-transcribes up to 5 minutes on the free plan.",
+      a: "No. Polished show notes or a detailed outline work. Paste text you already have — AioCast does not replace full-episode transcription tools.",
     },
     {
       q: "How long does generation take?",
-      a: "Pasted text usually completes in under a minute. A 5-minute audio clip typically takes 30–90 seconds to transcribe and package.",
+      a: "Pasted text usually completes in under a minute.",
     },
   ],
+  showNotesClean: {
+    summary:
+      "Turn one indie podcast episode into a searchable article, FAQ, and social follow-ups — starting from notes or a transcript you already have.",
+    chapters: [
+      { title: "Audio-only discovery problem", timestamp: null, summary: "Why app-only blurbs do not rank." },
+      { title: "Keyword + outline before generate", timestamp: null, summary: "One intent per episode." },
+    ],
+    resources: [],
+    quotes: [],
+    platformBlurbs: {
+      apple: "One episode → a week of SEO content for indie hosts.",
+      spotify: "Paste notes or a transcript, get an article + FAQ + social scripts for your own site.",
+      website:
+        "A practical packaging loop for solo hosts: structured show notes, blog draft, FAQ, and a 7-day publish plan.",
+    },
+  },
   socialPack: {
     x: "One episode → one SEO article + FAQ blocks + a week of social posts. Stop letting great conversations disappear after publish day. 🎙️",
     linkedIn:

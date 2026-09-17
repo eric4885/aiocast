@@ -12,13 +12,13 @@ import { freeTierPricingLine } from "@/lib/pricing-copy";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Pricing — AioCast Pro",
+  title: { absolute: "Pricing — AioCast Pro" },
   description:
-    "Free podcast SEO growth pack (3/day). Pro $12/mo or $99/yr — unlimited generations, FAQ JSON-LD, full pack history.",
+    "Free podcast SEO growth pack (3/day). Pro $12/mo or $99/yr — unlimited generations and full pack history.",
   alternates: { canonical: `${siteConfig.url}/pro-toolkit` },
   openGraph: {
     title: "AioCast Pro pricing",
-    description: "Unlimited podcast-to-SEO packs with FAQ schema export.",
+    description: "Unlimited podcast-to-SEO packs and full history — schema copy included on free results too.",
     url: `${siteConfig.url}/pro-toolkit`,
   },
 };
@@ -38,7 +38,7 @@ export default function ProToolkitPage({
     name: "AioCast Pro",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
-    description: "Unlimited podcast SEO growth pack generations with FAQ JSON-LD export.",
+    description: "Unlimited podcast SEO growth pack generations with full pack history.",
     url: proUrl,
     image: `${base}/opengraph-image`,
     offers: [
@@ -80,11 +80,11 @@ export default function ProToolkitPage({
         <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">Simple plans for podcast SEO</h1>
         <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
           Start free with {pricing.free.ipDailyLimit} generations per day. Upgrade when you publish weekly and need
-          unlimited packs, FAQ JSON-LD, and full history in{" "}
+          unlimited packs and full history in{" "}
           <Link href="/my-packs" className="text-primary underline-offset-4 hover:underline">
             Find my packs
           </Link>
-          .
+          . Schema JSON-LD copy is included on free results.
         </p>
 
         {checkout === "success" && (

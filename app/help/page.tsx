@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 
 export const metadata: Metadata = {
-  title: "Help & FAQ",
+  title: { absolute: "Help & FAQ · AioCast" },
   description: "Common questions about AioCast tools, transcripts, limits, and billing.",
   alternates: { canonical: `${siteConfig.url}/help` },
   openGraph: {

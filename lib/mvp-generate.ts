@@ -305,23 +305,6 @@ ${draft.slice(0, 6000)}`,
   }
 }
 
-function defaultFaq() {
-  return [
-    {
-      q: "How can podcasters rank on Google faster?",
-      a: "Publish intent-structured long-form articles from each episode, then support them with FAQ blocks and internal links.",
-    },
-    {
-      q: "What content should I post after publishing an episode?",
-      a: "Use a script matrix per channel: one X hook thread, one LinkedIn insight post, and one newsletter takeaway.",
-    },
-    {
-      q: "Do I need a team to run podcast SEO?",
-      a: "No. A repeatable weekly workflow plus templates can produce consistent growth assets solo.",
-    },
-  ];
-}
-
 function defaultSchedule() {
   return [
     "Mon 09:00 local: Publish long-form SEO article",
@@ -346,18 +329,19 @@ function defaultSeoReport() {
 }
 
 function normalizeFaq(raw: unknown) {
-  if (!Array.isArray(raw)) return defaultFaq();
+  if (!Array.isArray(raw)) return [] as Array<{ q: string; a: string }>;
   const items = raw
-    .map((item, index) => {
+    .map((item) => {
       if (!item || typeof item !== "object") return null;
       const row = item as Record<string, unknown>;
       const q = String(row.q ?? row.question ?? "").trim();
       const a = String(row.a ?? row.answer ?? "").trim();
-      if (!q) return null;
-      return { q, a: a || `Answer ${index + 1}` };
+      // Require both question and answer grounded — never invent "Answer N".
+      if (!q || !a) return null;
+      return { q, a };
     })
     .filter((item): item is { q: string; a: string } => item !== null);
-  return items.length > 0 ? items.slice(0, 3) : defaultFaq();
+  return items.slice(0, 6);
 }
 
 function normalizeSchedule(raw: unknown) {
@@ -411,11 +395,7 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     ? ai.keywords.map((k) => String(k)).slice(0, 5)
     : ["podcast SEO", "audio to article", "FAQ snippets", "social scripts", "content repurposing"];
 
-  const faqRaw = ai?.faq;
-  const faq =
-    Array.isArray(faqRaw) && faqRaw.length === 0
-      ? []
-      : normalizeFaq(faqRaw);
+  const faq = normalizeFaq(ai?.faq);
 
   const schedule = normalizeSchedule(ai?.schedule);
 

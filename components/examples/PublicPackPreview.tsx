@@ -61,6 +61,25 @@ export function PublicPackPreview() {
         </CardContent>
       </Card>
 
+      {"showNotesClean" in pack && pack.showNotesClean && (
+        <Card>
+          <CardContent className="space-y-3 p-6">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Example · Show notes clean</p>
+            <p className="text-sm text-muted-foreground">{pack.showNotesClean.summary}</p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              {pack.showNotesClean.chapters.map((c) => (
+                <li key={c.title} className="rounded-lg border border-border/70 p-3">
+                  <span className="font-medium text-foreground">{c.title}</span> — {c.summary}
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-muted-foreground">
+              Apple blurb: {pack.showNotesClean.platformBlurbs.apple}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardContent className="space-y-4 p-6">
           <p className="font-semibold">Social scripts</p>

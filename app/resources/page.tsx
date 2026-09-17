@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Resources — guides & checklists",
+  title: { absolute: "Resources — guides & checklists · AioCast" },
   description: "Podcast SEO guides, show notes templates, and recording checklists from AioCast.",
   alternates: { canonical: `${siteConfig.url}/resources` },
   openGraph: {

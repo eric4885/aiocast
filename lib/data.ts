@@ -74,15 +74,15 @@ export const featuredTools = [
 export const faqItems = [
   {
     q: "Do I need to change my current recording stack?",
-    a: "No. Keep your current recorder/host. AioCast sits on top to convert finished audio into SEO and distribution assets.",
+    a: "No. Keep your recorder and host. AioCast sits downstream: paste show notes or a transcript you already have (or a short clip on the growth pack), then get a publish-ready SEO pack for your own site.",
   },
   {
     q: "I am a complete beginner - can I follow along?",
-    a: "The workflow uses your transcript and context prompts. You still review tone and claims, but the first draft is aligned to your voice and intent.",
+    a: "Yes. Paste notes or a transcript, generate the pack, then review tone and claims before you publish. Rankings are never guaranteed — we sell structure and a publish checklist.",
   },
   {
-    q: "How is this different from recording/hosting/video tools?",
-    a: "AioCast focuses on post-production growth: one episode becomes an SEO draft, FAQ blocks, social scripts, and a publish schedule — not recording or hosting.",
+    q: "How is this different from recording/hosting/transcription tools?",
+    a: "AioCast focuses on post-production publish assets: structured show notes, SEO draft, FAQ, schema, social scripts, and a checklist — not studio recording, hosting, or full-episode transcription as the main product.",
   },
 ];
 

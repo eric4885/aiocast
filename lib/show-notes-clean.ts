@@ -97,6 +97,20 @@ function asString(value: unknown, fallback = ""): string {
   return typeof value === "string" ? value.trim() : fallback;
 }
 
+/** Strip trailing punctuation so https://x.com/a. still matches source https://x.com/a */
+function normalizeUrlCandidate(url: string): string {
+  return url.replace(/[),.;:!?\]]+$/g, "").trim();
+}
+
+function sourceContainsUrl(sourceText: string, url: string): boolean {
+  const cleaned = normalizeUrlCandidate(url);
+  if (!cleaned) return false;
+  if (sourceText.includes(cleaned)) return true;
+  // Tolerate missing trailing slash differences
+  const alt = cleaned.endsWith("/") ? cleaned.slice(0, -1) : `${cleaned}/`;
+  return sourceText.includes(alt);
+}
+
 function normalizeTimestamp(raw: unknown, allowTimecodes: boolean): string | null {
   if (!allowTimecodes) return null;
   const t = asString(raw);
@@ -139,8 +153,8 @@ export function normalizeShowNotesClean(
       const r = item as Record<string, unknown>;
       const name = asString(r.name ?? r.title);
       if (!name) return null;
-      const url = asString(r.url ?? r.link);
-      const urlInSource = url ? sourceText.includes(url) : false;
+      const url = normalizeUrlCandidate(asString(r.url ?? r.link));
+      const urlInSource = url ? sourceContainsUrl(sourceText, url) : false;
       return {
         name,
         kind: asString(r.kind ?? r.type, "mention"),
@@ -220,7 +234,7 @@ export function validateShowNotesAgainstSource(
   }
 
   for (const r of notes.resources) {
-    if (r.url && !sourceText.includes(r.url)) {
+    if (r.url && !sourceContainsUrl(sourceText, r.url)) {
       flags.push({
         level: "yellow",
         message: `URL not found in source: ${r.url}`,

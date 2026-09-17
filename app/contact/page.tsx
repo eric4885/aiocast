@@ -3,7 +3,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: { absolute: "Contact · AioCast" },
   description: "Contact the AioCast team about tools, billing, privacy requests, or partnership questions.",
   alternates: { canonical: `${siteConfig.url}/contact` },
   openGraph: {
