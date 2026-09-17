@@ -9,6 +9,12 @@ import {
   highlightsFromTranscript,
   srtFromTranscript,
 } from "@/lib/transcript-segments";
+import {
+  defaultShowNotesClean,
+  normalizeShowNotesClean,
+  sourceHasTimecodes,
+  wordCount,
+} from "@/lib/show-notes-clean";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -95,27 +101,39 @@ async function generateWithOpenAI(transcript: string): Promise<{
     return { data: null, failureReason: "OPENAI_API_KEY secret is missing on the server." };
   }
 
+  const allowTimecodes = sourceHasTimecodes(transcript);
+
   const prompt = `
 Return strict JSON with keys:
-title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 objects {q,a}), socialX, socialLinkedIn, socialSubstack, schedule (array of 7 short lines), seoReport ({targetKeyword,altTitle,altDescription,estimatedTrafficHint})
+title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 objects {q,a}), socialX, socialLinkedIn, socialSubstack, schedule (array of 7 short lines), seoReport ({targetKeyword,altTitle,altDescription,estimatedTrafficHint}), showNotesClean ({summary, chapters:[{title,timestamp,summary}], resources:[{name,kind,url,note}], quotes:[{text,speaker,timestamp,condensed}], platformBlurbs:{apple,spotify,website}, suggestedQuestions: string[]})
 
-Rules:
+Evidence-first rules (hard):
 - ${outputLanguageRule()}
-- articleBody: a FULL publishable SEO blog post in Markdown (900–1300 words) written for Google search — NOT a podcast script cleanup.
-  * Cover EVERY major theme/chapter from the transcript. If the source discusses ethics, AI policy, privacy, or labor impacts, include a dedicated ## section for that topic (do not fold into one sentence elsewhere). Do not omit any main section.
-  * Do NOT mirror the transcript outline: section titles must be NEW (no reuse of "Introduction", "Chapter 1", or transcript headings).
-  * Do NOT walk through the transcript in the same order paragraph-by-paragraph or section-by-section. Reorganize for search intent.
-  * Required sections: ## Who this is for, ## Key takeaways (bullet list), plus 4–6 topic sections with fresh titles, then ## Conclusion.
-  * Write fresh editorial prose — no copy-paste, no light paraphrase, no spoken-word filler ("Good morning", "Thank you for listening").
-  * Opening paragraph must not reuse any sentence from the transcript's first 150 words.
-- socialX: ready-to-post tweet text (≤280 chars). Plain text only — NO profile URLs, NO "https://" links, NO placeholders like yourpodcast.
-- socialLinkedIn: ready-to-post LinkedIn post (2–4 short paragraphs). Plain text only — NO URLs unless quoting a specific fact from the episode.
-- socialSubstack: ready-to-post newsletter intro (150–400 words). Plain text only — NO placeholder links.
-- schedule: 7 lines tied to THIS episode's topics, not generic "publish episode" filler.
-- faq: 3 Q&A pairs grounded in the transcript.
-- seoReport.estimatedTrafficHint: one short editorial angle sentence (how to frame the topic for search) — NO traffic numbers, impressions, or ranking promises.
+- ONLY use facts, names, books, tools, prices, dates, stats, and URLs that appear in the source transcript/notes below. Do NOT invent people, links, numbers, or events.
+- Timestamps: ${allowTimecodes ? "Source contains timecodes — you may copy MM:SS / HH:MM:SS that appear in the source. Do not invent new times." : "Source has NO timecodes — set every timestamp field to null. Use chapter titles only. NEVER invent timestamps."}
+- URLs: only if the exact URL string appears in the source; otherwise set url to "" and note "Mentioned without a URL in source — add manually."
+- Quotes: prefer verbatim; if shortened set condensed=true and keep a timestamp only when present in source.
+- FAQ: answers must be grounded in the source. If there is no real Q&A material, return faq as [] and fill suggestedQuestions (3–5) for the author instead — do NOT invent FAQ answers.
+- Medical, legal, or investment conclusions: add that the listener should consult a professional; do not state absolute advice as fact.
 
-Context transcript:
+articleBody:
+- FULL publishable SEO blog post in Markdown (900–1300 words) for Google search — NOT a podcast script cleanup.
+- Cover EVERY major theme from the source. Do NOT mirror transcript headings or section order.
+- Required: ## Who this is for, ## Key takeaways (bullets), 4–6 fresh topic sections, ## Conclusion.
+- Fresh editorial prose; opening must not reuse any sentence from the source's first 150 words.
+
+showNotesClean:
+- summary: 100–180 words; first sentence should include a searchable topic phrase from the episode; no invented stats.
+- chapters: 6–12 items; each title is an action-oriented label (not "Discussion continues"); timestamp null when unknown.
+- resources: books/tools/people mentioned; split by kind; no guessed URLs.
+- quotes: 3–5 max when source supports them.
+- platformBlurbs.apple: short (~1–2 sentences); spotify: medium; website: longer episode blurb for the host's site.
+
+socialX / socialLinkedIn / socialSubstack: plain text only — no placeholder URLs.
+schedule: 7 lines tied to THIS episode's topics.
+seoReport.estimatedTrafficHint: one editorial angle sentence — NO traffic numbers or ranking promises.
+
+Context transcript/notes:
 ${transcript.slice(0, 8000)}
 `;
 
@@ -139,7 +157,7 @@ ${transcript.slice(0, 8000)}
             {
               role: "system",
               content:
-                `You are an SEO content operator for podcasters. ${outputLanguageRule()} Return valid JSON only. Produce professional marketing copy only: no harassment, hate, illegal instructions, or explicit sexual content.`,
+                `You are an SEO content operator for podcasters. ${outputLanguageRule()} Return valid JSON only. Never invent facts, URLs, or timestamps not present in the user source. Produce professional marketing copy only: no harassment, hate, illegal instructions, or explicit sexual content.`,
             },
             { role: "user", content: prompt },
           ],
@@ -364,9 +382,19 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
   const rawTranscript = input.transcriptHint?.trim() || fallbackTranscript(input.sourceLabel);
   const normalized = await ensureEnglishTranscript(rawTranscript);
   const transcript = normalized.text;
-  const aiResult = await generateWithOpenAI(transcript);
+  const words = wordCount(transcript);
+  const inputTooShort = words < 80;
+
+  // Thin pastes: structure show notes from template; skip full AI blog inventiveness.
+  const aiResult = inputTooShort
+    ? {
+        data: null as Record<string, unknown> | null,
+        failureReason:
+          "Source is under ~80 words. Paste more show notes or a longer transcript for a full SEO blog — template pack returned instead.",
+      }
+    : await generateWithOpenAI(transcript);
   const ai = aiResult.data;
-  const usedAi = Boolean(ai && (ai.articleBody || ai.title));
+  const usedAi = Boolean(ai && (ai.articleBody || ai.title || ai.showNotesClean));
   const now = new Date().toISOString();
   const aiStr = (key: string) => {
     const v = ai?.[key];
@@ -383,7 +411,11 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     ? ai.keywords.map((k) => String(k)).slice(0, 5)
     : ["podcast SEO", "audio to article", "FAQ snippets", "social scripts", "content repurposing"];
 
-  const faq = normalizeFaq(ai?.faq);
+  const faqRaw = ai?.faq;
+  const faq =
+    Array.isArray(faqRaw) && faqRaw.length === 0
+      ? []
+      : normalizeFaq(faqRaw);
 
   const schedule = normalizeSchedule(ai?.schedule);
 
@@ -400,12 +432,21 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     aiStr("articleBody") ??
     `## Executive Summary\n${transcript}\n\n## Why Most Podcast Episodes Underperform\nMost episodes are published once and forgotten.\n\n## Build an AIO-Ready Content Loop\nTurn each episode into a long-form article, three FAQ answers, and a script matrix.\n\n## Execution Framework\nShip article first, then social distribution within 24 hours.\n`;
 
-  if (aiStr("articleBody") && articleNeedsDistinctRewrite(articleBody, transcript)) {
+  if (inputTooShort) {
+    articleBody = `## Short source — expand before publishing\n\nYour paste was only about ${words} words. Use the **Show notes clean** block below as a template, then paste a fuller transcript or outline and regenerate for a complete SEO article.\n\n## What you pasted\n\n${transcript.slice(0, 2000)}\n`;
+  }
+
+  if (!inputTooShort && aiStr("articleBody") && articleNeedsDistinctRewrite(articleBody, transcript)) {
     const rewritten = await rewriteDistinctArticle(transcript, articleBody, title);
     if (rewritten) articleBody = rewritten;
   }
 
-  const articleEchoesSource = Boolean(aiStr("articleBody")) && articleNeedsDistinctRewrite(articleBody, transcript);
+  const articleEchoesSource =
+    !inputTooShort && Boolean(aiStr("articleBody")) && articleNeedsDistinctRewrite(articleBody, transcript);
+
+  const showNotesClean = ai?.showNotesClean
+    ? normalizeShowNotesClean(ai.showNotesClean, transcript)
+    : defaultShowNotesClean(transcript);
 
   return {
     id: "",
@@ -414,8 +455,10 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     sourceLabel: input.sourceLabel,
     transcript,
     seoArticle: {
-      title,
-      metaDescription,
+      title: inputTooShort ? "Expand your notes — then regenerate the SEO pack" : title,
+      metaDescription: inputTooShort
+        ? "Your paste was too short for a full blog draft. Add more show notes or transcript text and run generate again."
+        : metaDescription,
       keywords,
       body: articleBody,
     },
@@ -429,10 +472,12 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     srt,
     highlights,
     seoReport: normalizeSeoReport(ai?.seoReport),
+    showNotesClean,
     generationSource: usedAi ? "ai" : "template",
     aiFailureReason: usedAi ? undefined : aiResult.failureReason,
     articleEchoesSource: articleEchoesSource || undefined,
     transcriptTranslated: normalized.wasTranslated || undefined,
+    inputTooShort: inputTooShort || undefined,
   };
 }
 

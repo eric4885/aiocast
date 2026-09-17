@@ -24,10 +24,15 @@ import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { FaqSchemaSection } from "@/components/results/FaqSchemaSection";
 import { PublishChecklist } from "@/components/results/PublishChecklist";
 import { PublishWorkflowCard } from "@/components/results/PublishWorkflowCard";
+import { ShowNotesCleanSection } from "@/components/results/ShowNotesCleanSection";
+import { EpisodeSchemaSection } from "@/components/results/EpisodeSchemaSection";
+import { OldNotesAuditSection } from "@/components/results/OldNotesAuditSection";
 import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
 import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
 import { productPromise } from "@/lib/product-copy";
+import type { ShowNotesClean } from "@/lib/show-notes-clean";
+import { defaultShowNotesClean, normalizeShowNotesClean } from "@/lib/show-notes-clean";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -48,12 +53,14 @@ type JobPayload = {
       altDescription: string;
       estimatedTrafficHint: string;
     };
+    showNotesClean?: ShowNotesClean;
     generationSource?: "ai" | "template";
     aiFailureReason?: string;
     transcript?: string;
     sourceType?: TranscriptSourceType;
     articleEchoesSource?: boolean;
     transcriptTranslated?: boolean;
+    inputTooShort?: boolean;
   };
 };
 
@@ -139,6 +146,12 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
         : "transcript",
     articleEchoesSource: raw.articleEchoesSource === true ? true : undefined,
     transcriptTranslated: raw.transcriptTranslated === true ? true : undefined,
+    inputTooShort: raw.inputTooShort === true ? true : undefined,
+    showNotesClean: (() => {
+      const source = asString(raw.transcript);
+      if (raw.showNotesClean) return normalizeShowNotesClean(raw.showNotesClean, source || " ");
+      return source ? defaultShowNotesClean(source) : undefined;
+    })(),
   };
 }
 
@@ -513,6 +526,40 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
 
       <PublishWorkflowCard />
       <PublishChecklist packId={id} />
+
+      {pack.inputTooShort && (
+        <p className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-50">
+          Your paste was under ~80 words, so we returned a template structure instead of a full AI blog. Add more show
+          notes or transcript text and{" "}
+          <Link href={TOOL_HREF} className="font-medium underline underline-offset-2">
+            generate again
+          </Link>
+          .
+        </p>
+      )}
+
+      {pack.showNotesClean && (
+        <ShowNotesCleanSection
+          notes={pack.showNotesClean}
+          sourceText={pack.transcript || ""}
+          episodeTitle={pack.seoArticle.title}
+          metaDescription={pack.seoArticle.metaDescription}
+          onCopy={(text, label) => void copy(text, label)}
+          copyToast={copyToast}
+        />
+      )}
+
+      {pack.transcript && (
+        <OldNotesAuditSection sourceText={pack.transcript} episodeTitle={pack.seoArticle.title} />
+      )}
+
+      <EpisodeSchemaSection
+        title={pack.seoArticle.title}
+        summary={pack.showNotesClean?.summary || pack.seoArticle.metaDescription}
+        faq={pack.faq}
+        onCopy={(text, label) => void copy(text, label)}
+        copyToast={copyToast}
+      />
 
       {!emailSent && token && (
         <Card className="border-primary/25 bg-primary/5">

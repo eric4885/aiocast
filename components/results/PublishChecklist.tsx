@@ -21,10 +21,16 @@ const ITEMS = [
       "In your CMS, set the canonical (or “original URL”) to the live post on your domain so search engines know which URL to index.",
   },
   {
-    id: "faq-schema",
-    label: "FAQ pasted on the page (+ schema if you have Pro)",
+    id: "show-notes-review",
+    label: "Show notes chapters / quotes scanned for invented facts",
     detail:
-      "Add the FAQ section to the article body. Pro users can copy FAQ JSON-LD from this results page and paste it into your CMS / head tag.",
+      "Check yellow/blue flags on the Show notes clean block. Do not publish invented URLs or timestamps that were not in your paste.",
+  },
+  {
+    id: "faq-schema",
+    label: "FAQ pasted on the page (+ Episode/FAQ JSON-LD)",
+    detail:
+      "Add FAQ to the article body. Copy BlogPosting + PodcastEpisode + FAQ JSON-LD from this results page — only fill duration/URL fields you know are true.",
   },
   {
     id: "sitemap",

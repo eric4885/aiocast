@@ -15,6 +15,7 @@ const entries: SitemapEntry[] = [
   { path: "/tools/free-show-notes-generator", priority: 0.96, changeFrequency: "weekly", lastModified: "2026-09-10" },
   { path: "/tools/seo-growth-pack", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-09-10" },
   { path: "/guides/show-notes-template", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-09-10" },
+  { path: "/guides/podcast-show-notes-for-seo", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-09-17" },
   { path: "/guides/podcast-to-blog-post", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-08-21" },
   { path: "/resources/podcast-to-blog-seo-checklist", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-09-10" },
   { path: "/tools/free-podcast-title-generator", priority: 0.85, changeFrequency: "monthly", lastModified: "2026-09-10" },

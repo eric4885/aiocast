@@ -2,14 +2,14 @@
 export const productPromise = {
   /** Who + what in one sentence */
   oneLiner:
-    "For solo podcasters without an editor: paste one episode's show notes or transcript, get a publish-ready SEO pack for your own site — title, article draft, FAQ, and social scripts.",
+    "For solo podcasters without an editor: paste one episode's show notes or transcript, get a publish-ready SEO pack for your own site — structured show notes, title, article draft, FAQ, schema, and social scripts.",
   /** Short hero H1 */
   headlineLead: "Paste show notes.",
   headlineAccent: "Get a publish-ready SEO pack.",
   /** Document title — action keyword + product result (home SEO, keep H1 conversion-focused). */
   seoTitle: "Turn a podcast into a blog post — free SEO draft",
   seoDescription:
-    "Paste show notes or a transcript → publish-ready SEO pack for your site: title, article draft, FAQ, and social scripts.",
+    "Paste show notes or a transcript → publish-ready SEO pack: structured notes, article draft, FAQ, schema, and social scripts.",
   /** GEO / AI citation line — use on tool pages, not as a ranking guarantee */
   geoLine:
     "Structured drafts with clear FAQ blocks help Google — and AI answer engines — surface and cite your podcast content on your domain.",

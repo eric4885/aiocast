@@ -53,6 +53,12 @@ const items = [
     icon: FileText,
   },
   {
+    title: "Show notes for SEO — timestamps, FAQ, schema",
+    href: "/guides/podcast-show-notes-for-seo",
+    description: "Write indexable episode notes on your domain — no invented timestamps.",
+    icon: FileText,
+  },
+  {
     title: "Show notes template",
     href: "/guides/show-notes-template",
     description: "Copy-paste template before you run the growth pack generator.",

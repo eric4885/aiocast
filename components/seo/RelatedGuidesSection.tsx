@@ -6,6 +6,11 @@ import { cn } from "@/lib/utils";
 
 const guides = [
   {
+    href: "/guides/podcast-show-notes-for-seo",
+    title: "Show notes for SEO",
+    description: "Timestamps only when real, FAQ, PodcastEpisode schema — publish on your domain.",
+  },
+  {
     href: "/resources/podcast-to-blog-seo-checklist",
     title: "Podcast to blog SEO checklist",
     description: "Interactive publish checklist — keyword, on-page SEO, FAQ, promotion. No signup.",

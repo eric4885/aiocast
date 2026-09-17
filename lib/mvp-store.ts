@@ -9,8 +9,10 @@ import { checkIpRateLimit, type IpGuardResult } from "@/lib/rate-limit";
 import { ipCooldownMs, ipDailyLimit, rateLimitsDisabled } from "@/lib/rate-limit-config";
 import { pricing } from "@/lib/pricing";
 import { isProEmail } from "@/lib/pro-subscription";
+import type { ShowNotesClean } from "@/lib/show-notes-clean";
 
 export type { IpGuardResult };
+export type { ShowNotesClean };
 
 type JobStatus = "processing" | "done" | "failed";
 
@@ -41,6 +43,8 @@ export type GeneratedPack = {
     altDescription: string;
     estimatedTrafficHint: string;
   };
+  /** Structured show notes for platforms + chapters (downstream of paste). */
+  showNotesClean?: ShowNotesClean;
   /** Whether content came from the AI model or the built-in template fallback. */
   generationSource?: "ai" | "template";
   /** Set when generationSource is template — safe to show the user. */
@@ -49,6 +53,8 @@ export type GeneratedPack = {
   articleEchoesSource?: boolean;
   /** True when non-English input was translated to English before generation. */
   transcriptTranslated?: boolean;
+  /** True when pasted source was too short for a full AI blog. */
+  inputTooShort?: boolean;
 };
 
 export type JobRecord = {
