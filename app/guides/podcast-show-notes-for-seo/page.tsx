@@ -8,15 +8,11 @@ import { productPromise } from "@/lib/product-copy";
 const PACK_HREF = "/tools/seo-growth-pack#pack-transcript-only";
 const GEO_HREF = "/tools/free-show-notes-generator";
 
-/** PAA-style questions — visible H3 + FAQPage JSON-LD for GEO. */
+/** PAA-style questions — unique to this SEO/method page (length + description-vs-notes live on the template guide). */
 const faq = [
   {
     q: "How to write podcast show notes for SEO?",
     a: "Write for your own domain, not only the podcast app: a searchable title, 100–180 word summary, chapter-style takeaways, real resource links, and FAQ grounded in the episode. Publish one URL with FAQ / PodcastEpisode schema. Paste existing notes or a transcript into AioCast’s growth pack to structure the draft — do not invent timestamps or URLs that were not in your source.",
-  },
-  {
-    q: "How long should podcast show notes be?",
-    a: "Aim for about 150–400 words on your website (hook, takeaways, links, one listener question). Apple and Spotify blurbs stay shorter for discovery; the long version belongs on your site so Google and AI answer engines can index and cite it.",
   },
   {
     q: "Do podcast show notes help with SEO?",
@@ -25,10 +21,6 @@ const faq = [
   {
     q: "Should I put timestamps in show notes?",
     a: "Only when your transcript or editor export includes real times. Fake MM:SS looks precise and erodes trust. Without timecodes, use clear chapter titles and action labels — AioCast keeps timestamp null rather than inventing clocks.",
-  },
-  {
-    q: "What is the difference between a podcast description and show notes?",
-    a: "A podcast or episode description is the short discovery blurb in Apple, Spotify, or YouTube. Show notes on your website are the full written page: summary, chapters, resources, FAQ, and schema. Reuse the short blurb in apps; publish the long version on your domain.",
   },
   {
     q: "Can I create SEO show notes from a transcript without uploading audio?",
@@ -52,12 +44,12 @@ function FaqJsonLd() {
 }
 
 export const metadata: Metadata = {
-  title: { absolute: "Podcast Show Notes for SEO — Timestamps, FAQ, Schema" },
+  title: { absolute: "Podcast Show Notes for SEO — Timestamps, FAQ & Schema" },
   description:
-    "How to write podcast show notes for SEO: chapters, FAQ, platform blurbs, and schema on your domain. Paste notes → publish-ready pack — no fake timestamps.",
+    "How to write podcast show notes for SEO: real timestamps only, platform blurbs vs website pages, FAQ + schema on your domain. Paste notes → publish-ready pack.",
   alternates: { canonical: `${siteConfig.url}/guides/podcast-show-notes-for-seo` },
   openGraph: {
-    title: "Podcast Show Notes for SEO",
+    title: "Podcast Show Notes for SEO — Timestamps, FAQ & Schema",
     description:
       "Timestamps only when real, FAQ from the episode, PodcastEpisode schema — then publish on your site.",
     url: `${siteConfig.url}/guides/podcast-show-notes-for-seo`,
@@ -71,17 +63,21 @@ export default function PodcastShowNotesForSeoGuidePage() {
       <FaqJsonLd />
       <GuideLayout
         title="Podcast show notes for SEO: timestamps, FAQ, schema"
-        description="Turn thin episode notes into indexable pages on your own domain — without pretending to be an audio transcription suite."
+        description="Technical guide — real timestamps only, platform blurbs vs website pages, FAQ + schema. Need a copy-paste outline? Use the show notes template."
         path="/guides/podcast-show-notes-for-seo"
         datePublished="2026-09-17"
-        dateModified="2026-09-17"
+        dateModified="2026-09-28"
       >
         <p>
           Most indie shows ship two-line Spotify blurbs and wonder why Google never surfaces the episode.{" "}
-          <strong className="text-foreground">Show notes for SEO</strong> means a structured written page: summary,
-          chapters, resources, FAQ, and schema — published on <em>your</em> domain. AioCast sits on the downstream half
-          of that job: you paste notes or a transcript you already have; we structure a publish-ready pack. We do not
-          sell “upload MP3 → invent a whole episode.”
+          <strong className="text-foreground">Podcast show notes for SEO</strong> means a structured written page on{" "}
+          <em>your</em> domain: summary, chapters, resources, FAQ, and schema — not a timestamp dump and not a blank
+          template. Need a blank outline to fill before you record? Use the{" "}
+          <Link href="/guides/show-notes-template" className="text-primary hover:underline">
+            free show notes template
+          </Link>
+          . AioCast sits on the downstream half of the SEO job: you paste notes or a transcript you already have; we
+          structure a publish-ready pack. We do not sell “upload MP3 → invent a whole episode.”
         </p>
 
         <h2 className="text-xl font-semibold text-foreground">1. Start from text you trust</h2>

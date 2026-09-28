@@ -79,7 +79,7 @@ export default function ShowNotesTemplateGuidePage() {
         description="Learn how to write podcast show notes (episode notes) that Google and skimmers can use — then turn them into an SEO blog draft with our free generator. Includes a copy-paste podcast show notes template."
         path="/guides/show-notes-template"
         datePublished="2026-06-18"
-        dateModified="2026-08-29"
+        dateModified="2026-09-28"
         showTopCta
       >
         <h2>What are podcast show notes?</h2>
@@ -289,6 +289,11 @@ One listener question this episode answers: What is the cheapest way to get sepa
 
         <h2>Related guides</h2>
         <ul>
+          <li>
+            <Link href="/guides/podcast-show-notes-for-seo" className="text-primary hover:underline">
+              Podcast show notes for SEO (timestamps, FAQ, schema)
+            </Link>
+          </li>
           <li>
             <Link href="/tools/free-show-notes-generator" className="text-primary hover:underline">
               Paste notes → blog draft

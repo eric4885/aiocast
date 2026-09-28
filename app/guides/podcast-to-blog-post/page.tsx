@@ -129,7 +129,7 @@ export default function PodcastToBlogGuidePage() {
       description="A practical podcast to blog post workflow for indie hosts — turn audio into indexable text, optimize for search intent, and ship every week without the blank-page grind."
       path="/guides/podcast-to-blog-post"
       datePublished="2026-06-15"
-      dateModified="2026-08-21"
+      dateModified="2026-09-28"
       showTopCta
     >
       <h2>How to turn a podcast into a blog post (direct answer)</h2>
@@ -247,15 +247,16 @@ export default function PodcastToBlogGuidePage() {
         for a perfect export before publishing.
       </p>
       <p>
-        Copy the blank outline from the{" "}
+        Practical path: copy the blank outline from the{" "}
         <Link href="/guides/show-notes-template" className="text-primary hover:underline">
           show notes template
         </Link>
-        , then paste the filled notes into the{" "}
+        , paste the filled notes into the{" "}
         <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
           growth pack generator
         </Link>
-        .
+        , then edit for voice before you publish. A transcript later upgrades quotes and depth — it should not block the
+        first indexable URL on your domain.
       </p>
 
       <h2>From show notes to blog post</h2>
@@ -293,6 +294,54 @@ export default function PodcastToBlogGuidePage() {
         <li>Add your audio embed or episode link above the notes so the page stays useful while you finish long-form SEO edits.</li>
       </ol>
       <p>The same HTML block works in WordPress, Ghost, or any CMS that accepts heading and list tags.</p>
+
+      <h2>How to turn a podcast into a WordPress blog post</h2>
+      <p>
+        WordPress is the most common home for a podcast-to-blog workflow. You do not need a special podcast plugin to
+        publish the written layer — you need a clean HTML or block paste, a title tag, and a meta description.
+      </p>
+      <ol>
+        <li>
+          Fill the{" "}
+          <Link href="/guides/show-notes-template" className="text-primary hover:underline">
+            show notes template
+          </Link>{" "}
+          or generate a draft with the{" "}
+          <Link href="/tools/seo-growth-pack#pack-transcript-only" className="text-primary hover:underline">
+            SEO growth pack
+          </Link>
+          .
+        </li>
+        <li>
+          Convert the outline with the{" "}
+          <Link href="/tools/show-notes-to-html" className="text-primary hover:underline">
+            show notes to HTML converter
+          </Link>
+          , or paste Markdown from the growth pack into the WordPress code editor.
+        </li>
+        <li>
+          In WordPress, create a new Post (or Page for a permanent episode hub). Paste the HTML into a Custom HTML block
+          or the classic Code editor. Add your audio embed or episode player above the notes.
+        </li>
+        <li>
+          Set the title tag and meta description in Yoast, Rank Math, or your theme SEO fields — reuse the pack&apos;s
+          suggested meta. Add the FAQ section under the article body.
+        </li>
+        <li>
+          Tick the free{" "}
+          <Link href="/resources/podcast-to-blog-seo-checklist" className="text-primary hover:underline">
+            podcast to blog SEO checklist
+          </Link>{" "}
+          before you hit Publish.
+        </li>
+      </ol>
+      <p>
+        Same paste path works in Ghost and Webflow. For timestamps, schema, and platform blurbs vs website pages, see{" "}
+        <Link href="/guides/podcast-show-notes-for-seo" className="text-primary hover:underline">
+          podcast show notes for SEO
+        </Link>
+        .
+      </p>
 
       <h2>Before / after: episode title → blog angle</h2>
       <p>Archive titles do not match search intent. Reframe every episode like this:</p>
