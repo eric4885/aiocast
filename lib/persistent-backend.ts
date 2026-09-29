@@ -102,8 +102,14 @@ async function saveToFile(snapshot: PersistedSnapshot): Promise<void> {
 async function loadSnapshot(): Promise<PersistedSnapshot> {
   const redis = getRedis();
   if (redis) {
-    const data = await redis.get<PersistedSnapshot>(REDIS_KEY);
-    return data ? { ...emptySnapshot(), ...data } : emptySnapshot();
+    try {
+      const data = await redis.get<PersistedSnapshot>(REDIS_KEY);
+      return data ? { ...emptySnapshot(), ...data } : emptySnapshot();
+    } catch (error) {
+      console.error("[aiocast] Redis load failed — falling back to memory for this isolate", error);
+      if (!memorySnapshot) memorySnapshot = emptySnapshot();
+      return memorySnapshot;
+    }
   }
 
   if (process.env.NODE_ENV !== "production") {
@@ -112,7 +118,11 @@ async function loadSnapshot(): Promise<PersistedSnapshot> {
   }
 
   if (!fileLoadPromise) {
-    fileLoadPromise = loadFromFile();
+    fileLoadPromise = loadFromFile().catch((error) => {
+      console.error("[aiocast] File store load failed — using memory", error);
+      if (!memorySnapshot) memorySnapshot = emptySnapshot();
+      return memorySnapshot;
+    });
   }
   return fileLoadPromise;
 }
@@ -120,8 +130,14 @@ async function loadSnapshot(): Promise<PersistedSnapshot> {
 async function saveSnapshot(snapshot: PersistedSnapshot): Promise<void> {
   const redis = getRedis();
   if (redis) {
-    await redis.set(REDIS_KEY, snapshot);
-    return;
+    try {
+      await redis.set(REDIS_KEY, snapshot);
+      return;
+    } catch (error) {
+      console.error("[aiocast] Redis save failed — keeping memory copy", error);
+      memorySnapshot = snapshot;
+      return;
+    }
   }
 
   if (process.env.NODE_ENV !== "production") {
@@ -129,8 +145,13 @@ async function saveSnapshot(snapshot: PersistedSnapshot): Promise<void> {
     return;
   }
 
-  await saveToFile(snapshot);
-  fileLoadPromise = Promise.resolve(snapshot);
+  try {
+    await saveToFile(snapshot);
+    fileLoadPromise = Promise.resolve(snapshot);
+  } catch (error) {
+    console.error("[aiocast] File store save failed — keeping memory copy", error);
+    memorySnapshot = snapshot;
+  }
 }
 
 export async function withSnapshot<T>(

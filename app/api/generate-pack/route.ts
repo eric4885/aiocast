@@ -35,126 +35,141 @@ async function finishJob(
   pack.id = job.id;
   await setJobDone(job.id, pack);
   if (email.trim()) {
-    await sendPackResultEmail(email, pack, job.accessToken);
-    await indexPackForEmail(email, {
-      id: job.id,
-      accessToken: job.accessToken,
-      title: pack.seoArticle.title,
-      createdAt: job.createdAt,
-    });
+    try {
+      await sendPackResultEmail(email, pack, job.accessToken);
+      await indexPackForEmail(email, {
+        id: job.id,
+        accessToken: job.accessToken,
+        title: pack.seoArticle.title,
+        createdAt: job.createdAt,
+      });
+    } catch (emailError) {
+      // Pack is already saved — do not fail the whole request if mail/index fails.
+      console.error("[generate-pack] email/index failed", emailError);
+    }
   }
   return resultPath(job.id, job.accessToken);
 }
 
 export async function POST(req: Request) {
-  warnIfEphemeralProduction();
-  assertProductionReady();
+  try {
+    warnIfEphemeralProduction();
+    assertProductionReady();
 
-  const ip = getClientIp(req);
-  const form = await req.formData();
-  const emailRaw = form.get("email");
-  const transcriptRaw = form.get("transcript");
-  const file = form.get("file");
+    const ip = getClientIp(req);
+    const form = await req.formData();
+    const emailRaw = form.get("email");
+    const transcriptRaw = form.get("transcript");
+    const file = form.get("file");
 
-  const email = emailValid(emailRaw) ? emailRaw.trim().toLowerCase() : "";
+    const email = emailValid(emailRaw) ? emailRaw.trim().toLowerCase() : "";
 
-  const transcriptStr = typeof transcriptRaw === "string" ? transcriptRaw.trim() : "";
-  const hasFile = file instanceof File && file.size > 0;
-  // Pasted transcript always wins — never re-transcribe audio when text was provided.
-  const needsTranscribe = hasFile && !transcriptStr;
+    const transcriptStr = typeof transcriptRaw === "string" ? transcriptRaw.trim() : "";
+    const hasFile = file instanceof File && file.size > 0;
+    // Pasted transcript always wins — never re-transcribe audio when text was provided.
+    const needsTranscribe = hasFile && !transcriptStr;
 
-  if (!transcriptStr && !hasFile) {
-    return NextResponse.json(
-      {
-        error: "Paste a transcript or upload an audio file to generate your pack.",
-        code: "INPUT_REQUIRED",
-      },
-      { status: 400 },
-    );
-  }
-
-  if (needsTranscribe && !transcribeEnabled()) {
-    return NextResponse.json(
-      {
-        error:
-          "Audio transcription is not enabled yet. Paste show notes instead, or ask the site owner to configure OPENAI_API_KEY.",
-        code: "TRANSCRIBE_UNAVAILABLE",
-      },
-      { status: 503 },
-    );
-  }
-
-  const limitsOff = process.env.RATE_LIMIT_DISABLED?.trim().toLowerCase();
-  if (limitsOff === "true" || limitsOff === "1" || limitsOff === "yes") {
-    console.info("[generate-pack] rate limits disabled via RATE_LIMIT_DISABLED");
-  }
-
-  const ipGuard = await checkIpGuards(ip, email || undefined);
-  if (!ipGuard.allowed) {
-    if (ipGuard.code === "IP_COOLDOWN") {
+    if (!transcriptStr && !hasFile) {
       return NextResponse.json(
         {
-          error: `Please wait ${ipGuard.retryAfterSec}s before the next request from this IP.`,
-          code: "IP_COOLDOWN",
+          error: "Paste a transcript or upload an audio file to generate your pack.",
+          code: "INPUT_REQUIRED",
         },
-        { status: 429 },
+        { status: 400 },
       );
     }
-    return NextResponse.json(
-      {
-        error: `Free daily limit reached (${ipGuard.dailyLimit}/day). Upgrade to Pro for unlimited generations, or try again tomorrow.`,
-        code: "IP_DAILY_LIMIT",
-        upgradeUrl: "/pro-toolkit",
-      },
-      { status: 429 },
-    );
-  }
 
-  let usage: { allowed: boolean; used: number; limit: number } | undefined;
-  if (email) {
-    usage = await checkAndConsumeUsage(email);
-    if (!usage.allowed) {
+    if (needsTranscribe && !transcribeEnabled()) {
       return NextResponse.json(
         {
-          error: `Free monthly email limit reached (${usage.used}/${usage.limit}). Upgrade to Pro for unlimited generations.`,
-          code: "LIMIT_REACHED",
+          error:
+            "Audio transcription is not enabled yet. Paste show notes instead, or ask the site owner to configure OPENAI_API_KEY.",
+          code: "TRANSCRIBE_UNAVAILABLE",
+        },
+        { status: 503 },
+      );
+    }
+
+    const limitsOff = process.env.RATE_LIMIT_DISABLED?.trim().toLowerCase();
+    if (limitsOff === "true" || limitsOff === "1" || limitsOff === "yes") {
+      console.info("[generate-pack] rate limits disabled via RATE_LIMIT_DISABLED");
+    }
+
+    const ipGuard = await checkIpGuards(ip, email || undefined);
+    if (!ipGuard.allowed) {
+      if (ipGuard.code === "IP_COOLDOWN") {
+        return NextResponse.json(
+          {
+            error: `Please wait ${ipGuard.retryAfterSec}s before the next request from this IP.`,
+            code: "IP_COOLDOWN",
+          },
+          { status: 429 },
+        );
+      }
+      return NextResponse.json(
+        {
+          error: `Free daily limit reached (${ipGuard.dailyLimit}/day). Upgrade to Pro for unlimited generations, or try again tomorrow.`,
+          code: "IP_DAILY_LIMIT",
           upgradeUrl: "/pro-toolkit",
         },
         { status: 429 },
       );
     }
-  }
 
-  const job = await createJob(email);
-  try {
-    const transcript = needsTranscribe ? await transcribeAudioFile(file as File) : transcriptStr;
-    const sourceType = hasFile ? "audio" : "transcript";
-    const sourceLabel = hasFile ? (file as File).name : "pasted transcript";
-    const resultUrl = await finishJob(job, email, {
-      sourceType,
-      sourceLabel,
-      transcriptHint: transcript,
-    });
+    let usage: { allowed: boolean; used: number; limit: number } | undefined;
+    if (email) {
+      usage = await checkAndConsumeUsage(email);
+      if (!usage.allowed) {
+        return NextResponse.json(
+          {
+            error: `Free monthly email limit reached (${usage.used}/${usage.limit}). Upgrade to Pro for unlimited generations.`,
+            code: "LIMIT_REACHED",
+            upgradeUrl: "/pro-toolkit",
+          },
+          { status: 429 },
+        );
+      }
+    }
 
-    return NextResponse.json({
-      ok: true,
-      id: job.id,
-      status: "done",
-      resultUrl,
-      usage,
-      transcribed: needsTranscribe,
-    });
+    const job = await createJob(email);
+    try {
+      const transcript = needsTranscribe ? await transcribeAudioFile(file as File) : transcriptStr;
+      const sourceType = hasFile ? "audio" : "transcript";
+      const sourceLabel = hasFile ? (file as File).name : "pasted transcript";
+      const resultUrl = await finishJob(job, email, {
+        sourceType,
+        sourceLabel,
+        transcriptHint: transcript,
+      });
+
+      return NextResponse.json({
+        ok: true,
+        id: job.id,
+        status: "done",
+        resultUrl,
+        usage,
+        transcribed: needsTranscribe,
+      });
+    } catch (error) {
+      const fallback = needsTranscribe
+        ? "Transcription failed. Try a shorter clip or paste show notes instead."
+        : "Generation failed. Try again in a moment.";
+      const message = toPublicApiError(error, fallback);
+      try {
+        await setJobFailed(job.id, message);
+      } catch (markError) {
+        console.error("[generate-pack] setJobFailed failed", markError);
+      }
+      const status = needsTranscribe && message.includes("Transcription") ? 502 : 500;
+      return NextResponse.json(
+        { error: message, code: needsTranscribe ? "TRANSCRIBE_FAILED" : "GENERATION_FAILED" },
+        { status },
+      );
+    }
   } catch (error) {
-    const fallback = needsTranscribe
-      ? "Transcription failed. Try a shorter clip or paste show notes instead."
-      : "Generation failed. Try again in a moment.";
-    const message = toPublicApiError(error, fallback);
-    await setJobFailed(job.id, message);
-    const status = needsTranscribe && message.includes("Transcription") ? 502 : 500;
-    return NextResponse.json(
-      { error: message, code: needsTranscribe ? "TRANSCRIBE_FAILED" : "GENERATION_FAILED" },
-      { status },
-    );
+    const message = toPublicApiError(error, "Generation failed. Try again in a moment.");
+    console.error("[generate-pack] unhandled", error);
+    return NextResponse.json({ error: message, code: "GENERATION_FAILED" }, { status: 500 });
   }
 }
 

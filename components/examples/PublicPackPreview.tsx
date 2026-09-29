@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ExampleSchemaCopy } from "@/components/examples/ExampleSchemaCopy";
 import { publicExamplePack } from "@/lib/public-example-pack";
 
 function renderBody(body: string) {
@@ -95,6 +96,18 @@ export function PublicPackPreview() {
           ))}
         </CardContent>
       </Card>
+
+      {"citableEpisode" in pack && pack.citableEpisode && (
+        <ExampleSchemaCopy
+          title={pack.seoArticle.title}
+          summary={pack.showNotesClean?.summary || pack.seoArticle.metaDescription}
+          faq={[...pack.faq]}
+          citable={{
+            leadQuote: pack.citableEpisode.leadQuote,
+            entities: pack.citableEpisode.entities.map((e) => ({ ...e })),
+          }}
+        />
+      )}
 
       {"showNotesClean" in pack && pack.showNotesClean && (
         <Card>
