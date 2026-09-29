@@ -26,6 +26,7 @@ import { PublishChecklist } from "@/components/results/PublishChecklist";
 import { PublishWorkflowCard } from "@/components/results/PublishWorkflowCard";
 import { ShowNotesCleanSection } from "@/components/results/ShowNotesCleanSection";
 import { EpisodeSchemaSection } from "@/components/results/EpisodeSchemaSection";
+import { CitableEpisodeSection } from "@/components/results/CitableEpisodeSection";
 import { OldNotesAuditSection } from "@/components/results/OldNotesAuditSection";
 import { ProUpsellCard } from "@/components/pricing/ProUpsellCard";
 import { RelatedGuidesSection } from "@/components/seo/RelatedGuidesSection";
@@ -33,6 +34,8 @@ import { ProStickyPromo } from "@/components/pricing/ProStickyPromo";
 import { productPromise } from "@/lib/product-copy";
 import type { ShowNotesClean } from "@/lib/show-notes-clean";
 import { defaultShowNotesClean, normalizeShowNotesClean } from "@/lib/show-notes-clean";
+import type { CitableEpisode } from "@/lib/citable-episode";
+import { normalizeCitableEpisode } from "@/lib/citable-episode";
 
 const TOOL_HREF = "/tools/seo-growth-pack";
 
@@ -54,6 +57,7 @@ type JobPayload = {
       estimatedTrafficHint: string;
     };
     showNotesClean?: ShowNotesClean;
+    citableEpisode?: CitableEpisode;
     generationSource?: "ai" | "template";
     aiFailureReason?: string;
     transcript?: string;
@@ -152,6 +156,7 @@ function normalizePack(raw: JobPayload["pack"]): JobPayload["pack"] | null {
       if (raw.showNotesClean) return normalizeShowNotesClean(raw.showNotesClean, source || " ");
       return source ? defaultShowNotesClean(source) : undefined;
     })(),
+    citableEpisode: normalizeCitableEpisode(raw.citableEpisode) ?? undefined,
   };
 }
 
@@ -447,15 +452,16 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
               <p className="text-xs font-semibold uppercase tracking-wide text-primary">Primary result</p>
               <p className="mt-1 text-lg font-semibold text-foreground">Your {productPromise.primaryOutput}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                AI-rewritten blog post for search — not your raw show notes. ~{wordCount.toLocaleString()} words · aim
-                for 800–1,500 for a solid SEO post. Copy/Download use Markdown or HTML.
+                AI-citable SEO draft (lead quote + structured H2s) — not your raw show notes. ~
+                {wordCount.toLocaleString()} words · aim for 800–1,500. Copy/Download include the lead quote when
+                present.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button
                 size="sm"
                 variant="secondary"
-                onClick={() => void copy(articleForClipboard(pack.seoArticle), "Article")}
+                onClick={() => void copy(articleForClipboard(pack.seoArticle, pack.citableEpisode), "Article")}
               >
                 <Copy className="mr-2 h-4 w-4" /> Copy full article
               </Button>
@@ -464,7 +470,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
                 variant="secondary"
                 onClick={() =>
                   downloadTextFile(
-                    articleToMarkdown(pack.seoArticle, pack.faq),
+                    articleToMarkdown(pack.seoArticle, pack.faq, pack.citableEpisode),
                     articleExportFilename(id, "md"),
                   )
                 }
@@ -476,7 +482,7 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
                 variant="secondary"
                 onClick={() =>
                   downloadTextFile(
-                    articleToHtml(pack.seoArticle, pack.faq),
+                    articleToHtml(pack.seoArticle, pack.faq, pack.citableEpisode),
                     articleExportFilename(id, "html"),
                     "text/html;charset=utf-8",
                   )
@@ -493,7 +499,13 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
             </p>
           )}
           <p className="text-base font-semibold text-foreground sm:text-lg">{pack.seoArticle.title}</p>
-          <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
+          {pack.citableEpisode?.leadQuote ? (
+            <blockquote className="rounded-lg border-l-4 border-primary/60 bg-background/50 px-4 py-3 text-sm leading-relaxed text-foreground">
+              {pack.citableEpisode.leadQuote}
+            </blockquote>
+          ) : (
+            <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
+          )}
           {pack.seoArticle.keywords.length > 0 && (
             <p className="text-xs text-muted-foreground">Keywords: {pack.seoArticle.keywords.join(", ")}</p>
           )}
@@ -553,10 +565,19 @@ export function ResultClient({ id, token }: { id: string; token: string | null }
         <OldNotesAuditSection sourceText={pack.transcript} episodeTitle={pack.seoArticle.title} />
       )}
 
+      {pack.citableEpisode && (
+        <CitableEpisodeSection
+          citable={pack.citableEpisode}
+          onCopy={(text, label) => void copy(text, label)}
+          copyToast={copyToast}
+        />
+      )}
+
       <EpisodeSchemaSection
         title={pack.seoArticle.title}
         summary={pack.showNotesClean?.summary || pack.seoArticle.metaDescription}
         faq={pack.faq}
+        entities={pack.citableEpisode?.entities}
         onCopy={(text, label) => void copy(text, label)}
         copyToast={copyToast}
       />

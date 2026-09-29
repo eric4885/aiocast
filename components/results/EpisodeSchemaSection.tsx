@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { episodeSeoJsonLd } from "@/lib/episode-schema";
+import type { CitableEntity } from "@/lib/citable-episode";
 
 type FaqItem = { q: string; a: string };
 
@@ -13,11 +14,12 @@ type Props = {
   title: string;
   summary: string;
   faq: FaqItem[];
+  entities?: CitableEntity[];
   onCopy: (text: string, label: string) => void;
   copyToast?: string | null;
 };
 
-export function EpisodeSchemaSection({ title, summary, faq, onCopy, copyToast }: Props) {
+export function EpisodeSchemaSection({ title, summary, faq, entities = [], onCopy, copyToast }: Props) {
   const [datePublished, setDatePublished] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [canonicalUrl, setCanonicalUrl] = useState("");
@@ -30,13 +32,14 @@ export function EpisodeSchemaSection({ title, summary, faq, onCopy, copyToast }:
         title,
         summary,
         faq,
+        entities,
         datePublished: datePublished || undefined,
         authorName: authorName || undefined,
         canonicalUrl: canonicalUrl || undefined,
         duration: duration || undefined,
         showName: showName || undefined,
       }),
-    [title, summary, faq, datePublished, authorName, canonicalUrl, duration, showName],
+    [title, summary, faq, entities, datePublished, authorName, canonicalUrl, duration, showName],
   );
 
   return (
@@ -46,11 +49,12 @@ export function EpisodeSchemaSection({ title, summary, faq, onCopy, copyToast }:
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Publish schema</p>
             <p className="mt-1 text-lg font-semibold text-foreground">
-              BlogPosting + PodcastEpisode + FAQ JSON-LD
+              BlogPosting + PodcastEpisode + Person + FAQ JSON-LD
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               Fill only fields you know are true. Empty fields are omitted — we never invent duration or URLs.
-              Paste the JSON-LD into your CMS or theme after you publish the episode page.
+              Person nodes come from your citable entity cards when present. Paste the JSON-LD into your CMS after you
+              publish the episode page.
             </p>
           </div>
           <Button size="sm" variant="secondary" onClick={() => onCopy(schema, "Episode schema")}>

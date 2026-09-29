@@ -1,3 +1,8 @@
+import {
+  citableEntitiesToMarkdown,
+  type CitableEpisode,
+} from "@/lib/citable-episode";
+
 type SeoArticle = {
   title: string;
   metaDescription: string;
@@ -6,6 +11,11 @@ type SeoArticle = {
 };
 
 type FaqItem = { q: string; a: string };
+
+export type ArticleExportOptions = {
+  faq?: FaqItem[];
+  citable?: CitableEpisode | null;
+};
 
 const ATTRIBUTION_MARKDOWN =
   "\n\n---\n\n_Draft generated with [AioCast](https://aiocast.com) — podcast-to-SEO workflow. Remove this line before publishing if you prefer._\n";
@@ -78,13 +88,46 @@ function bodyToHtmlParagraphs(body: string): string {
     .join("\n");
 }
 
-export function articleToMarkdown(article: SeoArticle, faq: FaqItem[] = []): string {
+function entitiesHtml(citable: CitableEpisode): string {
+  if (citable.entities.length === 0) return "";
+  const cards = citable.entities
+    .map((e) => {
+      const rows = [
+        ["Role", e.role],
+        ["Company", e.company],
+        ["Expertise", e.expertise],
+        ["Past work", e.pastWork],
+      ]
+        .filter(([, v]) => v.trim())
+        .map(([k, v]) => `<li><strong>${escapeHtml(k)}:</strong> ${escapeHtml(v)}</li>`)
+        .join("");
+      return `<article class="entity-card"><h3>${escapeHtml(e.name)}${
+        e.kind !== "other" ? ` <span>(${escapeHtml(e.kind)})</span>` : ""
+      }</h3><ul>${rows || "<li>—</li>"}</ul></article>`;
+    })
+    .join("\n");
+  return `<section><h2>Guest / host entity bio</h2>\n${cards}</section>`;
+}
+
+export function articleToMarkdown(
+  article: SeoArticle,
+  faq: FaqItem[] = [],
+  citable?: CitableEpisode | null,
+): string {
   const body = stripDuplicateLeadingTitle(article.body, article.title);
-  const lines: string[] = [`# ${article.title}`, "", `> ${article.metaDescription}`, ""];
+  const lines: string[] = [`# ${article.title}`, ""];
+  if (citable?.leadQuote) {
+    lines.push(`> ${citable.leadQuote}`, "");
+  } else {
+    lines.push(`> ${article.metaDescription}`, "");
+  }
   if (article.keywords.length > 0) {
     lines.push(`**Keywords:** ${article.keywords.join(", ")}`, "");
   }
   lines.push(body, "");
+  if (citable && citable.entities.length > 0 && !/##\s+Guest\s*\/\s*host entity bio/i.test(body)) {
+    lines.push(citableEntitiesToMarkdown(citable.entities).trim(), "");
+  }
   if (faq.length > 0) {
     lines.push("## FAQ", "");
     for (const item of faq) {
@@ -94,8 +137,23 @@ export function articleToMarkdown(article: SeoArticle, faq: FaqItem[] = []): str
   return lines.join("\n").trim() + ATTRIBUTION_MARKDOWN;
 }
 
-export function articleToHtml(article: SeoArticle, faq: FaqItem[] = []): string {
+export function articleToHtml(
+  article: SeoArticle,
+  faq: FaqItem[] = [],
+  citable?: CitableEpisode | null,
+): string {
   const body = stripDuplicateLeadingTitle(article.body, article.title);
+  const lead =
+    citable?.leadQuote?.trim() ||
+    article.metaDescription.trim() ||
+    "";
+  const leadHtml = lead
+    ? `<blockquote style="border-left:3px solid #333;margin:1rem 0;padding:0.5rem 1rem;color:#333;font-size:1.05rem;">${escapeHtml(lead)}</blockquote>`
+    : "";
+  const entityBlock =
+    citable && citable.entities.length > 0 && !/##\s+Guest\s*\/\s*host entity bio/i.test(body)
+      ? entitiesHtml(citable)
+      : "";
   const faqHtml =
     faq.length > 0
       ? `<section><h2>FAQ</h2>${faq
@@ -119,13 +177,15 @@ export function articleToHtml(article: SeoArticle, faq: FaqItem[] = []): string 
     h3 { font-size: 1.05rem; }
     em { color: #444; }
     ul { padding-left: 1.25rem; }
+    .entity-card { border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.75rem 0; }
   </style>
 </head>
 <body>
   <article>
     <h1>${escapeHtml(article.title)}</h1>
-    <p><em>${escapeHtml(article.metaDescription)}</em></p>
+    ${leadHtml}
     ${bodyToHtmlParagraphs(body)}
+    ${entityBlock}
     ${faqHtml}
   </article>
   ${ATTRIBUTION_HTML}
@@ -133,9 +193,9 @@ export function articleToHtml(article: SeoArticle, faq: FaqItem[] = []): string 
 </html>`;
 }
 
-/** Clipboard export: article only (no FAQ), single title, Markdown. */
-export function articleForClipboard(article: SeoArticle): string {
-  return articleToMarkdown(article, []);
+/** Clipboard export: article + lead quote (no FAQ), single title, Markdown. */
+export function articleForClipboard(article: SeoArticle, citable?: CitableEpisode | null): string {
+  return articleToMarkdown(article, [], citable);
 }
 
 export function articleExportFilename(packId: string, ext: "md" | "html"): string {

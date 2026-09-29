@@ -10,9 +10,11 @@ import { ipCooldownMs, ipDailyLimit, rateLimitsDisabled } from "@/lib/rate-limit
 import { pricing } from "@/lib/pricing";
 import { isProEmail } from "@/lib/pro-subscription";
 import type { ShowNotesClean } from "@/lib/show-notes-clean";
+import type { CitableEpisode } from "@/lib/citable-episode";
 
 export type { IpGuardResult };
 export type { ShowNotesClean };
+export type { CitableEpisode };
 
 type JobStatus = "processing" | "done" | "failed";
 
@@ -45,6 +47,8 @@ export type GeneratedPack = {
   };
   /** Structured show notes for platforms + chapters (downstream of paste). */
   showNotesClean?: ShowNotesClean;
+  /** AI-citable episode extras: lead quote + machine-readable entity cards. */
+  citableEpisode?: CitableEpisode;
   /** Whether content came from the AI model or the built-in template fallback. */
   generationSource?: "ai" | "template";
   /** Set when generationSource is template — safe to show the user. */

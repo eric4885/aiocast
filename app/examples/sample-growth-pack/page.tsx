@@ -50,7 +50,7 @@ function ExampleArticleJsonLd() {
     description:
       "Example SEO article draft from the AioCast growth pack — illustrative output for podcast-to-blog repurposing.",
     datePublished: "2026-06-20",
-    dateModified: "2026-08-01",
+    dateModified: "2026-09-29",
     author: { "@type": "Organization", name: siteConfig.name },
     publisher: {
       "@type": "Organization",
@@ -109,25 +109,25 @@ export default function SampleGrowthPackExamplePage() {
           </p>
 
           <section className="mt-8 max-w-2xl rounded-2xl border border-border bg-secondary/30 p-5 sm:p-6">
-            <h2 className="text-base font-semibold text-foreground">Example blog post skeleton</h2>
+            <h2 className="text-base font-semibold text-foreground">AI-citable episode page skeleton</h2>
             <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
               <li>
-                <strong className="text-foreground">H1 / title tag</strong> — problem-solving keyword + benefit
+                <strong className="text-foreground">H1 + lead quote</strong> — ≤40-word hard claim AI engines can lift
               </li>
               <li>
-                <strong className="text-foreground">Intro (2–3 sentences)</strong> — who it is for + outcome
+                <strong className="text-foreground">What this episode is about</strong> — topic + outcome
               </li>
               <li>
-                <strong className="text-foreground">H2 sections</strong> — search questions, not joke chapter names
+                <strong className="text-foreground">Key points AI can quote</strong> — bullet claims, not fluff
               </li>
               <li>
-                <strong className="text-foreground">Takeaways list</strong> — 3–5 bullets a skimmer can act on
+                <strong className="text-foreground">Who should listen</strong> — audience filter
               </li>
               <li>
-                <strong className="text-foreground">FAQ block</strong> — 3 honest Q&amp;A pairs from the episode
+                <strong className="text-foreground">Entity bio cards</strong> — name / role / company / expertise / past work
               </li>
               <li>
-                <strong className="text-foreground">CTA</strong> — next episode, newsletter, or related guide
+                <strong className="text-foreground">FAQ + schema</strong> — ≥4 grounded Q&amp;A + FAQPage JSON-LD
               </li>
             </ol>
             <p className="mt-4 text-xs text-muted-foreground">
@@ -157,9 +157,9 @@ export default function SampleGrowthPackExamplePage() {
             <h2 className="text-lg font-semibold text-foreground">What&apos;s in this podcast to blog example</h2>
             <p>
               One episode becomes a <strong className="text-foreground">publish workflow</strong>, not a magic ranking
-              button. The sample below shows four deliverables indie podcasters actually use: an SEO article draft with
-              title tag and meta description, FAQ blocks you can paste under the post, social scripts sized for X and
-              LinkedIn, and a lightweight 7-day publish plan so you are not guessing what to ship first.
+              button. The sample below shows an <strong className="text-foreground">AI-citable</strong> SEO article
+              (lead quote, quote-ready H2s, entity cards), FAQ with schema, social scripts, and a lightweight 7-day
+              publish plan — so you can demo the difference vs a generic AI blog dump.
             </p>
             <p>
               This is different from copying your Apple Podcasts blurb into WordPress. The draft is structured for

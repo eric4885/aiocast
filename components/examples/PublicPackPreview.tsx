@@ -37,9 +37,17 @@ export function PublicPackPreview() {
     <div className="space-y-6">
       <Card>
         <CardContent className="space-y-4 p-6">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Example output · SEO article</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+            Example output · AI-citable SEO article
+          </p>
           <p className="text-xl font-bold text-foreground">{pack.seoArticle.title}</p>
-          <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
+          {"citableEpisode" in pack && pack.citableEpisode?.leadQuote ? (
+            <blockquote className="rounded-lg border-l-4 border-primary/60 bg-background/50 px-4 py-3 text-sm leading-relaxed text-foreground">
+              {pack.citableEpisode.leadQuote}
+            </blockquote>
+          ) : (
+            <p className="text-sm text-muted-foreground">{pack.seoArticle.metaDescription}</p>
+          )}
           {pack.seoArticle.keywords.length > 0 && (
             <p className="text-xs text-muted-foreground">
               Keywords: {pack.seoArticle.keywords.join(", ")}
@@ -49,9 +57,36 @@ export function PublicPackPreview() {
         </CardContent>
       </Card>
 
+      {"citableEpisode" in pack && pack.citableEpisode && (
+        <Card>
+          <CardContent className="space-y-3 p-6">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Example · Entity bio cards</p>
+            <p className="text-sm text-muted-foreground">
+              Machine-readable host/guest fields (name / role / company / expertise / past work) — not prose-only bios.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {pack.citableEpisode.entities.map((e) => (
+                <div key={e.name} className="rounded-lg border border-border p-3 text-sm">
+                  <p className="font-semibold text-foreground">
+                    {e.name}{" "}
+                    <span className="text-xs font-medium uppercase text-muted-foreground">{e.kind}</span>
+                  </p>
+                  <p className="mt-2 text-muted-foreground">
+                    {e.role}
+                    {e.company ? ` · ${e.company}` : ""}
+                  </p>
+                  <p className="mt-1 text-muted-foreground">{e.expertise}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{e.pastWork}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardContent className="space-y-3 p-6">
-          <p className="font-semibold">FAQ blocks</p>
+          <p className="font-semibold">FAQ blocks ({pack.faq.length})</p>
           {pack.faq.map((f) => (
             <div key={f.q} className="rounded-lg border border-border p-3">
               <p className="text-sm font-medium">{f.q}</p>

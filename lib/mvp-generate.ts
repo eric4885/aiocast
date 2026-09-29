@@ -10,6 +10,10 @@ import {
   srtFromTranscript,
 } from "@/lib/transcript-segments";
 import {
+  defaultCitableEpisode,
+  normalizeCitableEpisode,
+} from "@/lib/citable-episode";
+import {
   defaultShowNotesClean,
   normalizeShowNotesClean,
   sourceHasTimecodes,
@@ -105,7 +109,7 @@ async function generateWithOpenAI(transcript: string): Promise<{
 
   const prompt = `
 Return strict JSON with keys:
-title, metaDescription, keywords (array of 5), articleBody, faq (array of 3 objects {q,a}), socialX, socialLinkedIn, socialSubstack, schedule (array of 7 short lines), seoReport ({targetKeyword,altTitle,altDescription,estimatedTrafficHint}), showNotesClean ({summary, chapters:[{title,timestamp,summary}], resources:[{name,kind,url,note}], quotes:[{text,speaker,timestamp,condensed}], platformBlurbs:{apple,spotify,website}, suggestedQuestions: string[]})
+title, metaDescription, keywords (array of 5), articleBody, faq (array of 4 objects {q,a} when source supports — else []), socialX, socialLinkedIn, socialSubstack, schedule (array of 7 short lines), seoReport ({targetKeyword,altTitle,altDescription,estimatedTrafficHint}), showNotesClean ({summary, chapters:[{title,timestamp,summary}], resources:[{name,kind,url,note}], quotes:[{text,speaker,timestamp,condensed}], platformBlurbs:{apple,spotify,website}, suggestedQuestions: string[]}), citableEpisode ({leadQuote, entities:[{name,role,company,expertise,pastWork,kind}]})
 
 Evidence-first rules (hard):
 - ${outputLanguageRule()}
@@ -113,13 +117,26 @@ Evidence-first rules (hard):
 - Timestamps: ${allowTimecodes ? "Source contains timecodes — you may copy MM:SS / HH:MM:SS that appear in the source. Do not invent new times." : "Source has NO timecodes — set every timestamp field to null. Use chapter titles only. NEVER invent timestamps."}
 - URLs: only if the exact URL string appears in the source; otherwise set url to "" and note "Mentioned without a URL in source — add manually."
 - Quotes: prefer verbatim; if shortened set condensed=true and keep a timestamp only when present in source.
-- FAQ: answers must be grounded in the source. If there is no real Q&A material, return faq as [] and fill suggestedQuestions (3–5) for the author instead — do NOT invent FAQ answers.
+- FAQ: prefer 4 grounded Q&A pairs from questions actually asked or clearly answered in the source. If there is no real Q&A material, return faq as [] and fill suggestedQuestions (3–5) for the author instead — do NOT invent FAQ answers.
 - Medical, legal, or investment conclusions: add that the listener should consult a professional; do not state absolute advice as fact.
 
+citableEpisode (required for AI-citable pages):
+- leadQuote: ONE sentence, max ~40 words, format exactly: "If you're researching [topic], this episode argues that [one contrarian or concrete claim] — based on [guest or host credential from source]." No fluff.
+- entities: 1–3 people clearly named in the source (host and/or guests). Each MUST use fields name, role, company, expertise, pastWork (use "" when unknown — never invent employers or credentials), kind: "host" | "guest" | "other".
+
 articleBody:
-- FULL publishable SEO blog post in Markdown (900–1300 words) for Google search — NOT a podcast script cleanup.
+- FULL publishable SEO blog post in Markdown (900–1300 words) for Google search AND AI citation — NOT a podcast script cleanup.
 - Cover EVERY major theme from the source. Do NOT mirror transcript headings or section order.
-- Required: ## Who this is for, ## Key takeaways (bullets), 4–6 fresh topic sections, ## Conclusion.
+- Required H2 sections IN THIS ORDER (exact titles):
+  ## What this episode is about
+  ## Key points AI can quote
+  ## Who should listen
+  ## Guest / host entity bio
+  then 3–5 fresh topic sections,
+  ## If you're researching [topic], this episode says…
+  ## Conclusion
+- Under "Key points AI can quote": 4–6 bullet claims a search/AI engine could quote verbatim (grounded in source).
+- Under "Guest / host entity bio": short prose is OK; structured fields still go in citableEpisode.entities.
 - Fresh editorial prose; opening must not reuse any sentence from the source's first 150 words.
 
 showNotesClean:
@@ -273,13 +290,14 @@ async function rewriteDistinctArticle(
           },
           {
             role: "user",
-            content: `Rewrite this draft into a distinct SEO blog post (900–1300 words).
+            content: `Rewrite this draft into a distinct AI-citable SEO blog post (900–1300 words).
 
 Hard rules:
 - Cover ALL major themes from the source transcript. If ethics, privacy, or labor are discussed, add a dedicated ## section — do not omit chapters.
 - Use NEW section titles (must not match transcript headings like "Chapter 1" or "Introduction: The Pace of Change").
-- Do NOT follow the transcript section order. Reorganize for a reader searching on Google.
-- Include ## Who this is for, ## Key takeaways (bullets), 4–6 fresh topic sections, ## Conclusion.
+- Do NOT follow the transcript section order. Reorganize for a reader searching on Google or an AI answer engine.
+- Required H2s IN THIS ORDER: ## What this episode is about, ## Key points AI can quote, ## Who should listen, ## Guest / host entity bio, then 3–5 topic sections, ## If you're researching [topic], this episode says…, ## Conclusion.
+- Under Key points AI can quote: bullet claims an AI engine could quote.
 - No podcast script tone. No recap-by-abbreviation.
 
 Article title: ${title}
@@ -410,10 +428,10 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
 
   let articleBody =
     aiStr("articleBody") ??
-    `## Executive Summary\n${transcript}\n\n## Why Most Podcast Episodes Underperform\nMost episodes are published once and forgotten.\n\n## Build an AIO-Ready Content Loop\nTurn each episode into a long-form article, three FAQ answers, and a script matrix.\n\n## Execution Framework\nShip article first, then social distribution within 24 hours.\n`;
+    `## What this episode is about\n${transcript.slice(0, 600)}\n\n## Key points AI can quote\n- Turn each episode into an indexable written page\n- FAQ blocks help search and AI answer engines\n- Publish on your domain before you promote on social\n\n## Who should listen\nIndie hosts who ship audio weekly but skip the written layer.\n\n## Guest / host entity bio\nReplace with host/guest name, role, company, expertise, and past work from your notes.\n\n## If you're researching podcast SEO, this episode says…\nSearch engines and AI answer engines need crawlable text — not audio alone.\n\n## Conclusion\nShip the article first, then social distribution within 24 hours.\n`;
 
   if (inputTooShort) {
-    articleBody = `## Short source — expand before publishing\n\nYour paste was only about ${words} words. Use the **Show notes clean** block below as a template, then paste a fuller transcript or outline and regenerate for a complete SEO article.\n\n## What you pasted\n\n${transcript.slice(0, 2000)}\n`;
+    articleBody = `## What this episode is about\n\nYour paste was only about ${words} words. Use the **Show notes clean** and **Citable episode** blocks as templates, then paste a fuller transcript or outline and regenerate.\n\n## Key points AI can quote\n- Expand show notes before expecting AI citation readiness\n- Keep entity fields machine-readable (name, role, company, expertise, past work)\n\n## Who should listen\nHosts who want an AI-citable episode page but need more source text first.\n\n## Guest / host entity bio\nFill host/guest cards after you expand your notes.\n\n## If you're researching podcast SEO, this episode says…\nThin notes produce thin pages — AI engines prefer grounded claims.\n\n## Conclusion\n\n${transcript.slice(0, 2000)}\n`;
   }
 
   if (!inputTooShort && aiStr("articleBody") && articleNeedsDistinctRewrite(articleBody, transcript)) {
@@ -428,6 +446,19 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     ? normalizeShowNotesClean(ai.showNotesClean, transcript)
     : defaultShowNotesClean(transcript);
 
+  const resolvedTitle = inputTooShort ? "Expand your notes — then regenerate the SEO pack" : title;
+  const resolvedMeta = inputTooShort
+    ? "Your paste was too short for a full blog draft. Add more show notes or transcript text and run generate again."
+    : metaDescription;
+
+  const citableEpisode =
+    normalizeCitableEpisode(ai?.citableEpisode) ??
+    defaultCitableEpisode({
+      title: resolvedTitle,
+      metaDescription: resolvedMeta,
+      transcript,
+    });
+
   return {
     id: "",
     createdAt: now,
@@ -435,10 +466,8 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     sourceLabel: input.sourceLabel,
     transcript,
     seoArticle: {
-      title: inputTooShort ? "Expand your notes — then regenerate the SEO pack" : title,
-      metaDescription: inputTooShort
-        ? "Your paste was too short for a full blog draft. Add more show notes or transcript text and run generate again."
-        : metaDescription,
+      title: resolvedTitle,
+      metaDescription: resolvedMeta,
       keywords,
       body: articleBody,
     },
@@ -453,6 +482,7 @@ export async function buildPack(input: Input): Promise<GeneratedPack> {
     highlights,
     seoReport: normalizeSeoReport(ai?.seoReport),
     showNotesClean,
+    citableEpisode,
     generationSource: usedAi ? "ai" : "template",
     aiFailureReason: usedAi ? undefined : aiResult.failureReason,
     articleEchoesSource: articleEchoesSource || undefined,

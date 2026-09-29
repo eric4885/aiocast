@@ -1,3 +1,5 @@
+import { personNodesFromEntities, type CitableEntity } from "@/lib/citable-episode";
+
 type FaqItem = { q: string; a: string };
 
 export type EpisodeSchemaInput = {
@@ -13,16 +15,22 @@ export type EpisodeSchemaInput = {
   /** ISO 8601 duration e.g. PT45M — only when user provides real length. */
   duration?: string;
   showName?: string;
+  /** Machine-readable host/guest cards for Person nodes. */
+  entities?: CitableEntity[];
 };
 
 /**
- * Safe @graph JSON-LD: BlogPosting + PodcastEpisode + FAQPage.
+ * Safe @graph JSON-LD: BlogPosting + PodcastEpisode + FAQPage + Person entities.
  * Omits duration/url/date when not provided — never invents fields.
  */
 export function episodeSeoJsonLd(input: EpisodeSchemaInput): string {
   const title = input.title.trim();
   const summary = input.summary.trim().slice(0, 5000);
-  const author = input.authorName?.trim() || "Podcast host";
+  const entities = input.entities ?? [];
+  const hostName =
+    entities.find((e) => e.kind === "host")?.name.trim() ||
+    input.authorName?.trim() ||
+    "Podcast host";
   const show = input.showName?.trim();
   const date = input.datePublished?.trim();
   const url = input.canonicalUrl?.trim();
@@ -32,7 +40,7 @@ export function episodeSeoJsonLd(input: EpisodeSchemaInput): string {
     "@type": "BlogPosting",
     headline: title,
     description: summary,
-    author: { "@type": "Person", name: author },
+    author: { "@type": "Person", name: hostName },
   };
   if (date) blogPosting.datePublished = date;
   if (url) blogPosting.mainEntityOfPage = url;
@@ -49,7 +57,12 @@ export function episodeSeoJsonLd(input: EpisodeSchemaInput): string {
     podcastEpisode.partOfSeries = { "@type": "PodcastSeries", name: show };
   }
 
-  const graph: Record<string, unknown>[] = [blogPosting, podcastEpisode];
+  const people = personNodesFromEntities(entities);
+  if (people.length > 0) {
+    podcastEpisode.actor = people.map((p) => ({ "@type": "Person", name: p.name }));
+  }
+
+  const graph: Record<string, unknown>[] = [blogPosting, podcastEpisode, ...people];
 
   const faqEntity = input.faq
     .filter((item) => item.q.trim() && item.a.trim())
