@@ -142,11 +142,26 @@ export function GrowthPackClient({
         method: "POST",
         body: formData,
       });
-      const payload = (await res.json()) as {
+      let payload: {
         ok?: boolean;
         error?: string;
         resultUrl?: string;
-      };
+        code?: string;
+      } = {};
+      try {
+        payload = (await res.json()) as typeof payload;
+      } catch {
+        setError(
+          res.status === 429
+            ? "Too many requests — wait a minute and try again."
+            : res.status >= 500
+              ? `Server error (${res.status}). Wait 30–60s and try again, or paste a shorter outline.`
+              : `Could not read server response (${res.status || "network"}). Check your connection and try again.`,
+        );
+        setOpeningChest(false);
+        setPhase("idle");
+        return;
+      }
       if (!res.ok || !payload.ok || !payload.resultUrl) {
         setError(payload.error ?? "Generation failed. Try again.");
         setOpeningChest(false);
@@ -164,7 +179,9 @@ export function GrowthPackClient({
         window.location.assign(payload.resultUrl!);
       }, willTranscribe ? 1200 : 1800);
     } catch {
-      setError("Generation failed - try again in a moment.");
+      setError(
+        "Network error — generation did not reach the server. Check Wi‑Fi/VPN, wait a moment, then try again.",
+      );
       setOpeningChest(false);
       setPhase("idle");
     }
