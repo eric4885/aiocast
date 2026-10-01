@@ -36,6 +36,18 @@ const nextConfig = {
         destination: "/api/downloads/pre-flight-checklist",
         permanent: true,
       },
+      {
+        // Legacy slug sold growth pack under an "editing stack" URL — consolidate.
+        source: "/ai-podcast-editing-stack",
+        destination: "/tools/seo-growth-pack",
+        permanent: true,
+      },
+      {
+        // Legacy slug said "remote recording"; page is the 7-day publish plan playbook.
+        source: "/remote-recording-setup",
+        destination: "/guides/7-day-publish-plan",
+        permanent: true,
+      },
     ];
   },
   async headers() {

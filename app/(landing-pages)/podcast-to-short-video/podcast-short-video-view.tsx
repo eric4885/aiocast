@@ -120,7 +120,7 @@ export function PodcastShortVideoView() {
         eyebrow="Next step"
         title="Plan your weekly rollout"
         description="The free growth pack includes a 7-day publish plan — pair it with your social scripts before standalone tooling ships."
-        href="/remote-recording-setup"
+        href="/guides/7-day-publish-plan"
         linkLabel="Open Local schedule guide →"
       />
     </motion.div>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -28,36 +28,39 @@ const kit = [
   },
 ];
 
-export function RemoteRecordingView() {
+export function PublishPlanView() {
   return (
     <motion.div initial="hidden" animate="visible" variants={pageVariants} className="bg-background">
       <section className="relative overflow-hidden border-b border-border bg-gradient-hero bg-grid-subtle">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
           <div className="flex flex-wrap gap-2">
-            <Badge className="bg-primary/15 text-primary">Tools</Badge>
-            <Badge className="border border-border bg-transparent text-muted-foreground">Local Schedule</Badge>
+            <Badge className="bg-primary/15 text-primary">Guide</Badge>
+            <Badge className="border border-border bg-transparent text-muted-foreground">7-day publish plan</Badge>
           </div>
           <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-[2.75rem] lg:text-5xl lg:leading-tight">
             Plan when to publish your SEO and social outputs across regions
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-muted-foreground">
-            A publishing cadence guide — map article drops and social posts to the regions you care about. Full
-            timezone automation is on the roadmap; today the free growth pack includes a 7-day plan you adapt manually.
+            A publishing cadence playbook — map article drops and social posts to the regions you care about. The free
+            growth pack already includes a 7-day plan you adapt manually; full timezone automation may come later.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Button size="lg" asChild>
-              <Link href="/contact?intent=timezone-analysis">
-                Join waitlist for timezone analysis
+              <Link href="/tools/seo-growth-pack">
+                Generate SEO pack
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link href="/tools/seo-growth-pack">Generate SEO pack</Link>
+              <Link href="/contact?intent=timezone-analysis">Join waitlist for timezone analysis</Link>
             </Button>
           </div>
           <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
             Need assets today? The free{" "}
-            <Link href="/tools/seo-growth-pack?from=remote" className="font-semibold text-primary underline-offset-4 hover:underline">
+            <Link
+              href="/tools/seo-growth-pack?from=publish-plan"
+              className="font-semibold text-primary underline-offset-4 hover:underline"
+            >
               Generate pack
             </Link>{" "}
             flow includes a 7-day publish plan with timing hints you can adapt to your regions.
@@ -70,11 +73,11 @@ export function RemoteRecordingView() {
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
               <h2 className="text-3xl font-bold tracking-tight sm:text-[2rem]">
-                Execution stack for regional growth
+                Cadence template for regional growth
               </h2>
               <p className="mt-3 text-muted-foreground">
-                Keep your existing recording stack. This page is a cadence template — the free growth pack already ships
-                a 7-day publish plan you can map to your regions.
+                This page is a publish-plan playbook — not a remote-recording setup. Use the sample rhythm below, then
+                generate a pack so you have article + social assets to schedule.
               </p>
               <div className="mt-8 space-y-6">
                 {kit.map((item) => {
@@ -102,8 +105,8 @@ export function RemoteRecordingView() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Illustrative defaults — not pulled from your account. Use it as a formatting reference when you request
-                  the full template.
+                  Illustrative defaults — not pulled from your account. Use it as a formatting reference when you adapt
+                  the 7-day plan from your pack.
                 </p>
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   <li>Regions: US East / UK / SG-style clusters (customizable)</li>
@@ -134,10 +137,8 @@ export function RemoteRecordingView() {
                         key={`c-${i}`}
                         className={cn(
                           "rounded px-0.5 py-2 text-center",
-                          cell.tone === "art" &&
-                            "border border-sky-500/40 bg-sky-950/90 text-sky-100",
-                          cell.tone === "soc" &&
-                            "border border-violet-500/40 bg-violet-950/90 text-violet-100",
+                          cell.tone === "art" && "border border-sky-500/40 bg-sky-950/90 text-sky-100",
+                          cell.tone === "soc" && "border border-violet-500/40 bg-violet-950/90 text-violet-100",
                           cell.tone === "rest" && "border border-border/60 bg-secondary/80 text-foreground/80",
                         )}
                       >
@@ -146,12 +147,11 @@ export function RemoteRecordingView() {
                     ))}
                   </div>
                   <p className="mt-3 text-xs text-muted-foreground">
-                    Blue = article drops · Violet = social — illustrative rhythm; real template adapts to your RSS +
-                    analytics.
+                    Blue = article drops · Violet = social — illustrative rhythm; real template adapts to your regions.
                   </p>
                 </div>
                 <Button variant="secondary" className="w-full" asChild>
-                  <Link href="/contact?intent=timezone-analysis">Join waitlist — timezone templates</Link>
+                  <Link href="/contact?intent=timezone-analysis">Optional: waitlist for timezone templates</Link>
                 </Button>
               </CardContent>
             </Card>

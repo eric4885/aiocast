@@ -26,6 +26,11 @@ const guides = [
     description: "Full podcast to blog example — article skeleton, FAQ, social scripts, and publish plan.",
   },
   {
+    href: "/guides/7-day-publish-plan",
+    title: "7-day publish plan",
+    description: "Cadence template for SEO articles and social posts — adapt the free pack schedule to your regions.",
+  },
+  {
     href: "/guides/show-notes-template",
     title: "Show notes template",
     description: "Copy-paste outline when you do not have a full transcript yet.",

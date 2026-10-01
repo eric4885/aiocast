@@ -72,8 +72,8 @@ const items = [
   },
   {
     title: "7-day publish plan playbook",
-    href: "/remote-recording-setup",
-    description: "Timezone-aware cadence after your pack is generated.",
+    href: "/guides/7-day-publish-plan",
+    description: "Cadence template for SEO articles and social posts after your pack is generated.",
     icon: ListChecks,
   },
 ];
