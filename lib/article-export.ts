@@ -59,9 +59,42 @@ function escapeHtml(text: string): string {
     .replace(/"/g, "&quot;");
 }
 
+/** Normalize all common line breaks before splitting (AI / paste often uses lone \\r). */
+function normalizeNewlines(text: string): string {
+  return text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").replace(/\u2028|\u2029/g, "\n");
+}
+
+function blockToHtml(block: string): string {
+  // Heading blocks must be first line only — never swallow following paragraphs/lists.
+  if (/^#{1,3}\s+\S/.test(block)) {
+    const nl = block.indexOf("\n");
+    const headLine = (nl === -1 ? block : block.slice(0, nl)).trim();
+    const rest = nl === -1 ? "" : block.slice(nl + 1).trim();
+    let headingHtml = "";
+    if (headLine.startsWith("### ")) {
+      headingHtml = `<h3>${escapeHtml(headLine.slice(4).trim())}</h3>`;
+    } else if (headLine.startsWith("## ")) {
+      headingHtml = `<h2>${escapeHtml(headLine.slice(3).trim())}</h2>`;
+    } else if (headLine.startsWith("# ")) {
+      headingHtml = `<h2>${escapeHtml(headLine.slice(2).trim())}</h2>`;
+    }
+    if (!rest) return headingHtml;
+    return `${headingHtml}\n${bodyToHtmlParagraphs(rest)}`;
+  }
+
+  const listLines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+  if (listLines.length > 0 && listLines.every((l) => /^[-*]\s+/.test(l))) {
+    const items = listLines
+      .map((l) => `<li>${escapeHtml(l.replace(/^[-*]\s+/, ""))}</li>`)
+      .join("");
+    return `<ul>${items}</ul>`;
+  }
+  return `<p>${escapeHtml(block).replace(/\n/g, "<br />")}</p>`;
+}
+
 /** Split a markdown body into HTML — headings stay on their own even if AI omitted blank lines. */
 function bodyToHtmlParagraphs(body: string): string {
-  const lines = body.replace(/\r\n/g, "\n").split("\n");
+  const lines = normalizeNewlines(body).split("\n");
   const blocks: string[] = [];
   let buf: string[] = [];
 
@@ -88,27 +121,7 @@ function bodyToHtmlParagraphs(body: string): string {
   }
   flush();
 
-  return blocks
-    .map((block) => {
-      if (block.startsWith("### ")) {
-        return `<h3>${escapeHtml(block.slice(4).trim())}</h3>`;
-      }
-      if (block.startsWith("## ")) {
-        return `<h2>${escapeHtml(block.slice(3).trim())}</h2>`;
-      }
-      if (block.startsWith("# ")) {
-        return `<h2>${escapeHtml(block.slice(2).trim())}</h2>`;
-      }
-      const listLines = block.split("\n").map((l) => l.trim()).filter(Boolean);
-      if (listLines.length > 0 && listLines.every((l) => /^[-*]\s+/.test(l))) {
-        const items = listLines
-          .map((l) => `<li>${escapeHtml(l.replace(/^[-*]\s+/, ""))}</li>`)
-          .join("");
-        return `<ul>${items}</ul>`;
-      }
-      return `<p>${escapeHtml(block).replace(/\n/g, "<br />")}</p>`;
-    })
-    .join("\n");
+  return blocks.map(blockToHtml).join("\n");
 }
 
 function entitiesHtml(citable: CitableEpisode): string {
