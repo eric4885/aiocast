@@ -124,7 +124,7 @@ function bodyToHtmlParagraphs(body: string): string {
   return blocks.map(blockToHtml).join("\n");
 }
 
-function entitiesHtml(citable: CitableEpisode): string {
+function entitiesHtml(citable: CitableEpisode, heading: string): string {
   if (citable.entities.length === 0) return "";
   const cards = citable.entities
     .map((e) => {
@@ -142,7 +142,7 @@ function entitiesHtml(citable: CitableEpisode): string {
       }</h3><ul>${rows || "<li>—</li>"}</ul></article>`;
     })
     .join("\n");
-  return `<section><h2>Guest / host entity bio</h2>\n${cards}</section>`;
+  return `<section><h2>${escapeHtml(heading)}</h2>\n${cards}</section>`;
 }
 
 export function articleToMarkdown(
@@ -161,8 +161,15 @@ export function articleToMarkdown(
     lines.push(`**Keywords:** ${article.keywords.join(", ")}`, "");
   }
   lines.push(body, "");
-  if (citable && citable.entities.length > 0 && !/##\s+Guest\s*\/\s*host entity bio/i.test(body)) {
-    lines.push(citableEntitiesToMarkdown(citable.entities).trim(), "");
+  if (citable && citable.entities.length > 0) {
+    const hasProseBio = /##\s+Guest\s*\/\s*host entity bio/i.test(body);
+    lines.push(
+      citableEntitiesToMarkdown(
+        citable.entities,
+        hasProseBio ? "Entity cards (machine-readable)" : "Guest / host entity bio",
+      ).trim(),
+      "",
+    );
   }
   if (faq.length > 0) {
     lines.push("## FAQ", "");
@@ -186,9 +193,13 @@ export function articleToHtml(
   const leadHtml = lead
     ? `<blockquote style="border-left:3px solid #333;margin:1rem 0;padding:0.5rem 1rem;color:#333;font-size:1.05rem;">${escapeHtml(lead)}</blockquote>`
     : "";
+  const hasProseBio = /##\s+Guest\s*\/\s*host entity bio/i.test(body);
   const entityBlock =
-    citable && citable.entities.length > 0 && !/##\s+Guest\s*\/\s*host entity bio/i.test(body)
-      ? entitiesHtml(citable)
+    citable && citable.entities.length > 0
+      ? entitiesHtml(
+          citable,
+          hasProseBio ? "Entity cards (machine-readable)" : "Guest / host entity bio",
+        )
       : "";
   const faqHtml =
     faq.length > 0

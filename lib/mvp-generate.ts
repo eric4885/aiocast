@@ -117,7 +117,7 @@ Evidence-first rules (hard):
 - Timestamps: ${allowTimecodes ? "Source contains timecodes — you may copy MM:SS / HH:MM:SS that appear in the source. Do not invent new times." : "Source has NO timecodes — set every timestamp field to null. Use chapter titles only. NEVER invent timestamps."}
 - URLs: only if the exact URL string appears in the source; otherwise set url to "" and note "Mentioned without a URL in source — add manually."
 - Quotes: prefer verbatim; if shortened set condensed=true and keep a timestamp only when present in source.
-- FAQ: prefer 4 grounded Q&A pairs from questions actually asked or clearly answered in the source. If there is no real Q&A material, return faq as [] and fill suggestedQuestions (3–5) for the author instead — do NOT invent FAQ answers.
+- FAQ: prefer exactly 4 grounded Q&A pairs. Grounding = each answer restates advice/claims already in the source (key points, guest tips, how-to steps). You do NOT need literal interviewer Q&A in the transcript — turn taught claims into FAQ (e.g. "Should I use one keyword per episode title?" → answer from source). Return faq as [] ONLY when the source has almost no substantive claims; then fill suggestedQuestions (3–5). Never invent facts, names, stats, or URLs not in the source.
 - Medical, legal, or investment conclusions: add that the listener should consult a professional; do not state absolute advice as fact.
 
 citableEpisode (required for AI-citable pages):

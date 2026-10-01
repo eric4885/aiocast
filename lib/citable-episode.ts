@@ -123,9 +123,12 @@ export function personsJsonLd(entities: CitableEntity[]): string {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": people }, null, 2);
 }
 
-export function citableEntitiesToMarkdown(entities: CitableEntity[]): string {
+export function citableEntitiesToMarkdown(
+  entities: CitableEntity[],
+  heading = "Guest / host entity bio",
+): string {
   if (entities.length === 0) return "";
-  const lines: string[] = ["## Guest / host entity bio", ""];
+  const lines: string[] = [`## ${heading}`, ""];
   for (const e of entities) {
     lines.push(`### ${e.name}${e.kind !== "other" ? ` (${e.kind})` : ""}`, "");
     lines.push(`- **Role:** ${e.role || "—"}`);
