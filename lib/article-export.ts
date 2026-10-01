@@ -59,11 +59,36 @@ function escapeHtml(text: string): string {
     .replace(/"/g, "&quot;");
 }
 
+/** Split a markdown body into HTML — headings stay on their own even if AI omitted blank lines. */
 function bodyToHtmlParagraphs(body: string): string {
-  return body
-    .split(/\n{2,}/)
-    .map((block) => block.trim())
-    .filter(Boolean)
+  const lines = body.replace(/\r\n/g, "\n").split("\n");
+  const blocks: string[] = [];
+  let buf: string[] = [];
+
+  const flush = () => {
+    const text = buf.join("\n").trim();
+    buf = [];
+    if (text) blocks.push(text);
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine;
+    const trimmed = line.trim();
+    const isHeading = /^#{1,3}\s+\S/.test(trimmed);
+    if (isHeading) {
+      flush();
+      blocks.push(trimmed);
+      continue;
+    }
+    if (!trimmed) {
+      flush();
+      continue;
+    }
+    buf.push(line);
+  }
+  flush();
+
+  return blocks
     .map((block) => {
       if (block.startsWith("### ")) {
         return `<h3>${escapeHtml(block.slice(4).trim())}</h3>`;
@@ -74,12 +99,10 @@ function bodyToHtmlParagraphs(body: string): string {
       if (block.startsWith("# ")) {
         return `<h2>${escapeHtml(block.slice(2).trim())}</h2>`;
       }
-      if (block.split("\n").every((line) => /^[-*]\s+/.test(line.trim()))) {
-        const items = block
-          .split("\n")
-          .map((line) => line.trim())
-          .filter(Boolean)
-          .map((line) => `<li>${escapeHtml(line.replace(/^[-*]\s+/, ""))}</li>`)
+      const listLines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+      if (listLines.length > 0 && listLines.every((l) => /^[-*]\s+/.test(l))) {
+        const items = listLines
+          .map((l) => `<li>${escapeHtml(l.replace(/^[-*]\s+/, ""))}</li>`)
           .join("");
         return `<ul>${items}</ul>`;
       }

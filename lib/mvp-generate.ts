@@ -135,9 +135,10 @@ articleBody:
   then 3–5 fresh topic sections,
   ## If you're researching [topic], this episode says…
   ## Conclusion
-- Under "Key points AI can quote": 4–6 bullet claims a search/AI engine could quote verbatim (grounded in source).
+- Under "Key points AI can quote": 4–6 bullet claims a search/AI engine could quote verbatim (grounded in source). Put a blank line after every ## heading before the paragraph or list that follows.
 - Under "Guest / host entity bio": short prose is OK; structured fields still go in citableEpisode.entities.
 - Fresh editorial prose; opening must not reuse any sentence from the source's first 150 words.
+- Always put a blank line after each ## / ### heading so Markdown parsers split title from body.
 
 showNotesClean:
 - summary: 100–180 words; first sentence should include a searchable topic phrase from the episode; no invented stats.
