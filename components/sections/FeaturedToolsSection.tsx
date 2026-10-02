@@ -12,8 +12,8 @@ const bundleCards = [
     title: "📄 SEO Blog Post",
     category: "Google-ready",
     icon: FileSearch,
-    value: "2,500-word long-form draft with title, meta, H2 structure, and FAQ blocks.",
-    detail: "Built for semantic depth and snippet-friendly structure.",
+    value: "An ~800–1,500 word SEO draft with title, meta, H2 structure, and FAQ blocks.",
+    detail: "Built for search intent and snippet-friendly structure — edit facts before you publish.",
   },
   {
     title: "📱 Social Scripts",
@@ -26,8 +26,8 @@ const bundleCards = [
     title: "📅 7-Day Publish Plan",
     category: "Execution cadence",
     icon: CalendarClock,
-    value: "A timezone-aware publishing plan by platform and region.",
-    detail: "Turns random posting into a repeatable distribution rhythm.",
+    value: "A 7-day cadence you adapt to your regions — article first, then social posts.",
+    detail: "Turns random posting into a repeatable weekly rhythm. Full timezone automation is not included.",
   },
 ];
 

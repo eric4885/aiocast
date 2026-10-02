@@ -19,7 +19,7 @@ const entries: SitemapEntry[] = [
   { path: "/guides/podcast-to-blog-post", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-09-28" },
   { path: "/resources/podcast-to-blog-seo-checklist", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-09-10" },
   { path: "/tools/free-podcast-title-generator", priority: 0.85, changeFrequency: "monthly", lastModified: "2026-09-10" },
-  { path: "/examples/sample-growth-pack", priority: 0.88, changeFrequency: "monthly", lastModified: "2026-09-10" },
+  { path: "/examples/sample-growth-pack", priority: 0.88, changeFrequency: "monthly", lastModified: "2026-09-29" },
   { path: "/tools/show-notes-to-html", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-09-10" },
   { path: "/guides/podcast-faq-for-seo", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-09-17" },
   { path: "/guides/7-day-publish-plan", priority: 0.75, changeFrequency: "monthly", lastModified: "2026-10-01" },
