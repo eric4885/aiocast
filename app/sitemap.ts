@@ -11,7 +11,7 @@ type SitemapEntry = {
 
 /** Indexable URLs only. Keep in sync with page-level robots metadata. */
 const entries: SitemapEntry[] = [
-  { path: "/", priority: 1, changeFrequency: "weekly", lastModified: "2026-09-10" },
+  { path: "/", priority: 1, changeFrequency: "weekly", lastModified: "2026-10-02" },
   { path: "/tools/free-show-notes-generator", priority: 0.96, changeFrequency: "weekly", lastModified: "2026-09-10" },
   { path: "/tools/seo-growth-pack", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-10-01" },
   { path: "/guides/show-notes-template", priority: 0.95, changeFrequency: "weekly", lastModified: "2026-09-28" },
