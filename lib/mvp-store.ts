@@ -6,7 +6,13 @@ import {
   type EmailPackEntry,
 } from "@/lib/persistent-backend";
 import { checkIpRateLimit, type IpGuardResult } from "@/lib/rate-limit";
-import { ipCooldownMs, ipDailyLimit, rateLimitsDisabled } from "@/lib/rate-limit-config";
+import {
+  ipCooldownMs,
+  ipDailyLimit,
+  rateLimitsDisabled,
+  titleIpCooldownMs,
+  titleIpDailyLimit,
+} from "@/lib/rate-limit-config";
 import { pricing } from "@/lib/pricing";
 import { isProEmail } from "@/lib/pro-subscription";
 import type { ShowNotesClean } from "@/lib/show-notes-clean";
@@ -149,6 +155,19 @@ export async function checkSubscribeIpGuards(ip: string): Promise<IpGuardResult>
     dailyLimit: 20,
     usageKey: "subscribeIpUsage",
     lastKey: "subscribeIpLast",
+  });
+}
+
+export async function checkTitleIpGuards(ip: string): Promise<IpGuardResult> {
+  if (rateLimitsDisabled()) {
+    return { allowed: true, code: "OK", used: 0, dailyLimit: titleIpDailyLimit() };
+  }
+  return checkIpRateLimit({
+    ip,
+    cooldownMs: titleIpCooldownMs(),
+    dailyLimit: titleIpDailyLimit(),
+    usageKey: "titleIpUsage",
+    lastKey: "titleIpLast",
   });
 }
 

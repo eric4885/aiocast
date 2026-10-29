@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { aiBudgetExceededMessage, consumeAiBudget } from "@/lib/ai-budget";
+import { getClientIp } from "@/lib/client-ip";
+import { checkTitleIpGuards } from "@/lib/mvp-store";
 import {
   buildOfflineTitleResult,
   fetchTitleOptimization,
@@ -27,6 +30,27 @@ function detectLanguage(input: string): OutputLanguage {
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req);
+    const ipGuard = await checkTitleIpGuards(ip);
+    if (!ipGuard.allowed) {
+      if (ipGuard.code === "IP_COOLDOWN") {
+        return NextResponse.json(
+          {
+            error: `Please wait ${ipGuard.retryAfterSec}s before another title request.`,
+            code: "IP_COOLDOWN",
+          },
+          { status: 429 },
+        );
+      }
+      return NextResponse.json(
+        {
+          error: `Daily title-idea limit reached (${ipGuard.dailyLimit}/day from this network). Try again tomorrow.`,
+          code: "IP_DAILY_LIMIT",
+        },
+        { status: 429 },
+      );
+    }
+
     let body: { topic?: unknown };
     try {
       body = (await req.json()) as { topic?: unknown };
@@ -41,6 +65,22 @@ export async function POST(req: Request) {
 
     const force = process.env.TITLE_OUTPUT_LANGUAGE?.toLowerCase();
     const outputLanguage = detectLanguage(trimmed);
+
+    const budget = await consumeAiBudget(1);
+    if (!budget.allowed) {
+      // Still return offline titles so the UI keeps working without burning credits.
+      const data = buildOfflineTitleResult(trimmed, outputLanguage);
+      return NextResponse.json({
+        ok: true,
+        data,
+        meta: {
+          outputLanguage,
+          mode: force === "en" || force === "zh" ? "forced" : "auto",
+          normalizedTopic: trimmed,
+          warning: aiBudgetExceededMessage(budget.limit),
+        },
+      });
+    }
 
     try {
       const data = await fetchTitleOptimization(trimmed, outputLanguage);

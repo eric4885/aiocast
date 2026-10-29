@@ -24,6 +24,10 @@ export type PersistedSnapshot = {
   ipLastSubmit: Record<string, number>;
   subscribeIpUsage: Record<string, DailyIpUsage>;
   subscribeIpLast: Record<string, number>;
+  titleIpUsage: Record<string, DailyIpUsage>;
+  titleIpLast: Record<string, number>;
+  /** UTC-day counter for billable AI ops (generate / title / transcribe). */
+  aiDaily: DailyIpUsage | null;
   emailPackIndex: Record<string, EmailPackEntry[]>;
   myPacksTokens: Record<string, MyPacksToken>;
   /** Emails that opted out of non-transactional mail (unix ms). */
@@ -49,6 +53,9 @@ function emptySnapshot(): PersistedSnapshot {
     ipLastSubmit: {},
     subscribeIpUsage: {},
     subscribeIpLast: {},
+    titleIpUsage: {},
+    titleIpLast: {},
+    aiDaily: null,
     emailPackIndex: {},
     myPacksTokens: {},
     unsubscribed: {},

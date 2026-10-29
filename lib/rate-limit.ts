@@ -28,8 +28,8 @@ type RateLimitOpts = {
   ip: string;
   cooldownMs: number;
   dailyLimit: number;
-  usageKey: "ipUsage" | "subscribeIpUsage";
-  lastKey: "ipLastSubmit" | "subscribeIpLast";
+  usageKey: "ipUsage" | "subscribeIpUsage" | "titleIpUsage";
+  lastKey: "ipLastSubmit" | "subscribeIpLast" | "titleIpLast";
 };
 
 export async function checkIpRateLimit(opts: RateLimitOpts): Promise<IpGuardResult> {

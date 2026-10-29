@@ -22,7 +22,12 @@
     "TITLE_OUTPUT_LANGUAGE": "en",
     "FREE_MONTHLY_LIMIT": "3",
     "FREE_IP_DAILY_LIMIT": "3",
-    "FREE_IP_COOLDOWN_SEC": "60"
+    "FREE_IP_COOLDOWN_SEC": "60",
+    // Title optimizer (homepage) — separate from pack generation
+    "TITLE_IP_DAILY_LIMIT": "20",
+    "TITLE_IP_COOLDOWN_SEC": "15",
+    // Global UTC-day ceiling for generate + title + (counted with) transcribe; 0 = off
+    "AI_DAILY_BUDGET": "200"
   },
   "assets": {
     "directory": ".open-next/assets",

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { aiBudgetExceededMessage, consumeAiBudget } from "@/lib/ai-budget";
 import { getClientIp } from "@/lib/client-ip";
 import { buildPack } from "@/lib/mvp-generate";
 import { sendPackResultEmail } from "@/lib/pack-email";
@@ -129,6 +130,19 @@ export async function POST(req: Request) {
           { status: 429 },
         );
       }
+    }
+
+    // One unit for pack generation; +1 if we will call Whisper first.
+    const aiUnits = needsTranscribe ? 2 : 1;
+    const budget = await consumeAiBudget(aiUnits);
+    if (!budget.allowed) {
+      return NextResponse.json(
+        {
+          error: aiBudgetExceededMessage(budget.limit),
+          code: "AI_DAILY_BUDGET",
+        },
+        { status: 429 },
+      );
     }
 
     const job = await createJob(email);
