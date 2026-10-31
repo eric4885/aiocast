@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { aiBudgetExceededMessage, consumeAiBudget } from "@/lib/ai-budget";
 import { getClientIp } from "@/lib/client-ip";
+import { emailProofMatches, getEmailProofTokenFromRequest } from "@/lib/email-proof";
 import { buildPack } from "@/lib/mvp-generate";
 import { sendPackResultEmail } from "@/lib/pack-email";
 import {
@@ -31,6 +32,7 @@ async function finishJob(
     sourceLabel: string;
     transcriptHint: string;
   },
+  emailVerified: boolean,
 ) {
   const pack = await buildPack(input);
   pack.id = job.id;
@@ -38,12 +40,16 @@ async function finishJob(
   if (email.trim()) {
     try {
       await sendPackResultEmail(email, pack, job.accessToken);
-      await indexPackForEmail(email, {
-        id: job.id,
-        accessToken: job.accessToken,
-        title: pack.seoArticle.title,
-        createdAt: job.createdAt,
-      });
+      await indexPackForEmail(
+        email,
+        {
+          id: job.id,
+          accessToken: job.accessToken,
+          title: pack.seoArticle.title,
+          createdAt: job.createdAt,
+        },
+        emailVerified,
+      );
     } catch (emailError) {
       // Pack is already saved — do not fail the whole request if mail/index fails.
       console.error("[generate-pack] email/index failed", emailError);
@@ -64,6 +70,8 @@ export async function POST(req: Request) {
     const file = form.get("file");
 
     const email = emailValid(emailRaw) ? emailRaw.trim().toLowerCase() : "";
+    const proofToken = getEmailProofTokenFromRequest(req);
+    const emailVerified = email ? await emailProofMatches(email, proofToken) : false;
 
     const transcriptStr = typeof transcriptRaw === "string" ? transcriptRaw.trim() : "";
     const hasFile = file instanceof File && file.size > 0;
@@ -96,7 +104,7 @@ export async function POST(req: Request) {
       console.info("[generate-pack] rate limits disabled via RATE_LIMIT_DISABLED");
     }
 
-    const ipGuard = await checkIpGuards(ip, email || undefined);
+    const ipGuard = await checkIpGuards(ip, email || undefined, emailVerified);
     if (!ipGuard.allowed) {
       if (ipGuard.code === "IP_COOLDOWN") {
         return NextResponse.json(
@@ -112,20 +120,30 @@ export async function POST(req: Request) {
           error: `Free daily limit reached (${ipGuard.dailyLimit}/day). Upgrade to Pro for unlimited generations, or try again tomorrow.`,
           code: "IP_DAILY_LIMIT",
           upgradeUrl: "/pro-toolkit",
+          ...(email && !emailVerified
+            ? {
+                hint: "Subscribed? Verify your checkout email on the Pro page so unlimited limits unlock in this browser.",
+              }
+            : {}),
         },
         { status: 429 },
       );
     }
 
-    let usage: { allowed: boolean; used: number; limit: number } | undefined;
+    let usage: { allowed: boolean; used: number; limit: number; pro?: true } | undefined;
     if (email) {
-      usage = await checkAndConsumeUsage(email);
+      usage = await checkAndConsumeUsage(email, emailVerified);
       if (!usage.allowed) {
         return NextResponse.json(
           {
             error: `Free monthly email limit reached (${usage.used}/${usage.limit}). Upgrade to Pro for unlimited generations.`,
             code: "LIMIT_REACHED",
             upgradeUrl: "/pro-toolkit",
+            ...(emailVerified
+              ? {}
+              : {
+                  hint: "If this email has Pro, open the verify link from /pro-toolkit first so we know the inbox is yours.",
+                }),
           },
           { status: 429 },
         );
@@ -150,11 +168,16 @@ export async function POST(req: Request) {
       const transcript = needsTranscribe ? await transcribeAudioFile(file as File) : transcriptStr;
       const sourceType = hasFile ? "audio" : "transcript";
       const sourceLabel = hasFile ? (file as File).name : "pasted transcript";
-      const resultUrl = await finishJob(job, email, {
-        sourceType,
-        sourceLabel,
-        transcriptHint: transcript,
-      });
+      const resultUrl = await finishJob(
+        job,
+        email,
+        {
+          sourceType,
+          sourceLabel,
+          transcriptHint: transcript,
+        },
+        emailVerified,
+      );
 
       return NextResponse.json({
         ok: true,
@@ -163,6 +186,7 @@ export async function POST(req: Request) {
         resultUrl,
         usage,
         transcribed: needsTranscribe,
+        emailVerified,
       });
     } catch (error) {
       const fallback = needsTranscribe

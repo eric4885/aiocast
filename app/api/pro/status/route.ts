@@ -1,33 +1,51 @@
 import { NextResponse } from "next/server";
-import { getProRecord } from "@/lib/pro-subscription";
+import { getEmailProof, getEmailProofTokenFromRequest } from "@/lib/email-proof";
 import { getAnnualEarlyBirdRemaining, proRecordForResponse } from "@/lib/pro-early-bird";
+import { getProRecord } from "@/lib/pro-subscription";
 import { pricing } from "@/lib/pricing";
 
+/**
+ * Pro status for the verified inbox only (email-proof cookie or ?proof=).
+ * Public early-bird slot counts remain available without proof.
+ */
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const email = searchParams.get("email")?.trim().toLowerCase();
-  if (!email || !email.includes("@")) {
-    return NextResponse.json({ error: "Valid email required." }, { status: 400 });
+  const annualEarlyBirdRemaining = await getAnnualEarlyBirdRemaining();
+  const earlyBirdMeta = {
+    annualEarlyBirdRemaining,
+    annualEarlyBirdTotal: pricing.pro.annualEarlyBirdSlots,
+  };
+
+  const token = getEmailProofTokenFromRequest(req);
+  const proof = await getEmailProof(token);
+  if (!proof) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Verify your email first — we only show Pro status after you open the magic link.",
+        code: "PROOF_REQUIRED",
+        pro: false,
+        ...earlyBirdMeta,
+      },
+      { status: 401 },
+    );
   }
 
-  const record = await getProRecord(email);
-  const annualEarlyBirdRemaining = await getAnnualEarlyBirdRemaining();
-
+  const record = await getProRecord(proof.email);
   if (!record) {
     return NextResponse.json({
       ok: true,
+      email: proof.email,
       pro: false,
       plan: null,
       earlyBird: false,
-      annualEarlyBirdRemaining,
-      annualEarlyBirdTotal: pricing.pro.annualEarlyBirdSlots,
+      ...earlyBirdMeta,
     });
   }
 
   return NextResponse.json({
     ok: true,
+    email: proof.email,
     ...proRecordForResponse(record),
-    annualEarlyBirdRemaining,
-    annualEarlyBirdTotal: pricing.pro.annualEarlyBirdSlots,
+    ...earlyBirdMeta,
   });
 }

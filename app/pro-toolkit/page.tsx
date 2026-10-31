@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { CheckoutButtons } from "@/components/pricing/CheckoutButtons";
 import { PricingTrustBlock } from "@/components/pricing/PricingTrustBlock";
@@ -158,14 +159,18 @@ export default function ProToolkitPage({
 
         <PricingTrustBlock />
 
-        <ProStatusChecker />
+        <Suspense fallback={<div className="mt-8 min-h-[8rem]" aria-hidden />}>
+          <ProStatusChecker />
+        </Suspense>
 
         <Card className="mt-8 border-border/70">
           <CardContent className="space-y-3 p-6 text-sm text-muted-foreground">
             <p className="font-semibold text-foreground">How Pro unlocks</p>
             <p>
-              We match your subscription to the email you use at Creem checkout. Enter that same email when generating a
-              pack (or on the result page backup form) so limits lift automatically.
+              We match your subscription to the email you use at Creem checkout. To stop anyone else from typing that
+              address and using your unlimited quota, you must{" "}
+              <strong className="text-foreground">open a verify link</strong> we send to that inbox (or open a Find my
+              packs link). After that, generate packs with the same email in this browser — limits lift for 30 days.
             </p>
             <p>
               Questions?{" "}

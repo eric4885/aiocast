@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import {
+  EMAIL_PROOF_COOKIE,
+  createEmailProofToken,
+  emailProofCookieOptions,
+} from "@/lib/email-proof";
 import { getPacksForMyPacksToken, resultPath } from "@/lib/mvp-store";
 import { publicSiteUrl } from "@/lib/subscribe";
 
@@ -15,7 +20,9 @@ export async function GET(req: Request) {
   }
 
   const baseUrl = publicSiteUrl();
-  return NextResponse.json({
+  // Opening a my-packs magic link also proves inbox ownership for Pro unlock.
+  const proofToken = await createEmailProofToken(data.email);
+  const res = NextResponse.json({
     ok: true,
     email: data.email,
     packs: data.packs.map((pack) => ({
@@ -25,4 +32,6 @@ export async function GET(req: Request) {
       resultUrl: `${baseUrl}${resultPath(pack.id, pack.accessToken)}`,
     })),
   });
+  res.cookies.set(EMAIL_PROOF_COOKIE, proofToken, emailProofCookieOptions());
+  return res;
 }

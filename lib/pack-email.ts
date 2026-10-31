@@ -44,3 +44,24 @@ export async function sendMyPacksAccessEmail(email: string, accessUrl: string, p
     `,
   });
 }
+
+/** Magic link to prove inbox ownership (Pro limits + status in this browser). */
+export async function sendProVerifyEmail(email: string, verifyUrl: string) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) throw new Error("Email is not configured.");
+  const resend = new Resend(apiKey);
+  const baseUrl = publicSiteUrl();
+
+  await resend.emails.send({
+    from: process.env.RESEND_FROM_EMAIL || "AioCast <onboarding@resend.dev>",
+    to: email,
+    subject: "Verify your email for AioCast Pro",
+    html: `
+      <p>Confirm this inbox so we can unlock Pro limits (and show subscription status) in your browser.</p>
+      <p><a href="${verifyUrl}"><strong>Verify email</strong></a></p>
+      <p style="color:#64748b;font-size:12px;">This link works for 30 days on the device that opens it. Someone else requesting a link for your address cannot use Pro as you without opening your mail.</p>
+      <p style="color:#64748b;font-size:12px;">Not expecting this? You can ignore it. <a href="${baseUrl}/pro-toolkit">Pro pricing</a></p>
+      ${emailFooterHtml()}
+    `,
+  });
+}

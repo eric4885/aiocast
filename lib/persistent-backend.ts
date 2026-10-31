@@ -28,6 +28,11 @@ export type PersistedSnapshot = {
   titleIpLast: Record<string, number>;
   /** UTC-day counter for billable AI ops (generate / title / transcribe). */
   aiDaily: DailyIpUsage | null;
+  /**
+   * Magic-link proofs that an inbox was opened in this browser.
+   * Required before Pro limit bypass / Pro status reveal.
+   */
+  emailProofTokens: Record<string, { email: string; expiresAt: number }>;
   emailPackIndex: Record<string, EmailPackEntry[]>;
   myPacksTokens: Record<string, MyPacksToken>;
   /** Emails that opted out of non-transactional mail (unix ms). */
@@ -56,6 +61,7 @@ function emptySnapshot(): PersistedSnapshot {
     titleIpUsage: {},
     titleIpLast: {},
     aiDaily: null,
+    emailProofTokens: {},
     emailPackIndex: {},
     myPacksTokens: {},
     unsubscribed: {},

@@ -104,14 +104,18 @@ export function toPublicJob(job: JobRecord): PublicJobRecord {
   return rest;
 }
 
-export async function checkAndConsumeUsage(email: string) {
+/**
+ * @param emailVerified - true only when the request presents a valid email-proof
+ *   cookie/token for this address. Pro unlimited limits require this (stops spoofing).
+ */
+export async function checkAndConsumeUsage(email: string, emailVerified = false) {
   const limit = freeLimit();
   if (rateLimitsDisabled()) {
     return { allowed: true, used: 0, limit };
   }
 
   const key = email.trim().toLowerCase();
-  if (await isProEmail(key)) {
+  if (emailVerified && (await isProEmail(key))) {
     return { allowed: true, used: 0, limit: Number.POSITIVE_INFINITY, pro: true as const };
   }
 
@@ -132,11 +136,15 @@ export async function checkAndConsumeUsage(email: string) {
   });
 }
 
-export async function checkIpGuards(ip: string, email?: string): Promise<IpGuardResult> {
+export async function checkIpGuards(
+  ip: string,
+  email?: string,
+  emailVerified = false,
+): Promise<IpGuardResult> {
   if (rateLimitsDisabled()) {
     return { allowed: true, code: "OK", used: 0, dailyLimit: ipDailyLimit() };
   }
-  if (email && (await isProEmail(email))) {
+  if (email && emailVerified && (await isProEmail(email))) {
     return { allowed: true, code: "OK", used: 0, dailyLimit: ipDailyLimit() };
   }
   return checkIpRateLimit({
@@ -218,19 +226,20 @@ const PRO_MAX_PACKS_PER_EMAIL = 100;
 
 export type { EmailPackEntry };
 
-export async function maxPacksForEmail(email: string): Promise<number> {
-  if (await isProEmail(email)) return PRO_MAX_PACKS_PER_EMAIL;
+export async function maxPacksForEmail(email: string, emailVerified = false): Promise<number> {
+  if (emailVerified && (await isProEmail(email))) return PRO_MAX_PACKS_PER_EMAIL;
   return pricing.free.packHistoryLimit;
 }
 
 export async function indexPackForEmail(
   email: string,
   entry: { id: string; accessToken: string; title?: string; createdAt?: number },
+  emailVerified = false,
 ) {
   const key = email.trim().toLowerCase();
   if (!key.includes("@")) return;
 
-  const cap = await maxPacksForEmail(key);
+  const cap = await maxPacksForEmail(key, emailVerified);
 
   await withSnapshot((snapshot) => {
     const list = snapshot.emailPackIndex[key] ?? [];
